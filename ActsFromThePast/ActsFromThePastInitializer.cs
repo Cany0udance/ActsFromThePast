@@ -24,7 +24,7 @@ public class ActsFromThePastInitializer
     
     public static void Initialize()
     {
-        var harmony = new Harmony("yourname.actsfromthepast");
+        var harmony = new Harmony("actsfromthepast.actsfromthepast");
         harmony.PatchAll(typeof(ActsFromThePastInitializer).Assembly);
         
         ModHelper.AddModelToPool<CurseCardPool, Parasite>();
