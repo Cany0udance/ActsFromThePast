@@ -1,0 +1,133 @@
+﻿using ActsFromThePast.Acts.TheBeyond.Encounters;
+using ActsFromThePast.Acts.TheBeyond.Encounters.Elite;
+using ActsFromThePast.Acts.TheBeyond.Events;
+using ActsFromThePast.Acts.TheCity.Events;
+using Godot;
+using MegaCrit.Sts2.Core.Entities.Ascension;
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Map;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Events;
+using MegaCrit.Sts2.Core.Random;
+using MegaCrit.Sts2.Core.Unlocks;
+
+namespace ActsFromThePast.Acts.TheBeyond;
+
+public sealed class TheBeyondAct : ActModel
+{
+    public override IEnumerable<EncounterModel> GenerateAllEncounters()
+    {
+        return new EncounterModel[]
+        {
+            // Weak encounters
+            ModelDb.Encounter<OrbWalkerWeak>(),
+            ModelDb.Encounter<ThreeShapesWeak>(),
+            ModelDb.Encounter<DarklingsWeak>(),
+            
+            // Normal encounters
+            ModelDb.Encounter<FourShapesNormal>(),
+            ModelDb.Encounter<JawWormHordeNormal>(),
+            ModelDb.Encounter<MawNormal>(),
+            ModelDb.Encounter<SphereAndTwoShapesNormal>(),
+            ModelDb.Encounter<SpireGrowthNormal>(),
+            ModelDb.Encounter<TransientNormal>(),
+            ModelDb.Encounter<WrithingMassNormal>(),
+            
+            // Elite encounters
+            ModelDb.Encounter<GiantHeadElite>(),
+            ModelDb.Encounter<NemesisElite>(),
+            ModelDb.Encounter<ReptomancerElite>(),
+            
+            // Boss encounters
+            ModelDb.Encounter<DonuAndDecaBoss>(),
+            ModelDb.Encounter<AwakenedOneBoss>(),
+            ModelDb.Encounter<TimeEaterBoss>()
+        };
+    }
+    
+    public override IEnumerable<EncounterModel> BossDiscoveryOrder
+    {
+        get
+        {
+            return new EncounterModel[]
+            {
+            };
+        }
+    }
+    
+    public override IEnumerable<AncientEventModel> AllAncients
+    {
+        get
+        {
+            return new AncientEventModel[]
+            {
+                ModelDb.AncientEvent<Nonupeipe>(),
+                ModelDb.AncientEvent<Vakuu>(),
+                ModelDb.AncientEvent<Tanx>()
+            };
+        }
+    }
+    
+    public override IEnumerable<AncientEventModel> GetUnlockedAncients(UnlockState unlockState)
+    {
+        return AllAncients;
+    }
+    
+    public override IEnumerable<EventModel> AllEvents // TODO Replace these with actual Beyond events
+    {
+        get
+        {
+            return new EventModel[]
+            {
+                ModelDb.Event<Falling>(),
+                ModelDb.Event<MindBloom>(),
+                ModelDb.Event<MoaiHead>(),
+                ModelDb.Event<MysteriousSphere>(),
+                ModelDb.Event<SecretPortal>(),
+                ModelDb.Event<SensoryStone>(),
+                ModelDb.Event<TombOfLordRedMask>(),
+                ModelDb.Event<WindingHalls>(),
+                ModelDb.Event<TrashHeap>()
+            };
+        }
+    }
+    
+    protected override void ApplyActDiscoveryOrderModifications(UnlockState unlockState)
+    {
+    }
+    
+    protected override int NumberOfWeakEncounters => 2;
+    protected override int BaseNumberOfRooms => 13;
+    
+    public override string[] BgMusicOptions => Array.Empty<string>();
+    public override string[] MusicBankPaths => Array.Empty<string>();
+    public override string AmbientSfx => "";
+    
+    public override string ChestSpineResourcePath
+    {
+        get => "res://animations/backgrounds/treasure_room/chest_room_act_3_skel_data.tres";
+    }
+
+    public override string ChestSpineSkinNameNormal => "act3";
+
+    public override string ChestSpineSkinNameStroke => "act3_stroke";
+    public override string ChestOpenSfx => "event:/sfx/ui/treasure/treasure_act2";
+    public override Color MapTraveledColor => new Color("1D1E2F");
+
+    public override Color MapUntraveledColor => new Color("60717C");
+
+    public override Color MapBgColor => new Color("819A97");
+    
+    public override MapPointTypeCounts GetMapPointTypes(Rng mapRng)
+    {
+        MapPointTypeCounts mapPointTypeCounts = new MapPointTypeCounts(new Rng(mapRng.Seed, mapRng.Counter));
+        int num = mapRng.NextInt(5, 7);
+        if (AscensionHelper.HasAscension(AscensionLevel.Gloom))
+            --num;
+        return new MapPointTypeCounts(mapRng)
+        {
+            NumOfUnknowns = mapPointTypeCounts.NumOfUnknowns - 1,
+            NumOfRests = num
+        };
+    }
+}
