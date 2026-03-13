@@ -60,7 +60,7 @@ public sealed class Transient : MonsterModel
         await CreatureCmd.TriggerAnim(Creature, "Swing", 0.4f);
         await DamageCmd.Attack(CurrentAttackDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_starry_impact", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
         Count++;
     }

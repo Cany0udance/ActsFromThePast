@@ -120,6 +120,7 @@ public sealed class Romeo : MonsterModel
 
         await DamageCmd.Attack(CrossSlashDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack")
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(null);
     }
@@ -131,6 +132,7 @@ public sealed class Romeo : MonsterModel
 
         await DamageCmd.Attack(AgonizeDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack")
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(null);
 

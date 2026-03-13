@@ -153,6 +153,7 @@ public sealed class Chosen : MonsterModel
 
         await DamageCmd.Attack(ZapDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/characters/attack_fire")
             .WithHitFx("vfx/vfx_fire_burst")
             .Execute(null);
     }

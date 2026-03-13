@@ -16,7 +16,6 @@ namespace ActsFromThePast;
 
 public sealed class Taskmaster : MonsterModel
 {
-    // TODO UNPREMULTIPLY ALPHA
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 57, 54);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 64, 60);
     

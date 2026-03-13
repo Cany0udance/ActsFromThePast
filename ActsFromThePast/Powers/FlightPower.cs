@@ -12,8 +12,6 @@ namespace ActsFromThePast.Powers;
 public sealed class FlightPower : PowerModel
 {
     
-    // TODO figure out how to implement "on apply" sound
-    
     private const string _storedAmountKey = "StoredAmount";
 
     public override PowerType Type => PowerType.Buff;

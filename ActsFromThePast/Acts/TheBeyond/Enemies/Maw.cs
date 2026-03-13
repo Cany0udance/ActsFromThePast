@@ -137,7 +137,7 @@ public sealed class Maw : MonsterModel
         await FastAttackAnimation.Play(Creature);
         await DamageCmd.Attack(SlamDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 

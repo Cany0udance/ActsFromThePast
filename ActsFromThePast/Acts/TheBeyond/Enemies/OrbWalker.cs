@@ -97,6 +97,7 @@ public sealed class OrbWalker : MonsterModel
 
         await DamageCmd.Attack(LaserDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/characters/attack_fire")
             .WithHitFx("vfx/vfx_fire_burst")
             .Execute(null);
 
@@ -125,7 +126,7 @@ public sealed class OrbWalker : MonsterModel
 
         await DamageCmd.Attack(ClawDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_slash")
+            .WithHitFx("vfx/vfx_attack_slash", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 

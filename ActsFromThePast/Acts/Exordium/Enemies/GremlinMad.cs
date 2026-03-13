@@ -1,5 +1,7 @@
 ﻿using ActsFromThePast.Powers;
+using Godot;
 using MegaCrit.Sts2.Core.Animation;
+using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -8,6 +10,7 @@ using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
@@ -55,10 +58,16 @@ public sealed class GremlinMad : MonsterModel
     private async Task Scratch(IReadOnlyList<Creature> targets)
     {
         await FastAttackAnimation.Play(Creature);
-
         await DamageCmd.Attack(ScratchDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_slash", tmpSfx: "slash_attack.mp3")
+            .WithHitFx(tmpSfx: "slash_attack.mp3")
+            .WithHitVfxNode(target =>
+            {
+                var vfx = PreloadManager.Cache.GetScene(SceneHelper.GetScenePath("vfx/vfx_scratch")).Instantiate<Node2D>();
+                vfx.Scale = new Vector2(-1f, 1f);
+                vfx.GlobalPosition = NCombatRoom.Instance?.GetCreatureNode(target)?.VfxSpawnPosition ?? Vector2.Zero;
+                return vfx;
+            })
             .Execute(null);
     }
 

@@ -204,15 +204,16 @@ public sealed class Hexaghost : MonsterModel
                 float offsetX = (float)(Rng.Chaotic.NextDouble() * 240.0 - 120.0);
                 float offsetY = (float)(Rng.Chaotic.NextDouble() * 240.0 - 120.0);
                 var ignite = GhostIgniteEffect.Create(playerCenter.X + offsetX, playerCenter.Y + offsetY);
-                Sts1VfxHelper.Play(ignite);
+              //  Sts1VfxHelper.Play(ignite);
             }
         
-            PlayGhostOrbIgniteSfx();
+        //    PlayGhostOrbIgniteSfx();
         
             await Cmd.Wait(0.05f);
         
             await DamageCmd.Attack(_dividerDamage)
                 .FromMonster(this)
+                .WithAttackerFx(sfx: "event:/sfx/characters/attack_fire")
                 .WithHitVfxNode(target => CreateGhostFireBurst(target))
                 .Execute(null);
         }
@@ -241,6 +242,7 @@ public sealed class Hexaghost : MonsterModel
         await DamageCmd.Attack(FireTackleDamage)
             .WithHitCount(FireTackleCount)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/characters/attack_fire")
             .WithHitVfxNode(target => CreateGhostFireBurst(target))
             .Execute(null);
         await ActivateOrb();
@@ -273,6 +275,7 @@ public sealed class Hexaghost : MonsterModel
     
         await DamageCmd.Attack(SearDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/characters/attack_fire")
             .WithHitVfxNode(target => CreateGhostFireBurst(target))
             .Execute(null);
     
@@ -290,6 +293,7 @@ public sealed class Hexaghost : MonsterModel
         await DamageCmd.Attack(InfernoDamage)
             .WithHitCount(InfernoHits)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/characters/attack_fire")
             .WithHitVfxNode(target => CreateGhostFireBurst(target))
             .Execute(null);
 

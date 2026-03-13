@@ -6,6 +6,8 @@ namespace ActsFromThePast;
 public sealed class SlaversElite : EncounterModel
 {
     public override RoomType RoomType => RoomType.Elite;
+    public override bool HasScene => true;
+    public override IReadOnlyList<string> Slots => new[] { "blue", "taskmaster", "red" };
     
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {
@@ -21,9 +23,9 @@ public sealed class SlaversElite : EncounterModel
     {
         return new List<(MonsterModel, string?)>
         {
-            (ModelDb.Monster<SlaverBlue>().ToMutable(), null),
-            (ModelDb.Monster<Taskmaster>().ToMutable(), null),
-            (ModelDb.Monster<SlaverRed>().ToMutable(), null)
+            (ModelDb.Monster<SlaverBlue>().ToMutable(), "blue"),
+            (ModelDb.Monster<Taskmaster>().ToMutable(), "taskmaster"),
+            (ModelDb.Monster<SlaverRed>().ToMutable(), "red")
         };
     }
 }

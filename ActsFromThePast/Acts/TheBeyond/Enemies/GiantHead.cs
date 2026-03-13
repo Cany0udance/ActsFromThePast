@@ -136,7 +136,7 @@ public sealed class GiantHead : MonsterModel
         await Cmd.Wait(0.5f);
         await DamageCmd.Attack(ItIsTimeDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 
@@ -147,7 +147,7 @@ public sealed class GiantHead : MonsterModel
         await Cmd.Wait(0.5f);
         await DamageCmd.Attack(CountDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 

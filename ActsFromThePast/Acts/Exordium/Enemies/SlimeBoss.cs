@@ -14,6 +14,7 @@ using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes;
+using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Vfx.Utilities;
 using MegaCrit.Sts2.Core.Random;
@@ -146,11 +147,11 @@ public sealed class SlimeBoss : MonsterModel
             }
         }
         
-        await Cmd.Wait(0.8f);
+        await Cmd.Wait(0.4f);
         
         await DamageCmd.Attack(SlamDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
     
@@ -159,28 +160,34 @@ public sealed class SlimeBoss : MonsterModel
         var currentHp = Creature.CurrentHp;
         var combatState = Creature.CombatState;
         var originalPosition = NCombatRoom.Instance?.GetCreatureNode(Creature)?.Position ?? Vector2.Zero;
-        
+
         _ = ShakeAnimation.Play(Creature, 1.0f, 3.0f);
-        
         await Cmd.Wait(1.0f);
-        
         ModAudio.Play("general", "slime_split");
-        
         await CreatureCmd.Kill(Creature);
-        
+
+        var positionQueue = new Queue<Vector2>();
+        var enemyContainer = NCombatRoom.Instance?.GetNode<Godot.Control>("%EnemyContainer");
+
+        void OnChildEntered(Node child)
+        {
+            if (child is NCreature nc && positionQueue.Count > 0)
+                nc.Position = positionQueue.Dequeue();
+        }
+
+        enemyContainer?.Connect(Node.SignalName.ChildEnteredTree, Callable.From<Node>(OnChildEntered));
+
+        positionQueue.Enqueue(originalPosition + new Vector2(-385f, 20f));
         var spikeSlime = (SpikeSlimeLarge)ModelDb.Monster<SpikeSlimeLarge>().ToMutable();
         spikeSlime.OverrideHp = currentHp;
-        var creature1 = await CreatureCmd.Add(spikeSlime, combatState, CombatSide.Enemy, null);
-        var node1 = NCombatRoom.Instance?.GetCreatureNode(creature1);
-        if (node1 != null)
-            node1.Position = originalPosition + new Vector2(-385f, 20f);
-        
+        await CreatureCmd.Add(spikeSlime, combatState, CombatSide.Enemy, null);
+
+        positionQueue.Enqueue(originalPosition + new Vector2(120f, 20f));
         var acidSlime = (AcidSlimeLarge)ModelDb.Monster<AcidSlimeLarge>().ToMutable();
         acidSlime.OverrideHp = currentHp;
-        var creature2 = await CreatureCmd.Add(acidSlime, combatState, CombatSide.Enemy, null);
-        var node2 = NCombatRoom.Instance?.GetCreatureNode(creature2);
-        if (node2 != null)
-            node2.Position = originalPosition + new Vector2(120f, 20f);
+        await CreatureCmd.Add(acidSlime, combatState, CombatSide.Enemy, null);
+
+        enemyContainer?.Disconnect(Node.SignalName.ChildEnteredTree, Callable.From<Node>(OnChildEntered));
     }
     
     private void PlayPrepSfx()

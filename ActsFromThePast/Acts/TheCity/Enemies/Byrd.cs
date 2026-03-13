@@ -243,7 +243,14 @@ public sealed class Byrd : MonsterModel
 
         await DamageCmd.Attack(SwoopDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_slash")
+            .WithHitFx(tmpSfx: "slash_attack.mp3")
+            .WithHitVfxNode(target =>
+            {
+                var vfx = PreloadManager.Cache.GetScene(SceneHelper.GetScenePath("vfx/vfx_scratch")).Instantiate<Node2D>();
+                vfx.Scale = new Vector2(-1f, 1f);
+                vfx.GlobalPosition = NCombatRoom.Instance?.GetCreatureNode(target)?.VfxSpawnPosition ?? Vector2.Zero;
+                return vfx;
+            })
             .Execute(null);
     }
 
@@ -276,7 +283,7 @@ public sealed class Byrd : MonsterModel
                 .SetTrans(Tween.TransitionType.Sine);
             await creatureNode.ToSignal(settleTween, Tween.SignalName.Finished);
         }
-
+        ModAudio.Play("byrd", "flight");
         await PowerCmd.Apply<FlightPower>(Creature, FlightAmount, Creature, null);
     }
 

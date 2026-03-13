@@ -140,7 +140,7 @@ public sealed class Cultist : MonsterModel
         
         await DamageCmd.Attack(AttackDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_slash")
+            .WithHitFx("vfx/vfx_attack_slash", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
     

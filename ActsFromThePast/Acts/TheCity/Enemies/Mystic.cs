@@ -76,7 +76,7 @@ public sealed class Mystic : MonsterModel
         var healState = new MoveState(
             HEAL,
             Heal,
-            new AbstractIntent[] { new BuffIntent() }
+            new AbstractIntent[] { new HealIntent() }
         );
         var buffState = new MoveState(
             BUFF,
@@ -154,7 +154,7 @@ public sealed class Mystic : MonsterModel
 
         await DamageCmd.Attack((decimal)MagicDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_slash")
+            .WithHitFx("vfx/vfx_attack_slash", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
 
         await PowerCmd.Apply<FrailPower>(targets, (decimal)FrailAmount, Creature, (CardModel)null);
@@ -163,7 +163,7 @@ public sealed class Mystic : MonsterModel
     private async Task Heal(IReadOnlyList<Creature> targets)
     {
         PlayTurnSfx();
-        await CreatureCmd.TriggerAnim(Creature, "Attack", 0.0f);
+        await CreatureCmd.TriggerAnim(Creature, "Heal", 0.0f);
         await Cmd.Wait(0.25f);
 
         var teammates = CombatState.GetTeammatesOf(Creature);
@@ -179,7 +179,7 @@ public sealed class Mystic : MonsterModel
     private async Task Buff(IReadOnlyList<Creature> targets)
     {
         PlayTurnSfx();
-        await CreatureCmd.TriggerAnim(Creature, "Attack", 0.0f);
+        await CreatureCmd.TriggerAnim(Creature, "Heal", 0.0f);
         await Cmd.Wait(0.25f);
 
         var teammates = CombatState.GetTeammatesOf(Creature);
@@ -195,14 +195,14 @@ public sealed class Mystic : MonsterModel
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)
     {
         var idle = new AnimState("Idle", true);
-        var attack = new AnimState("Attack");
+        var heal = new AnimState("Attack");
         var hit = new AnimState("Hit");
 
-        attack.NextState = idle;
+        heal.NextState = idle;
         hit.NextState = idle;
 
         var animator = new CreatureAnimator(idle, controller);
-        animator.AddAnyState("Attack", attack);
+        animator.AddAnyState("Heal", heal);
         animator.AddAnyState("Hit", hit);
         controller.GetAnimationState().SetTimeScale(0.8f);
 

@@ -8,7 +8,7 @@ namespace ActsFromThePast.Acts.TheBeyond.Encounters;
 public sealed class FourShapesNormal : EncounterModel
 {
     public override RoomType RoomType => RoomType.Monster;
-    public override IEnumerable<EncounterTag> Tags => Array.Empty<EncounterTag>(); // TODO shapes
+    public override IEnumerable<EncounterTag> Tags => [CustomEncounterTags.Shapes];
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {
         get

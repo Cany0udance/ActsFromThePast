@@ -34,6 +34,7 @@ public sealed class Snecko : MonsterModel
     private const string GLARE = "GLARE";
     private const string BITE = "BITE";
     private const string TAIL_WHIP = "TAIL_WHIP";
+    
 
     public override async Task BeforeDeath(Creature creature)
     {

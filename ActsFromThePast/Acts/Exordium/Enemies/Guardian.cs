@@ -164,7 +164,7 @@ public sealed class Guardian : MonsterModel
         await FastAttackAnimation.Play(Creature);
         await DamageCmd.Attack(FierceBashDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 
@@ -215,6 +215,7 @@ public sealed class Guardian : MonsterModel
         await FastAttackAnimation.Play(Creature);
         await DamageCmd.Attack(RollDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/punch_construct/punch_construct_attack_single")
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(null);
     }
@@ -226,6 +227,7 @@ public sealed class Guardian : MonsterModel
         await DamageCmd.Attack(TwinSlamDamage)
             .WithHitCount(TwinSlamHits)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/punch_construct/punch_construct_attack_double")
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(null);
 

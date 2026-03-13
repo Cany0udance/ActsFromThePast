@@ -30,7 +30,7 @@ public sealed class Enchiridion : RelicModel
             1,
             Owner.RunState.Rng.CombatCardGeneration).First();
 
-        card.EnergyCost.SetThisCombat(0);
+        card.SetToFreeThisTurn();
         await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, true);
     }
 }

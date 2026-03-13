@@ -8,7 +8,7 @@ namespace ActsFromThePast.Acts.TheBeyond.Encounters;
 public sealed class SphereAndTwoShapesNormal : EncounterModel
 {
     public override RoomType RoomType => RoomType.Monster;
-    public override IEnumerable<EncounterTag> Tags => Array.Empty<EncounterTag>();
+    public override IEnumerable<EncounterTag> Tags => [CustomEncounterTags.Shapes];
     public override bool IsWeak => false;
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters

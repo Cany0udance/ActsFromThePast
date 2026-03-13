@@ -88,7 +88,7 @@ public sealed class Exploder : MonsterModel
 
         await DamageCmd.Attack(AttackDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 

@@ -20,9 +20,12 @@ public sealed class CityProtectorsNormal : EncounterModel
 
     protected override IReadOnlyList<(MonsterModel, string?)> GenerateMonsters()
     {
+        var sentry = (Sentry)ModelDb.Monster<Sentry>().ToMutable();
+        sentry.BoltFirst = true;
+
         return new List<(MonsterModel, string?)>
         {
-            (ModelDb.Monster<Sentry>().ToMutable(), null),
+            (sentry, null),
             (ModelDb.Monster<SphericGuardian>().ToMutable(), null)
         };
     }

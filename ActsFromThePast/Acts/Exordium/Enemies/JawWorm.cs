@@ -1,4 +1,6 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using Godot;
+using MegaCrit.Sts2.Core.Animation;
+using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -143,23 +145,19 @@ public sealed class JawWorm : MonsterModel
     private async Task Chomp(IReadOnlyList<Creature> targets)
     {
         await CreatureCmd.TriggerAnim(Creature, "chomp", 0.0f);
-        
-        foreach (var target in targets)
-        {
-            var targetNode = NCombatRoom.Instance?.GetCreatureNode(target);
-            if (targetNode != null)
-            {
-                var position = targetNode.VfxSpawnPosition;
-                var effect = BiteEffect.Create(position);
-                NCombatRoom.Instance.CombatVfxContainer.AddChild(effect);
-                effect.GlobalPosition = position;
-            }
-        }
-        
-        await Cmd.Wait(0.3f);
-        
+        await Cmd.Wait(0.6f);
         await DamageCmd.Attack(ChompDamage)
             .FromMonster(this)
+            .WithHitVfxNode(target =>
+            {
+                var creatureNode = NCombatRoom.Instance?.GetCreatureNode(target);
+                if (creatureNode == null) return null;
+                var vfx = PreloadManager.Cache.GetScene(SceneHelper.GetScenePath("vfx/vfx_bite")).Instantiate<Node2D>();
+                vfx.GlobalPosition = creatureNode.VfxSpawnPosition;
+                vfx.Modulate = new Color(0.3f, 0.5f, 0.7f, 1f);
+                return vfx;
+            })
+            .BeforeDamage(async () => ModAudio.Play("general", "bite", 0f, 0.05f))
             .Execute(null);
     }
     
@@ -180,7 +178,7 @@ public sealed class JawWorm : MonsterModel
         
         await DamageCmd.Attack(ThrashDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
         
         await CreatureCmd.GainBlock(Creature, ThrashBlock, ValueProp.Move, null);

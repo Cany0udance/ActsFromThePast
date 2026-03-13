@@ -42,7 +42,8 @@ public sealed class GremlinSneaky : MonsterModel
 
         await DamageCmd.Attack(PunctureDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_slash", tmpSfx: "blunt_attack.mp3")
+            .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack")
+            .WithHitFx("vfx/vfx_attack_slash")
             .Execute(null);
     }
 

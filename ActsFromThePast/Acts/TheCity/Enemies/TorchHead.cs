@@ -113,6 +113,7 @@ public sealed class TorchHead : MonsterModel
 
         await DamageCmd.Attack(AttackDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/axe_ruby_raider/axe_ruby_raider_attack")
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(null);
     }

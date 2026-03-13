@@ -156,7 +156,7 @@ public sealed class ShelledParasite : MonsterModel
 
         await DamageCmd.Attack(FellDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
 
         foreach (var target in targets.Where(t => t.IsAlive))
@@ -174,7 +174,7 @@ public sealed class ShelledParasite : MonsterModel
 
             await DamageCmd.Attack(DoubleStrikeDamage)
                 .FromMonster(this)
-                .WithHitFx("vfx/vfx_attack_blunt")
+                .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
                 .Execute(null);
         }
     }

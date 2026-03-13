@@ -8,7 +8,7 @@ namespace ActsFromThePast.Acts.TheBeyond.Encounters;
 public sealed class ThreeShapesWeak : EncounterModel
 {
     public override RoomType RoomType => RoomType.Monster;
-    public override IEnumerable<EncounterTag> Tags => Array.Empty<EncounterTag>(); // TODO shapes
+    public override IEnumerable<EncounterTag> Tags => [CustomEncounterTags.Shapes];
     public override bool IsWeak => true;
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters

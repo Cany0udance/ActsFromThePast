@@ -13,6 +13,8 @@ public static async Task Play(Creature creature)
     var creatureNode = NCombatRoom.Instance?.GetCreatureNode(creature);
     if (creatureNode == null)
         return;
+    
+    SfxCmd.Play("event:/sfx/enemy/enemy_attacks/obscura/obscura_buff");
 
     var visuals = creatureNode.Visuals;
     if (visuals == null)

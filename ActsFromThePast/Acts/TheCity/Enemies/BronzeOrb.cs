@@ -71,7 +71,7 @@ public sealed class BronzeOrb : MonsterModel
         await base.AfterAddedToRoom();
         _usedStasis = false;
 
-        if (SpawnAnimPending && ModConfig.EnableSpawnAnimations)
+        if (SpawnAnimPending)
         {
             var visuals = NCombatRoom.Instance?.GetCreatureNode(Creature)?.Visuals;
             var sprite = visuals?.GetNodeOrNull<Sprite2D>("Visuals");

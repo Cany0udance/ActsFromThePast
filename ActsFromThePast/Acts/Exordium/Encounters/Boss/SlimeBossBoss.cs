@@ -18,7 +18,9 @@ public sealed class SlimeBossBoss : EncounterModel
             {
                 ModelDb.Monster<SlimeBoss>(),
                 ModelDb.Monster<AcidSlimeLarge>(),
-                ModelDb.Monster<SpikeSlimeLarge>()
+                ModelDb.Monster<SpikeSlimeLarge>(),
+                ModelDb.Monster<AcidSlimeMedium>(),
+                ModelDb.Monster<SpikeSlimeMedium>()
             };
         }
     }

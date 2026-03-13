@@ -339,6 +339,7 @@ public sealed class Collector : MonsterModel
     {
         await DamageCmd.Attack(FireballDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/characters/attack_fire")
             .WithHitFx("vfx/vfx_fire_burst")
             .Execute(null);
     }

@@ -115,12 +115,12 @@ public sealed class Centurion : MonsterModel
     private async Task Slash(IReadOnlyList<Creature> targets)
     {
         PlayAttackSfx();
-        await CreatureCmd.TriggerAnim(Creature, "Attack", 0.0f);
+        await CreatureCmd.TriggerAnim(Creature, "MaceSlam", 0.0f);
         await Cmd.Wait(0.3f);
 
         await DamageCmd.Attack((decimal)SlashDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 
@@ -138,12 +138,12 @@ public sealed class Centurion : MonsterModel
         for (int i = 0; i < FuryHits; i++)
         {
             PlayAttackSfx();
-            await CreatureCmd.TriggerAnim(Creature, "Attack", 0.0f);
+            await CreatureCmd.TriggerAnim(Creature, "MaceSlam", 0.0f);
             await Cmd.Wait(0.3f);
 
             await DamageCmd.Attack((decimal)FuryDamage)
                 .FromMonster(this)
-                .WithHitFx("vfx/vfx_attack_blunt")
+                .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
                 .Execute(null);
         }
     }
@@ -152,14 +152,14 @@ public sealed class Centurion : MonsterModel
     {
         // TODO fix extremely cursed animations
         var idle = new AnimState("Idle", true);
-        var attack = new AnimState("Attack");
+        var maceSlam = new AnimState("Attack");
         var hit = new AnimState("Hit");
 
-        attack.NextState = idle;
+        maceSlam.NextState = idle;
         hit.NextState = idle;
 
         var animator = new CreatureAnimator(idle, controller);
-        animator.AddAnyState("Attack", attack);
+        animator.AddAnyState("MaceSlam", maceSlam);
         animator.AddAnyState("Hit", hit);
         controller.GetAnimationState().SetTimeScale(0.8f);
 

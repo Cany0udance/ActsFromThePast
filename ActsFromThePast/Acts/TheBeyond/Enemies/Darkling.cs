@@ -225,7 +225,7 @@ public sealed class Darkling : MonsterModel
         await DamageCmd.Attack(ChompDamage)
             .WithHitCount(ChompHits)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 
@@ -245,7 +245,7 @@ public sealed class Darkling : MonsterModel
 
         await DamageCmd.Attack(NipDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 

@@ -53,6 +53,7 @@ public sealed class SnakeDagger : MonsterModel
 
         await DamageCmd.Attack(StabDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack")
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(null);
 
@@ -66,6 +67,7 @@ public sealed class SnakeDagger : MonsterModel
 
         await DamageCmd.Attack(SacrificeDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack")
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(null);
 
@@ -80,7 +82,6 @@ public sealed class SnakeDagger : MonsterModel
         var hurt = new AnimState("Hurt");
 
         stab.NextState = idle;
-        suicide.NextState = idle;
         hurt.NextState = idle;
 
         var animator = new CreatureAnimator(idle, controller);

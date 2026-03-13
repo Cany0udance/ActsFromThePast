@@ -274,6 +274,7 @@ public sealed class Champ : MonsterModel
 
         await DamageCmd.Attack(SlashDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/characters/ironclad/ironclad_attack")
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(null);
     }
@@ -293,6 +294,7 @@ public sealed class Champ : MonsterModel
         {
             await DamageCmd.Attack(ExecuteDamage)
                 .FromMonster(this)
+                .WithAttackerFx(sfx: "event:/sfx/characters/ironclad/ironclad_attack")
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(null);
         }

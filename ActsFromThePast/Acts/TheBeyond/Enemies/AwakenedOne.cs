@@ -245,7 +245,7 @@ public sealed class AwakenedOne : MonsterModel
         {
             await DamageCmd.Attack(SoulStrikeDamage)
                 .FromMonster(this)
-                .WithHitFx("vfx/vfx_fire_burst")
+                .WithHitFx("vfx/vfx_fire_burst", tmpSfx: "blunt_attack.mp3")
                 .Execute(null);
         }
     }
@@ -274,7 +274,7 @@ public sealed class AwakenedOne : MonsterModel
 
         await DamageCmd.Attack(DarkEchoDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 
@@ -294,7 +294,7 @@ public sealed class AwakenedOne : MonsterModel
 
         await DamageCmd.Attack(SludgeDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_poison_impact")
+            .WithHitFx("vfx/vfx_poison_impact", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
 
         foreach (var target in targets)
@@ -322,7 +322,7 @@ public sealed class AwakenedOne : MonsterModel
 
             await DamageCmd.Attack(TackleDamage)
                 .FromMonster(this)
-                .WithHitFx("vfx/vfx_fire_burst")
+                .WithHitFx("vfx/vfx_fire_burst", tmpSfx: "blunt_attack.mp3")
                 .Execute(null);
         }
     }

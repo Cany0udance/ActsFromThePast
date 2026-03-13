@@ -105,7 +105,7 @@ public sealed class SnakePlant : MonsterModel
 
     private async Task ChompMove(IReadOnlyList<Creature> targets)
     {
-        await CreatureCmd.TriggerAnim(Creature, "Attack", 0.0f);
+        await CreatureCmd.TriggerAnim(Creature, "Chomp", 0.0f);
         await Cmd.Wait(0.5f);
 
         for (int i = 0; i < ChompHits; i++)
@@ -144,14 +144,14 @@ public sealed class SnakePlant : MonsterModel
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)
     {
         var idle = new AnimState("Idle", true);
-        var attack = new AnimState("Attack");
+        var chomp = new AnimState("Attack");
         var hit = new AnimState("Hit");
 
-        attack.NextState = idle;
+        chomp.NextState = idle;
         hit.NextState = idle;
 
         var animator = new CreatureAnimator(idle, controller);
-        animator.AddAnyState("Attack", attack);
+        animator.AddAnyState("Chomp", chomp);
         animator.AddAnyState("Hit", hit);
         controller.GetAnimationState().SetTimeScale(0.8f);
 

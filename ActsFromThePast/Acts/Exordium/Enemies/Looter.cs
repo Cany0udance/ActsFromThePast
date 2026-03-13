@@ -150,6 +150,7 @@ public sealed class Looter : MonsterModel
         
         await DamageCmd.Attack(MugDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack")
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(null);
 
@@ -194,6 +195,7 @@ public sealed class Looter : MonsterModel
 
         await DamageCmd.Attack(LungeDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack")
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(null);
 

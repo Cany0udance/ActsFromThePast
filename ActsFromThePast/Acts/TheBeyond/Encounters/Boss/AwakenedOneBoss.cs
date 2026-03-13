@@ -8,6 +8,8 @@ public sealed class AwakenedOneBoss : EncounterModel
 {
     public override RoomType RoomType => RoomType.Boss;
     public override string BossNodePath => "res://ActsFromThePast/map_boss_icons/awakened_one";
+    public override bool HasScene => true;
+    public override IReadOnlyList<string> Slots => new[] { "cultist_left", "cultist_right", "awakened" };
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters => new MonsterModel[]
     {
@@ -19,9 +21,9 @@ public sealed class AwakenedOneBoss : EncounterModel
     {
         return new List<(MonsterModel, string?)>
         {
-            (ModelDb.Monster<Cultist>().ToMutable(), null),
-            (ModelDb.Monster<Cultist>().ToMutable(), null),
-            (ModelDb.Monster<AwakenedOne>().ToMutable(), null)
+            (ModelDb.Monster<Cultist>().ToMutable(), "cultist_left"),
+            (ModelDb.Monster<Cultist>().ToMutable(), "cultist_right"),
+            (ModelDb.Monster<AwakenedOne>().ToMutable(), "awakened")
         };
     }
 }

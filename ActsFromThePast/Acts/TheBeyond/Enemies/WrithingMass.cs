@@ -192,7 +192,7 @@ public sealed class WrithingMass : MonsterModel
         await CreatureCmd.TriggerAnim(Creature, "BigSwing", 0.4f);
         await DamageCmd.Attack(BigHitDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_slash")
+            .WithHitFx("vfx/vfx_attack_slash", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 
@@ -203,7 +203,7 @@ public sealed class WrithingMass : MonsterModel
         {
             await DamageCmd.Attack(MultiHitDamage)
                 .FromMonster(this)
-                .WithHitFx("vfx/vfx_attack_blunt")
+                .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
                 .Execute(null);
         }
     }
@@ -213,7 +213,7 @@ public sealed class WrithingMass : MonsterModel
         await FastAttackAnimation.Play(Creature);
         await DamageCmd.Attack(AttackBlockDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
         await CreatureCmd.GainBlock(Creature, AttackBlockBlock, ValueProp.Move, null);
     }
@@ -223,7 +223,7 @@ public sealed class WrithingMass : MonsterModel
         await FastAttackAnimation.Play(Creature);
         await DamageCmd.Attack(AttackDebuffDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
         foreach (var target in targets.Where(t => t.IsAlive))
         {

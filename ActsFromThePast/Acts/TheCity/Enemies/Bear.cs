@@ -78,7 +78,7 @@ public sealed class Bear : MonsterModel
 
         await DamageCmd.Attack(MaulDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 
@@ -88,7 +88,7 @@ public sealed class Bear : MonsterModel
 
         await DamageCmd.Attack(LungeDamage)
             .FromMonster(this)
-            .WithHitFx("vfx/vfx_attack_slash")
+            .WithHitFx("vfx/vfx_attack_slash", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
 
         await CreatureCmd.GainBlock(Creature, LungeBlock, ValueProp.Move, null);

@@ -70,6 +70,7 @@ public sealed class Pointy : MonsterModel
         {
             await DamageCmd.Attack(AttackDamage)
                 .FromMonster(this)
+                .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack")
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(null);
         }

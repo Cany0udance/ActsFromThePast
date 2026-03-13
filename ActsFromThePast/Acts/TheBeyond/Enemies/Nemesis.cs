@@ -229,6 +229,7 @@ private void SpawnFireParticles(object creatureNode, GodotObject[] bones, SceneT
         {
             await DamageCmd.Attack(FireDamage)
                 .FromMonster(this)
+                .WithAttackerFx(sfx: "event:/sfx/characters/necrobinder/necrobinder_attack")
                 .WithHitFx("vfx/vfx_attack_blunt")
                 .Execute(null);
         }
@@ -241,6 +242,7 @@ private void SpawnFireParticles(object creatureNode, GodotObject[] bones, SceneT
         await CreatureCmd.TriggerAnim(Creature, "Slash", 0.4f);
         await DamageCmd.Attack(ScytheDamage)
             .FromMonster(this)
+            .WithAttackerFx(sfx: "event:/sfx/characters/necrobinder/necrobinder_attack")
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(null);
         await ApplyIntangibleIfNeeded();

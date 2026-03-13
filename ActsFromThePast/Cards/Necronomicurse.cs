@@ -13,7 +13,7 @@ public sealed class Necronomicurse : CardModel
     public Necronomicurse() : base(
         canonicalEnergyCost: -1,
         type: CardType.Curse,
-        rarity: CardRarity.Event,
+        rarity: CardRarity.Curse,
         targetType: TargetType.None)
     {
     }

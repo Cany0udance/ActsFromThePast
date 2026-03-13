@@ -1,4 +1,5 @@
 ﻿using Godot;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
@@ -30,5 +31,7 @@ public static class ByrdFallAnimation
         await creatureNode.ToSignal(tween, Tween.SignalName.Finished);
 
         NGame.Instance?.ScreenShake(ShakeStrength.Medium, ShakeDuration.Short);
+        
+        SfxCmd.Play("event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_fur");
     }
 }

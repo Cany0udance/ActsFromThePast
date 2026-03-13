@@ -198,7 +198,13 @@ public sealed class GremlinLeader : MonsterModel
             if (summoned != null)
             {
                 occupiedSlots.Add(emptySlot);
+
+                var node = NCombatRoom.Instance?.GetCreatureNode(summoned);
+                if (node != null)
+                    node.Visible = false;
+
                 await PowerCmd.Apply<MinionPower>(summoned, 1, Creature, null);
+                await SummonSlideInAnimation.Play(summoned);
             }
         }
     }
@@ -242,6 +248,7 @@ public sealed class GremlinLeader : MonsterModel
         {
             await DamageCmd.Attack(StabDamage)
                 .FromMonster(this)
+                .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack")
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(null);
         }

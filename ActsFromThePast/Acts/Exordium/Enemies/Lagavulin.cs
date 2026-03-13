@@ -252,7 +252,7 @@ public sealed class Lagavulin : MonsterModel
         await DamageCmd.Attack(AttackDamage)
             .FromMonster(this)
             .WithAttackerAnim("Attack", 0.3f)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 

@@ -173,7 +173,7 @@ public sealed class TimeEater : MonsterModel
             await Cmd.Wait(0.75f);
             await DamageCmd.Attack(ReverbDamage)
                 .FromMonster(this)
-                .WithHitFx("vfx/vfx_attack_blunt")
+                .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
                 .Execute(null);
         }
     }

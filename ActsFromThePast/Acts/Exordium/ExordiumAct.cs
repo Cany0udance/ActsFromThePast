@@ -23,14 +23,13 @@ public sealed class ExordiumAct : ActModel
             ModelDb.Encounter<SmallSlimesWeak>(),
             
             // Normal encounters
-            ModelDb.Encounter<BlueSlaverNormal>(),
             ModelDb.Encounter<LargeSlimeNormal>(),
             ModelDb.Encounter<LooterNormal>(),
             ModelDb.Encounter<ExordiumThugsNormal>(),
             ModelDb.Encounter<ExordiumWildlifeNormal>(),
             ModelDb.Encounter<TwoFungiBeastsNormal>(),
             ModelDb.Encounter<LotsOfSlimesNormal>(),
-            ModelDb.Encounter<RedSlaverNormal>(),
+            ModelDb.Encounter<SlaverNormal>(),
             ModelDb.Encounter<LiceNormal>(),
             ModelDb.Encounter<GremlinGangNormal>(),
             

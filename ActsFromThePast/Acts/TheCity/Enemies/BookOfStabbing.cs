@@ -1,4 +1,6 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using Godot;
+using MegaCrit.Sts2.Core.Animation;
+using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -8,6 +10,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
@@ -36,6 +39,14 @@ public sealed class BookOfStabbing : MonsterModel
             _stabCount = value;
         }
     }
+    
+    private static readonly string[] StabVfxPaths = new[]
+    {
+        "vfx/slash/vfx_slash_core",
+        "vfx/vfx_dramatic_stab",
+        "vfx/vfx_attack_slash",
+        "vfx/vfx_big_slash"
+    };
     
     public override async Task AfterAddedToRoom()
     {
@@ -130,22 +141,34 @@ public sealed class BookOfStabbing : MonsterModel
         await DamageCmd.Attack(StabDamage)
             .FromMonster(this)
             .WithAttackerAnim("Stab", 0.5f)
-            .WithHitFx("vfx/vfx_attack_slash")
+            .WithHitVfxNode(target => CreateRandomStabVfx(target))
             .Execute(null);
-        
+
         for (int i = 1; i < StabCount; i++)
         {
             PlayStabSfx();
             await DamageCmd.Attack(StabDamage)
                 .FromMonster(this)
-                .WithHitFx("vfx/vfx_attack_slash")
+                .WithHitVfxNode(target => CreateRandomStabVfx(target))
                 .Execute(null);
         }
     }
     
+    
+    private static Node2D? CreateRandomStabVfx(Creature target)
+    {
+        var creatureNode = NCombatRoom.Instance?.GetCreatureNode(target);
+        if (creatureNode == null) return null;
+        var path = StabVfxPaths[Rng.Chaotic.NextInt(StabVfxPaths.Length)];
+        var vfx = PreloadManager.Cache.GetScene(SceneHelper.GetScenePath(path)).Instantiate<Node2D>();
+        vfx.Scale = new Vector2(-1f, 1f);
+        vfx.GlobalPosition = creatureNode.VfxSpawnPosition;
+        return vfx;
+    }
+    
     private void PlayStabSfx()
     {
-        var roll = Rng.Chaotic.NextInt(4);
+        var roll = Rng.Chaotic.NextInt(4) + 1;
         var sfxName = $"book_of_stabbing_attack_{roll}";
         ModAudio.Play("book_of_stabbing", sfxName);
     }
@@ -155,7 +178,9 @@ public sealed class BookOfStabbing : MonsterModel
         await DamageCmd.Attack(BigStabDamage)
             .FromMonster(this)
             .WithAttackerAnim("BigStab", 0.5f)
+            .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack")
             .WithHitFx("vfx/vfx_attack_slash")
+            .BeforeDamage(async () => PlayStabSfx())
             .Execute(null);
     }
     

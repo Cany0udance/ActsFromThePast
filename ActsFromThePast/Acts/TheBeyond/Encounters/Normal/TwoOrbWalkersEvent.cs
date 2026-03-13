@@ -7,6 +7,8 @@ namespace ActsFromThePast.Acts.TheBeyond.Encounters;
 public class TwoOrbWalkersEvent : EncounterModel
 {
     public override RoomType RoomType => RoomType.Monster;
+    public override bool HasScene => true;
+    public override IReadOnlyList<string> Slots => new[] { "left", "right" };
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {
@@ -20,8 +22,8 @@ public class TwoOrbWalkersEvent : EncounterModel
     {
         return new List<(MonsterModel, string?)>
         {
-            (ModelDb.Monster<OrbWalker>().ToMutable(), null),
-            (ModelDb.Monster<OrbWalker>().ToMutable(), null),
+            (ModelDb.Monster<OrbWalker>().ToMutable(), "left"),
+            (ModelDb.Monster<OrbWalker>().ToMutable(), "right"),
         };
     }
 }

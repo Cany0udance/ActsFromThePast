@@ -4,24 +4,30 @@ using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class RedSlaverNormal : EncounterModel
+public sealed class SlaverNormal : EncounterModel
 {
     public override RoomType RoomType => RoomType.Monster;
 
-    public override IEnumerable<EncounterTag> Tags => Array.Empty<EncounterTag>();
-
-    public override bool IsWeak => false;
+    private static MonsterModel[] Slavers => new MonsterModel[]
+    {
+        ModelDb.Monster<SlaverRed>(),
+        ModelDb.Monster<SlaverBlue>()
+    };
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {
-        get { yield return ModelDb.Monster<SlaverRed>(); }
+        get
+        {
+            yield return ModelDb.Monster<SlaverRed>();
+            yield return ModelDb.Monster<SlaverBlue>();
+        }
     }
 
     protected override IReadOnlyList<(MonsterModel, string?)> GenerateMonsters()
     {
         return new List<(MonsterModel, string?)>
         {
-            (ModelDb.Monster<SlaverRed>().ToMutable(), null)
+            (Rng.NextItem(Slavers).ToMutable(), null)
         };
     }
 }

@@ -161,12 +161,10 @@ public sealed class BronzeAutomaton : MonsterModel
         {
             var orb = (BronzeOrb)ModelDb.Monster<BronzeOrb>().ToMutable();
             orb.BobIndex = index;
-            orb.SpawnAnimPending = ModConfig.EnableSpawnAnimations;
+            orb.SpawnAnimPending = true;
             var summoned = await CreatureCmd.Add(orb, CombatState, CombatSide.Enemy, slot);
             await PowerCmd.Apply<MinionPower>(summoned, 1, Creature, null);
-
-            if (ModConfig.EnableSpawnAnimations)
-                spawnTasks.Add(BronzeOrbSpawnAnimation.Play(summoned));
+            spawnTasks.Add(BronzeOrbSpawnAnimation.Play(summoned));
 
             index++;
         }
@@ -189,7 +187,7 @@ public sealed class BronzeAutomaton : MonsterModel
         {
             await DamageCmd.Attack(FlailDamage)
                 .FromMonster(this)
-                .WithHitFx("vfx/vfx_attack_slash")
+                .WithHitFx("vfx/vfx_attack_slash", tmpSfx: "blunt_attack.mp3")
                 .Execute(null);
         }
     }

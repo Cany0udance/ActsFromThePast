@@ -89,7 +89,7 @@ public sealed class Donu : MonsterModel
         await DamageCmd.Attack(BeamDamage)
             .FromMonster(this)
             .WithHitCount(BeamCount)
-            .WithHitFx("vfx/vfx_attack_blunt")
+            .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
     }
 
