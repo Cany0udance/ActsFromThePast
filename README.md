@@ -7,6 +7,7 @@
 - The files in this repository only cover the .dll contents, not the .pck contents (which contain things like scenes, images, etc). This may change if/when I decide to restructure the mod to be made in [Alchyr's ModTemplate](https://github.com/Alchyr/ModTemplate-StS2).
 - I have to imagine this mod breaks if played on widescreen or resolutions other than 16:9.
 - **This mod was not tested with multiplayer.**
+- **Acts From The Past was only tested with fast mode enabled**, no idea what timing stuff is broken when playing with it disabled
 - Acts From The Past is an English-only mod for now. If anyone is willing to translate, let me know and I can send the .json files!
 
 # Acts From The Past
