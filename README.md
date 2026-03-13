@@ -23,3 +23,8 @@ Some enemies have been given visual & auditory touchups to help them feel a bit 
 
 ![image 3](https://media.discordapp.net/attachments/1481936803576680558/1481936947201970176/image.png?ex=69b520d5&is=69b3cf55&hm=23edfc6eda9cde341ed2a9773c6f1440e02915205354540aecaba0ed7b6feaee&=&format=webp&quality=lossless)
 
+## Installation instructions
+1. If there isn't already a `mods` folder located at `C:\Program Files (x86)\Steam\steamapps\common\Slay the Spire 2` (or wherever your file path equivalent is), make one. I'd also highly recommend making a folder within the `mods` folder called `ActsFromThePast`, which is where you should put all the related files.
+2. Put the latest release of this mod's .pck, .dll, and mod_manifest.jsons file in that folder.
+3. Launch the game. Note that launching the game for the first time created new "modded" save folders, this is intentional and your unmodded saves have not been wiped.
+
