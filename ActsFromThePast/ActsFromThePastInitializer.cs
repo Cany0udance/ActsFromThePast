@@ -11,6 +11,7 @@ using ActsFromThePast.Patches.Powers;
 
 using ActsFromThePast.Patches.RoomEvents;
 using ActsFromThePast.Relics;
+using BaseLib.Config;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
@@ -43,6 +44,8 @@ public class ActsFromThePastInitializer
         ModHelper.AddModelToPool<EventRelicPool, NlothsGift>();
         ModHelper.AddModelToPool<EventRelicPool, BloodyIdol>();
         ModHelper.AddModelToPool<EventRelicPool, GoldenIdolOriginal>();
+        
+        ModConfigRegistry.Register("ActsFromThePast" ,new ActsFromThePastConfig());
     }
     
 

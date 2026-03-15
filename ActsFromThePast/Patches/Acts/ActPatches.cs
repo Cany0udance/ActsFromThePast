@@ -22,9 +22,8 @@ public class ActPatches
         public static void Postfix(ref IEnumerable<ActModel> __result, string seed, UnlockState unlockState, bool isMultiplayer)
         {
             var list = __result.ToList();
-            var config = AftpConfigManager.GetConfig();
 
-            if (config.LegacyActsOnly)
+            if (ActsFromThePastConfig.LegacyActsOnly)
             {
                 list[0] = ModelDb.Act<ExordiumAct>();
                 list[1] = ModelDb.Act<TheCityAct>();
