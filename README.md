@@ -1,7 +1,6 @@
 # **IMPORTANT!!**
 
 - Acts From The Past isn't yet finished! It still has things like placeholder audio & visual effects, missing logic in places, and more.
-- Currently, you must play on the public beta branch to use this mod.
 - If you play with Acts From The Past and then play on the same modded profile with the mod disabled afterwards, trying to enter the Run History screen will crash the game! Either make a new modded profile just for testing this mod OR back up your modded profile. If you make a new profile, I'd recommend running `unlock all` in the console.
 - Launching the game for the first time with Acts From The Past loaded will cause a `aftp_config.json` file to be created in your modded profile's file path. **By default, the new (old?) acts are mixed in with the base game's. However, if you want to ONLY play with Exordium/The City/The Beyond, you can edit this .json and set the "LegacyActsOnly" field to "true".** You can do this while the game is still running.
 - The files in this repository only cover the .dll contents, not the .pck contents (which contain things like scenes, images, etc). This may change if/when I decide to restructure the mod to be made in [Alchyr's ModTemplate](https://github.com/Alchyr/ModTemplate-StS2).
