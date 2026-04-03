@@ -11,6 +11,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast;
@@ -156,7 +157,7 @@ public sealed class Guardian : MonsterModel
     {
         await CreatureCmd.GainBlock(Creature, ChargeUpBlock, ValueProp.Move, null);
         ModAudio.Play("guardian", "guardian_destroy");
-        TalkCmd.Play(_destroyDialog, Creature, 2.5);
+        TalkCmd.Play(_destroyDialog, Creature, VfxColor.Gold, VfxDuration.VeryLong);
     }
 
     private async Task FierceBash(IReadOnlyList<Creature> targets)

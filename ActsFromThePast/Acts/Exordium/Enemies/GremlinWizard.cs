@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
@@ -81,7 +82,7 @@ public sealed class GremlinWizard : MonsterModel
         if (CurrentCharge >= ChargeLimit)
         {
             PlayRandomChargeSfx();
-            TalkCmd.Play(_ultimateDialog, Creature, 2.0);
+            TalkCmd.Play(_ultimateDialog, Creature, VfxColor.Purple, VfxDuration.Long);
         }
         return Task.CompletedTask;
     }

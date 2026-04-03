@@ -109,12 +109,12 @@ public sealed class Cultist : MonsterModel
             var roll = Rng.Chaotic.NextInt(10);
             if (roll < 3)
             {
-                TalkCmd.Play(_incantationLine1, Creature, 2.0);
+                TalkCmd.Play(_incantationLine1, Creature, VfxColor.Blue, VfxDuration.Long);
                 SaidPower = true;
             }
             else if (roll < 6)
             {
-                TalkCmd.Play(_incantationLine2, Creature, 2.0);
+                TalkCmd.Play(_incantationLine2, Creature, VfxColor.Blue, VfxDuration.Long);
             }
         }
 

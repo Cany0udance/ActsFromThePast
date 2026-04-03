@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
@@ -137,7 +138,7 @@ public sealed class Chosen : MonsterModel
 
     private async Task HexMove(IReadOnlyList<Creature> targets)
     {
-        TalkCmd.Play(_hexDialog, Creature, 2.0);
+        TalkCmd.Play(_hexDialog, Creature, VfxColor.Blue, VfxDuration.Long);
         await CreatureCmd.TriggerAnim(Creature, "Hex", 0.0f);
         await Cmd.Wait(0.2f);
 

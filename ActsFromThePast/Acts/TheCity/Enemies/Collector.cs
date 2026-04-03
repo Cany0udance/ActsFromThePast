@@ -14,6 +14,7 @@ using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Nodes.Vfx.Utilities;
 using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -356,7 +357,7 @@ public sealed class Collector : MonsterModel
 
     private async Task MegaDebuffMove(IReadOnlyList<Creature> targets)
     {
-        TalkCmd.Play(_megaDebuffDialog, Creature, 2.0);
+        TalkCmd.Play(_megaDebuffDialog, Creature, VfxColor.Swamp, VfxDuration.Long);
         ModAudio.Play("collector", "collector_debuff");
 
         var target = targets.FirstOrDefault(t => t.IsAlive);

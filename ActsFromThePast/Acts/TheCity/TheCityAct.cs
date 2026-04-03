@@ -130,12 +130,7 @@ public sealed class TheCityAct : ActModel
     
     public override MapPointTypeCounts GetMapPointTypes(Rng mapRng)
     {
-        int num = mapRng.NextGaussianInt(6, 1, 6, 7);
-        if (AscensionHelper.HasAscension(AscensionLevel.Gloom))
-            --num;
-        return new MapPointTypeCounts(mapRng)
-        {
-            NumOfRests = num
-        };
+        int restCount = mapRng.NextGaussianInt(6, 1, 6, 7);
+        return new MapPointTypeCounts(MapPointTypeCounts.StandardRandomUnknownCount(mapRng) - 1, restCount);
     }
 }

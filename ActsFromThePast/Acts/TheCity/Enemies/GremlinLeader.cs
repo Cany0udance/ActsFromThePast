@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -227,7 +228,7 @@ public sealed class GremlinLeader : MonsterModel
     {
         var encourageLines = new[] { _encourageLine1, _encourageLine2, _encourageLine3 };
         var line = encourageLines[Rng.Chaotic.NextInt(encourageLines.Length)];
-        TalkCmd.Play(line, Creature, 2.0);
+        TalkCmd.Play(line, Creature, VfxColor.Orange, VfxDuration.Long);
 
         // Strength to self and all living allies; Block to living allies only
         await PowerCmd.Apply<StrengthPower>(Creature, StrengthAmount, Creature, null);

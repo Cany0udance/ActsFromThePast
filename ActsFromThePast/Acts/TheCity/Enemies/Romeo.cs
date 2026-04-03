@@ -9,6 +9,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
@@ -49,7 +50,7 @@ public sealed class Romeo : MonsterModel
         _.Died -= BearDeathResponse;
         if (Creature.IsDead)
             return;
-        TalkCmd.Play(_deathReactLine, Creature, 2.0);
+        TalkCmd.Play(_deathReactLine, Creature, VfxColor.Red, VfxDuration.Long);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -110,7 +111,7 @@ public sealed class Romeo : MonsterModel
         var bearAlive = CombatState.GetTeammatesOf(Creature)
             .Any(t => t != Creature && t.IsAlive && t.Monster is Bear);
         var line = bearAlive ? _mockBearAlive : _mockBearDead;
-        TalkCmd.Play(line, Creature, 2.0);
+        TalkCmd.Play(line, Creature, VfxColor.Red,VfxDuration.Long);
     }
 
     private async Task CrossSlash(IReadOnlyList<Creature> targets)

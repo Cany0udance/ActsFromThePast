@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 
 namespace ActsFromThePast;
 
@@ -42,7 +43,7 @@ public sealed class Pointy : MonsterModel
         _.Died -= BearDeathResponse;
         if (Creature.IsDead)
             return;
-        TalkCmd.Play(_deathReactLine, Creature, 2.0);
+        TalkCmd.Play(_deathReactLine, Creature, VfxColor.Red, VfxDuration.Long);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()

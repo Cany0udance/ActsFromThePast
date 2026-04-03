@@ -137,7 +137,7 @@ public sealed class Lagavulin : MonsterModel
 
     public async Task WakeUpFromDamage()
     {
-        TalkCmd.Play(_wakeLine, Creature);
+        TalkCmd.Play(_wakeLine, Creature, VfxColor.White, VfxDuration.Long);
         await CreatureCmd.TriggerAnim(Creature, "Wake", 0.6f);
         StopSleepingVfx();
         IsAwake = true;
@@ -148,7 +148,7 @@ public sealed class Lagavulin : MonsterModel
 
     public async Task WakeUpNaturally()
     {
-        TalkCmd.Play(_wakeLine, Creature);
+        TalkCmd.Play(_wakeLine, Creature, VfxColor.White, VfxDuration.Long);
         await CreatureCmd.TriggerAnim(Creature, "Wake", 0.6f);
         StopSleepingVfx();
         IsAwake = true;
@@ -236,10 +236,10 @@ public sealed class Lagavulin : MonsterModel
         switch (SleepTurnCount)
         {
             case 1:
-                TalkCmd.Play(_sleepLine1, Creature);
+                TalkCmd.Play(_sleepLine1, Creature, VfxColor.White, VfxDuration.Long);
                 break;
             case 2:
-                TalkCmd.Play(_sleepLine2, Creature);
+                TalkCmd.Play(_sleepLine2, Creature, VfxColor.White, VfxDuration.Long);
                 break;
         }
         return Task.CompletedTask;

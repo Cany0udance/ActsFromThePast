@@ -12,6 +12,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Nodes.Vfx.Utilities;
 using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -211,7 +212,7 @@ public sealed class Champ : MonsterModel
         if (ThresholdReached && !LastMove(stateMachine, EXECUTE) && !LastMoveBefore(stateMachine, EXECUTE))
         {
             var deathQuote = Rng.Chaotic.NextInt(2) == 0 ? _deathLine1 : _deathLine2;
-            TalkCmd.Play(deathQuote, Creature, 2.0);
+            TalkCmd.Play(deathQuote, Creature, VfxColor.Blue, VfxDuration.Long);
             return EXECUTE;
         }
 
@@ -327,7 +328,7 @@ public sealed class Champ : MonsterModel
         var tauntLines = new[] { _tauntLine1, _tauntLine2, _tauntLine3, _tauntLine4 };
         var taunt = tauntLines[Rng.Chaotic.NextInt(tauntLines.Length)];
         ModAudio.Play("champ", "champ_taunt");
-        TalkCmd.Play(taunt, Creature, 2.0);
+        TalkCmd.Play(taunt, Creature, VfxColor.Blue, VfxDuration.Long);
 
         foreach (var target in targets.Where(t => t.IsAlive))
         {
@@ -341,7 +342,7 @@ public sealed class Champ : MonsterModel
         var limitBreakLines = new[] { _limitBreakLine1, _limitBreakLine2 };
         var line = limitBreakLines[Rng.Chaotic.NextInt(limitBreakLines.Length)];
         ModAudio.Play("champ", "champ_charge");
-        TalkCmd.Play(line, Creature, 3.0);
+        TalkCmd.Play(line, Creature, VfxColor.Blue, VfxDuration.VeryLong);
         // TODO: Inflame VFX
         await Cmd.Wait(0.75f);
         

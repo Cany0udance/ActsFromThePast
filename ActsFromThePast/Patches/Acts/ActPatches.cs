@@ -19,10 +19,9 @@ public class ActPatches
     public class LegacyActsPatch
     {
     
-        public static void Postfix(ref IEnumerable<ActModel> __result, string seed, UnlockState unlockState, bool isMultiplayer)
+        public static void Postfix(ref IEnumerable<ActModel> __result, Rng rng, UnlockState unlockState, bool isMultiplayer)
         {
             var list = __result.ToList();
-
             if (ActsFromThePastConfig.LegacyActsOnly)
             {
                 list[0] = ModelDb.Act<ExordiumAct>();
@@ -31,27 +30,22 @@ public class ActPatches
             }
             else
             {
-                var rng = new Rng((uint)StringHelper.GetDeterministicHashCode(seed + "_legacy_acts"));
-
                 int act1Roll = rng.NextInt(3);
                 if (act1Roll == 0)
                 {
                     list[0] = ModelDb.Act<ExordiumAct>();
                 }
-
                 int act2Roll = rng.NextInt(2);
                 if (act2Roll == 0)
                 {
                     list[1] = ModelDb.Act<TheCityAct>();
                 }
-
                 int act3Roll = rng.NextInt(2);
                 if (act3Roll == 0)
                 {
                     list[2] = ModelDb.Act<TheBeyondAct>();
                 }
             }
-
             __result = list;
         }
     }

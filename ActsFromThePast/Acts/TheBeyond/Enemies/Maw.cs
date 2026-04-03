@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast.Acts.TheBeyond.Enemies;
@@ -122,7 +123,7 @@ public sealed class Maw : MonsterModel
     private async Task Roar(IReadOnlyList<Creature> targets)
     {
         ModAudio.Play("maw", "maw_death", pitchVariation: 0.1f);
-        TalkCmd.Play(_roarDialog, Creature, 2.0);
+        TalkCmd.Play(_roarDialog, Creature, VfxColor.Blue, VfxDuration.Long);
         await Cmd.Wait(0.05f);
         foreach (var target in targets.Where(t => t.IsAlive))
         {

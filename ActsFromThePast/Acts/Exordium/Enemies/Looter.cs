@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.MonsterMoves;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -59,7 +60,7 @@ public sealed class Looter : MonsterModel
         
         if (Rng.Chaotic.NextFloat() < 0.3f)
         {
-            TalkCmd.Play(L10NMonsterLookup("LOOTER.deathLine"), Creature, 2.0);
+            TalkCmd.Play(L10NMonsterLookup("LOOTER.deathLine"), Creature, VfxColor.Blue, VfxDuration.Long);
         }
         
         PlayRandomDeathSfx();
@@ -140,7 +141,7 @@ public sealed class Looter : MonsterModel
         if (!_hasSpoken && Rng.Chaotic.NextFloat() < 0.6f)
         {
             _hasSpoken = true;
-            TalkCmd.Play(L10NMonsterLookup("LOOTER.moves.MUG.banter"), Creature);
+            TalkCmd.Play(L10NMonsterLookup("LOOTER.moves.MUG.banter"), Creature, VfxColor.Blue, VfxDuration.Long);
         }
 
         PlayAttackSfx();
@@ -164,14 +165,14 @@ public sealed class Looter : MonsterModel
 
     private async Task SmokeBomb(IReadOnlyList<Creature> targets)
     {
-        TalkCmd.Play(L10NMonsterLookup("LOOTER.moves.SMOKE_BOMB.banter"), Creature);
+        TalkCmd.Play(L10NMonsterLookup("LOOTER.moves.SMOKE_BOMB.banter"), Creature, VfxColor.Blue, VfxDuration.Long);
         
         await CreatureCmd.GainBlock(Creature, EscapeBlock, ValueProp.Move, null);
     }
 
     private async Task Escape(IReadOnlyList<Creature> targets)
     {
-        TalkCmd.Play(L10NMonsterLookup("LOOTER.moves.ESCAPE.banter"), Creature, 1.25);
+        TalkCmd.Play(L10NMonsterLookup("LOOTER.moves.ESCAPE.banter"), Creature, VfxColor.Blue, VfxDuration.Standard);
 
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Creature);
         if (creatureNode != null)

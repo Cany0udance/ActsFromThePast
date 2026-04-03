@@ -14,6 +14,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -158,7 +159,7 @@ public sealed class TimeEater : MonsterModel
         if (!FirstTurn)
             return;
         FirstTurn = false;
-        TalkCmd.Play(_introDialog, Creature, 3.0);
+        TalkCmd.Play(_introDialog, Creature, VfxColor.Purple, VfxDuration.VeryLong);
         await Cmd.Wait(0.5f);
     }
 
@@ -209,7 +210,7 @@ public sealed class TimeEater : MonsterModel
     private async Task Haste(IReadOnlyList<Creature> targets)
     {
         await PlayIntroIfFirstTurn();
-        TalkCmd.Play(_hasteDialog, Creature, 3.0);
+        TalkCmd.Play(_hasteDialog, Creature, VfxColor.Purple, VfxDuration.VeryLong);
 
         var debuffs = Creature.Powers.Where(p => p.Type == PowerType.Debuff).ToList();
         foreach (var debuff in debuffs)

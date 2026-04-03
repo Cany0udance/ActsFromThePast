@@ -9,6 +9,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast.Acts.TheBeyond.Enemies;
@@ -120,7 +121,7 @@ public sealed class GiantHead : MonsterModel
     private async Task Glare(IReadOnlyList<Creature> targets)
     {
         PlaySfx();
-        TalkCmd.Play(GetCountDialog(), Creature, 1.7);
+        TalkCmd.Play(GetCountDialog(), Creature, VfxColor.DarkGray);
         await Cmd.Wait(0.5f);
         foreach (var target in targets.Where(t => t.IsAlive))
         {
@@ -132,7 +133,7 @@ public sealed class GiantHead : MonsterModel
     {
         PlaySfx();
         var dialog = _timeDialogs[Rng.Chaotic.NextInt(_timeDialogs.Length)];
-        TalkCmd.Play(dialog, Creature, 2.0);
+        TalkCmd.Play(dialog, Creature, VfxColor.DarkGray);
         await Cmd.Wait(0.5f);
         await DamageCmd.Attack(ItIsTimeDamage)
             .FromMonster(this)
@@ -143,7 +144,7 @@ public sealed class GiantHead : MonsterModel
     private async Task CountMove(IReadOnlyList<Creature> targets)
     {
         PlaySfx();
-        TalkCmd.Play(GetCountDialog(), Creature, 1.7);
+        TalkCmd.Play(GetCountDialog(), Creature, VfxColor.DarkGray);
         await Cmd.Wait(0.5f);
         await DamageCmd.Attack(CountDamage)
             .FromMonster(this)

@@ -16,6 +16,7 @@ using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Nodes.Vfx.Utilities;
 using MegaCrit.Sts2.Core.Random;
 
@@ -129,7 +130,7 @@ public sealed class SlimeBoss : MonsterModel
     private async Task PrepSlam(IReadOnlyList<Creature> targets)
     {
         PlayPrepSfx();
-        TalkCmd.Play(L10NMonsterLookup("SLIME_BOSS.moves.PREP_SLAM.banter"), Creature, 2.0);
+        TalkCmd.Play(L10NMonsterLookup("SLIME_BOSS.moves.PREP_SLAM.banter"), Creature, VfxColor.Green, VfxDuration.Long);
         NGame.Instance?.ScreenShake(ShakeStrength.Weak, ShakeDuration.Long);
         await Cmd.Wait(0.3f);
     }

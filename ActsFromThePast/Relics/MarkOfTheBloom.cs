@@ -1,19 +1,20 @@
-﻿using MegaCrit.Sts2.Core.Entities.Creatures;
+﻿using BaseLib.Hooks;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
 
 namespace ActsFromThePast.Relics;
 
-public sealed class MarkOfTheBloom : RelicModel
+public sealed class MarkOfTheBloom : RelicModel, IHealAmountModifier
 {
     public override RelicRarity Rarity => RelicRarity.Event;
-// TODO fix odd fairy slash lizard tail interaction
-    public override decimal ModifyHealAmount(Creature creature, decimal amount)
+
+    public decimal ModifyHealMultiplicative(Creature creature, decimal amount)
     {
         if (creature.Player != Owner)
-            return amount;
+            return 1M;
         if (amount > 0)
             Flash();
-        return 0;
+        return 0M;
     }
 }

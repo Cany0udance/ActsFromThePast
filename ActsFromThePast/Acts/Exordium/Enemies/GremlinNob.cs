@@ -110,7 +110,7 @@ public sealed class GremlinNob : MonsterModel
     private async Task Bellow(IReadOnlyList<Creature> targets)
     {
         PlayBellowSfx();
-        TalkCmd.Play(L10NMonsterLookup("GREMLIN_NOB.moves.BELLOW.banter"), Creature, 3.0);
+        TalkCmd.Play(L10NMonsterLookup("GREMLIN_NOB.moves.BELLOW.banter"), Creature, VfxColor.Red, VfxDuration.VeryLong);
     
         VfxCmd.PlayOnCreatureCenter(Creature, "vfx/vfx_scream");
         NGame.Instance?.ScreenShake(ShakeStrength.Strong, ShakeDuration.Long);

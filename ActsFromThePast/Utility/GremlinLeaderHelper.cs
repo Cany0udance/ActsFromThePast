@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 
 namespace ActsFromThePast;
 
@@ -33,7 +34,7 @@ public static class GremlinLeaderHelper
             var isFirst = livingGremlins.FirstOrDefault() == gremlin;
 
             var line = isFirst ? _fleeLine1 : _fleeLine2;
-            TalkCmd.Play(line, gremlin, 1.2);
+            TalkCmd.Play(line, gremlin, VfxColor.White, VfxDuration.Short);
 
             var creatureNode = NCombatRoom.Instance?.GetCreatureNode(gremlin);
             creatureNode?.ToggleIsInteractable(false);

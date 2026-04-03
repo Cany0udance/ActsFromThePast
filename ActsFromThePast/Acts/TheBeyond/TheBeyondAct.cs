@@ -120,14 +120,7 @@ public sealed class TheBeyondAct : ActModel
     
     public override MapPointTypeCounts GetMapPointTypes(Rng mapRng)
     {
-        MapPointTypeCounts mapPointTypeCounts = new MapPointTypeCounts(new Rng(mapRng.Seed, mapRng.Counter));
-        int num = mapRng.NextInt(5, 7);
-        if (AscensionHelper.HasAscension(AscensionLevel.Gloom))
-            --num;
-        return new MapPointTypeCounts(mapRng)
-        {
-            NumOfUnknowns = mapPointTypeCounts.NumOfUnknowns - 1,
-            NumOfRests = num
-        };
+        int restCount = mapRng.NextInt(5, 7);
+        return new MapPointTypeCounts(MapPointTypeCounts.StandardRandomUnknownCount(mapRng) - 1, restCount);
     }
 }

@@ -36,9 +36,7 @@ public sealed class ModeShiftPower : PowerModel
         guardian.DmgTaken += result.UnblockedDamage;
 
         // Update the power display
-        Amount -= result.UnblockedDamage;
-        if (Amount < 0)
-            Amount = 0;
+        SetAmount(Math.Max(0, Amount - result.UnblockedDamage));
 
         if (guardian.DmgTaken >= guardian.CurrentDmgThreshold)
         {

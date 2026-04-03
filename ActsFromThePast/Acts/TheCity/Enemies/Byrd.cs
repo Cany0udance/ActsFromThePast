@@ -15,6 +15,7 @@ using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
@@ -257,7 +258,7 @@ public sealed class Byrd : MonsterModel
     private async Task Caw(IReadOnlyList<Creature> targets)
     {
         ModAudio.Play("byrd", "byrd_death");
-        TalkCmd.Play(_cawLine, Creature, 1.2);
+        TalkCmd.Play(_cawLine, Creature, VfxColor.Swamp, VfxDuration.Short);
         await PowerCmd.Apply<StrengthPower>(Creature, CawStrength, Creature, null);
     }
 

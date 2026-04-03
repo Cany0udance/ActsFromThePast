@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.MonsterMoves;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -128,7 +129,7 @@ public sealed class Mugger : MonsterModel
         if (_mugCount == 1 && !_hasSpoken && Rng.Chaotic.NextFloat() < 0.6f)
         {
             _hasSpoken = true;
-            TalkCmd.Play(L10NMonsterLookup("MUGGER.moves.MUG.banter"), Creature);
+            TalkCmd.Play(L10NMonsterLookup("MUGGER.moves.MUG.banter"), Creature, VfxColor.Swamp, VfxDuration.Long);
         }
 
         PlayAttackSfx();
@@ -156,7 +157,7 @@ public sealed class Mugger : MonsterModel
 
     private async Task Escape(IReadOnlyList<Creature> targets)
     {
-        TalkCmd.Play(L10NMonsterLookup("MUGGER.moves.ESCAPE.banter"), Creature, 1.25);
+        TalkCmd.Play(L10NMonsterLookup("MUGGER.moves.ESCAPE.banter"), Creature, VfxColor.Swamp, VfxDuration.Short);
 
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Creature);
         if (creatureNode != null)

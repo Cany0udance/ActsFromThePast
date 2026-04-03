@@ -118,12 +118,7 @@ public sealed class ExordiumAct : ActModel
     public override Color MapBgColor => new Color("A78A67");
     public override MapPointTypeCounts GetMapPointTypes(Rng mapRng)
     {
-        int num = mapRng.NextGaussianInt(7, 1, 6, 7);
-        if (AscensionHelper.HasAscension(AscensionLevel.Gloom))
-            --num;
-        return new MapPointTypeCounts(mapRng)
-        {
-            NumOfRests = num
-        };
+        int restCount = mapRng.NextGaussianInt(7, 1, 6, 7);
+        return new MapPointTypeCounts(MapPointTypeCounts.StandardRandomUnknownCount(mapRng), restCount);
     }
 }
