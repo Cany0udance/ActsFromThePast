@@ -11,15 +11,15 @@
 
 Acts From The Past is a work-in-progress port of the Acts from Slay the Spire 1, including Exordium, The City, and The Beyond.
 
-![image 1](https://cdn.discordapp.com/attachments/1481936803576680558/1481936804167811092/image.png?ex=69bbb833&is=69ba66b3&hm=ca60f38c7c83050e6b4a6c43670c17c92d20dc147f4214f0104174a180ff4a19)
+<img width="1369" height="770" alt="image" src="https://github.com/user-attachments/assets/ad195a97-9743-435c-8107-a6fa4c242568" />
 
 The mod *only* includes the encounters and act-specific events from Slay the Spire 1's acts, meaning Shrine events such as Wheel of Change or Lady in Blue have *not* been ported (though I may do that later if there is a demand for it)
 
-![image 2](https://cdn.discordapp.com/attachments/1481936803576680558/1481936872065335296/image.png?ex=69bbb843&is=69ba66c3&hm=993a7a28c533bcd65a4f6829f815db4da893006dbff624f9dd42ba5cd555e89a)
+<img width="1369" height="770" alt="image" src="https://github.com/user-attachments/assets/76f0bb64-0f6d-41c6-8833-62322f85d733" />
 
 Some enemies have been given visual & auditory touchups to help them feel a bit more fresh in the new game environment.
 
-![image 3](https://cdn.discordapp.com/attachments/1481936803576680558/1481936947201970176/image.png?ex=69bbb855&is=69ba66d5&hm=80d94356639033cb1da17202490898a9e797210aac1f1f47c85d9a70c18420ca)
+<img width="1369" height="770" alt="image" src="https://github.com/user-attachments/assets/3a74cc2e-afcd-4616-9db9-f729147533b7" />
 
 ## Installation instructions
 1. If there isn't already a `mods` folder located at `C:\Program Files (x86)\Steam\steamapps\common\Slay the Spire 2` (or wherever your file path equivalent is), make one. I'd also highly recommend making a folder within the `mods` folder called `ActsFromThePast`, which is where you should put all the related files.
