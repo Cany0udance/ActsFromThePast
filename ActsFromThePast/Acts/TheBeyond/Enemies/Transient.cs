@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Singleton;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 
 namespace ActsFromThePast.Acts.TheBeyond.Enemies;
@@ -29,14 +30,25 @@ public sealed class Transient : MonsterModel
         get => _count;
         set { AssertMutable(); _count = value; }
     }
+    
+    private Decimal _multiplayerDamageMultiplier = 1m;
 
-    private int CurrentAttackDamage => StartingDeathDmg + Count * IncrementDmg;
+    private int CurrentAttackDamage => (int)(( StartingDeathDmg + Count * IncrementDmg) * _multiplayerDamageMultiplier);
 
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
         await PowerCmd.Apply<FadingPower>(Creature, AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 6, 5), Creature, null);
         await PowerCmd.Apply<ShiftingPower>(Creature, 1, Creature, null);
+
+        var playerCount = Creature.CombatState.Players.Count;
+        if (playerCount > 1)
+        {
+            _multiplayerDamageMultiplier = playerCount
+                                           * MultiplayerScalingModel.GetMultiplayerScaling(
+                                               Creature.CombatState.Encounter,
+                                               Creature.CombatState.RunState.CurrentActIndex);
+        }
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
