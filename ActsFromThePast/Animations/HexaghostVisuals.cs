@@ -182,14 +182,20 @@ public class HexaghostVisuals : IDisposable
     
     public void Dispose()
     {
-        _plasma1?.QueueFree();
-        _plasma2?.QueueFree();
-        _plasma3?.QueueFree();
-        _shadow?.QueueFree();
-        
+        SafeFree(_plasma1);
+        SafeFree(_plasma2);
+        SafeFree(_plasma3);
+        SafeFree(_shadow);
+
         foreach (var orb in _orbs)
         {
-            orb.Dispose();
+            orb?.Dispose();
         }
+    }
+
+    private static void SafeFree(Node node)
+    {
+        if (node != null && GodotObject.IsInstanceValid(node))
+            node.QueueFree();
     }
 }
