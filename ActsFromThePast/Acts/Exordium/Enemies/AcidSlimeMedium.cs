@@ -151,7 +151,15 @@ public sealed class AcidSlimeMedium : MonsterModel
             .WithHitFx("vfx/vfx_slime_impact")
             .Execute(null);
 
-        await CardPileCmd.AddToCombatAndPreview<Slimed>(targets, PileType.Discard, SlimedCount, false);
+        try
+        {
+            ClassicSlimedTracker.CreatingClassicSlimed = ActsFromThePastConfig.LegacyEnemiesGiveClassicSlimed;
+            await CardPileCmd.AddToCombatAndPreview<Slimed>(targets, PileType.Discard, SlimedCount, false);
+        }
+        finally
+        {
+            ClassicSlimedTracker.CreatingClassicSlimed = false;
+        }
     }
 
     private async Task Tackle(IReadOnlyList<Creature> targets)

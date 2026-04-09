@@ -204,7 +204,15 @@ public sealed class TimeEater : MonsterModel
         {
             await PowerCmd.Apply<DrawReductionPower>(target, 1, Creature, null);
         }
-        await CardPileCmd.AddToCombatAndPreview<Slimed>(targets, PileType.Discard, SlimedCount, false);
+        try
+        {
+            ClassicSlimedTracker.CreatingClassicSlimed = ActsFromThePastConfig.LegacyEnemiesGiveClassicSlimed;
+            await CardPileCmd.AddToCombatAndPreview<Slimed>(targets, PileType.Discard, SlimedCount, false);
+        }
+        finally
+        {
+            ClassicSlimedTracker.CreatingClassicSlimed = false;
+        }
     }
 
     private async Task Haste(IReadOnlyList<Creature> targets)

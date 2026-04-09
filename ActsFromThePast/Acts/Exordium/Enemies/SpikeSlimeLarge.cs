@@ -14,6 +14,7 @@ using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
+using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Random;
 
@@ -154,7 +155,15 @@ public sealed class SpikeSlimeLarge : MonsterModel
             .WithHitFx("vfx/vfx_slime_impact")
             .Execute(null);
 
-        await CardPileCmd.AddToCombatAndPreview<Slimed>(targets, PileType.Discard, SlimedCount, false);
+        try
+        {
+            ClassicSlimedTracker.CreatingClassicSlimed = ActsFromThePastConfig.LegacyEnemiesGiveClassicSlimed;
+            await CardPileCmd.AddToCombatAndPreview<Slimed>(targets, PileType.Discard, SlimedCount, false);
+        }
+        finally
+        {
+            ClassicSlimedTracker.CreatingClassicSlimed = false;
+        }
     }
 
     private async Task Lick(IReadOnlyList<Creature> targets)
@@ -172,28 +181,34 @@ public sealed class SpikeSlimeLarge : MonsterModel
         var currentHp = Creature.CurrentHp;
         var combatState = Creature.CombatState;
         var originalPosition = NCombatRoom.Instance?.GetCreatureNode(Creature)?.Position ?? Vector2.Zero;
-    
+
         _ = ShakeAnimation.Play(Creature, 1.0f, 3.0f);
-    
         await Cmd.Wait(1.0f);
-    
         ModAudio.Play("general", "slime_split");
-    
         await CreatureCmd.Kill(Creature);
-    
+
+        var positionQueue = new Queue<Vector2>();
+        var enemyContainer = NCombatRoom.Instance?.GetNode<Godot.Control>("%EnemyContainer");
+        void OnChildEntered(Node child)
+        {
+            if (child is NCreature nc && positionQueue.Count > 0)
+                nc.Position = positionQueue.Dequeue();
+        }
+        enemyContainer?.Connect(Node.SignalName.ChildEnteredTree, Callable.From<Node>(OnChildEntered));
+
+        positionQueue.Enqueue(originalPosition + new Vector2(-134f, Rng.Chaotic.NextFloat() * 8f - 4f));
         var slime1 = (SpikeSlimeMedium)ModelDb.Monster<SpikeSlimeMedium>().ToMutable();
-        slime1.OverrideHp = currentHp;
         var creature1 = await CreatureCmd.Add(slime1, combatState, CombatSide.Enemy, null);
-        var node1 = NCombatRoom.Instance?.GetCreatureNode(creature1);
-        if (node1 != null)
-            node1.Position = originalPosition + new Vector2(-134f, Rng.Chaotic.NextFloat() * 8f - 4f);
-    
+        await CreatureCmd.SetMaxHp(creature1, currentHp);
+        await CreatureCmd.Heal(creature1, currentHp);
+
+        positionQueue.Enqueue(originalPosition + new Vector2(134f, Rng.Chaotic.NextFloat() * 8f - 4f));
         var slime2 = (SpikeSlimeMedium)ModelDb.Monster<SpikeSlimeMedium>().ToMutable();
-        slime2.OverrideHp = currentHp;
         var creature2 = await CreatureCmd.Add(slime2, combatState, CombatSide.Enemy, null);
-        var node2 = NCombatRoom.Instance?.GetCreatureNode(creature2);
-        if (node2 != null)
-            node2.Position = originalPosition + new Vector2(134f, Rng.Chaotic.NextFloat() * 8f - 4f);
+        await CreatureCmd.SetMaxHp(creature2, currentHp);
+        await CreatureCmd.Heal(creature2, currentHp);
+
+        enemyContainer?.Disconnect(Node.SignalName.ChildEnteredTree, Callable.From<Node>(OnChildEntered));
     }
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)

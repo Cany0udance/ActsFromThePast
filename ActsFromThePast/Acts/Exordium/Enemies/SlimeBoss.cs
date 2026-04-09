@@ -124,7 +124,16 @@ public sealed class SlimeBoss : MonsterModel
     {
         await FastAttackAnimation.Play(Creature);
         ModAudio.Play("general", "slime_attack");
-        await CardPileCmd.AddToCombatAndPreview<Slimed>(targets, PileType.Discard, SlimedCount, false);
+
+        try
+        {
+            ClassicSlimedTracker.CreatingClassicSlimed = ActsFromThePastConfig.LegacyEnemiesGiveClassicSlimed;
+            await CardPileCmd.AddToCombatAndPreview<Slimed>(targets, PileType.Discard, SlimedCount, false);
+        }
+        finally
+        {
+            ClassicSlimedTracker.CreatingClassicSlimed = false;
+        }
     }
     
     private async Task PrepSlam(IReadOnlyList<Creature> targets)
@@ -181,12 +190,16 @@ public sealed class SlimeBoss : MonsterModel
         positionQueue.Enqueue(originalPosition + new Vector2(-385f, 20f));
         var spikeSlime = (SpikeSlimeLarge)ModelDb.Monster<SpikeSlimeLarge>().ToMutable();
         spikeSlime.OverrideHp = currentHp;
-        await CreatureCmd.Add(spikeSlime, combatState, CombatSide.Enemy, null);
+        var spikeCreature = await CreatureCmd.Add(spikeSlime, combatState, CombatSide.Enemy, null);
+        await CreatureCmd.SetMaxHp(spikeCreature, currentHp);
+        await CreatureCmd.Heal(spikeCreature, currentHp);
 
         positionQueue.Enqueue(originalPosition + new Vector2(120f, 20f));
         var acidSlime = (AcidSlimeLarge)ModelDb.Monster<AcidSlimeLarge>().ToMutable();
         acidSlime.OverrideHp = currentHp;
-        await CreatureCmd.Add(acidSlime, combatState, CombatSide.Enemy, null);
+        var acidCreature = await CreatureCmd.Add(acidSlime, combatState, CombatSide.Enemy, null);
+        await CreatureCmd.SetMaxHp(acidCreature, currentHp);
+        await CreatureCmd.Heal(acidCreature, currentHp);
 
         enemyContainer?.Disconnect(Node.SignalName.ChildEnteredTree, Callable.From<Node>(OnChildEntered));
     }

@@ -39,7 +39,7 @@ public partial class AwakenedWingParticle : NSts1Effect
         var boneY = (float)_bone.Call("get_world_y");
         var pos = new Vector2(
             _creatureNode.GlobalPosition.X + boneX * 1.1f,
-            _creatureNode.GlobalPosition.Y + boneY * 1.1f
+            _creatureNode.GlobalPosition.Y + boneY * 1.1f - 20f
         );
         return pos;
     }

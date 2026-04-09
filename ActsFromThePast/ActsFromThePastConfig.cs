@@ -6,4 +6,10 @@ public class ActsFromThePastConfig : SimpleModConfig
 {
     public static bool LegacyActsOnly {get; set;} = false;
     
+    [ConfigHoverTip]
+    public static bool DarvOnlyInLegacyActs { get; set; } = false;
+    
+    [ConfigHoverTip]
+    public static bool LegacyEnemiesGiveClassicSlimed { get; set; } = false;
+    
 }

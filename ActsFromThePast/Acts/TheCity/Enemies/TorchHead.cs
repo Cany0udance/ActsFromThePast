@@ -75,7 +75,7 @@ public sealed class TorchHead : MonsterModel
 
             var firePos = new Vector2(
                 globalPos.X + boneX * 1.1f,
-                globalPos.Y + boneY * 1.1f
+                globalPos.Y + boneY * 1.1f - 20f
             );
 
             var effect = TorchHeadFireEffect.Create(firePos);

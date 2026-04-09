@@ -34,7 +34,7 @@ public sealed class SnakeDagger : MonsterModel
         var explode = new MoveState(
             EXPLODE,
             Explode,
-            new SingleAttackIntent(SacrificeDamage)
+            new DeathBlowIntent((Func<Decimal>) (() => SacrificeDamage))
         );
 
         woundStab.FollowUpState = explode;

@@ -413,7 +413,7 @@ private void SpawnParticles(object creatureNode, GodotObject eyeBone, GodotObjec
             var eyeY = (float)eyeBone.Call("get_world_y");
             var eyePos = new Vector2(
                 globalPos.X + eyeX * 1.1f,
-                globalPos.Y + eyeY * 1.1f
+                globalPos.Y + eyeY * 1.1f - 20f
             );
             var eyeParticle = AwakenedEyeParticle.Create(eyePos);
             NCombatRoom.Instance?.CombatVfxContainer?.AddChildSafely(eyeParticle);

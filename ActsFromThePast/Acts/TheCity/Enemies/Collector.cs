@@ -88,7 +88,7 @@ public sealed class Collector : MonsterModel
         Creature.Died += OnCollectorDeath;
 
         var root = (SceneTree)Engine.GetMainLoop();
-        var bg = root.Root.FindChild("TheCityActBackground", true, false) as TheCityBackground;
+        var bg = root.Root.FindChild("the_city_act_background", true, false) as TheCityBackground;
         bg?.SetBossMode(true);
 
         StartFireLoop();
@@ -199,7 +199,7 @@ public sealed class Collector : MonsterModel
         var boneY = (float)bone.Call("get_world_y");
         return new Vector2(
             creatureGlobalPos.X + boneX * 1.1f,
-            creatureGlobalPos.Y + boneY * 1.1f + 10f
+            creatureGlobalPos.Y + boneY * 1.1f
         );
     }
 

@@ -9,6 +9,7 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Encounters;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.Rooms;
@@ -81,13 +82,20 @@ public class ActBackgroundPatches
             return AccessTools.Method(typeof(EncounterModel), "GetBackgroundAssets", new[] { typeof(ActModel), typeof(Rng) });
         }
 
-        public static bool Prefix(ActModel parentAct, Rng rng, ref BackgroundAssets __result)
+        public static bool Prefix(EncounterModel __instance, ActModel parentAct, Rng rng, ref BackgroundAssets __result)
         {
             if (parentAct is not ExordiumAct and not TheCityAct and not TheBeyondAct)
                 return true;
 
-            var instance = (BackgroundAssets)FormatterServices.GetUninitializedObject(typeof(BackgroundAssets));
+            // Skip encounters that have their own unique backgrounds.
+            // If more cases pop up, consider switching to an allowlist instead:
+            //   if (__instance is not CombatEncounterModel) return true;
+            // That would let only regular combat encounters through and automatically
+            // exclude any future special encounters (events, endings, etc.).
+            if (__instance is TheArchitectEventEncounter)
+                return true;
 
+            var instance = (BackgroundAssets)FormatterServices.GetUninitializedObject(typeof(BackgroundAssets));
             var type = typeof(BackgroundAssets);
             var flags = BindingFlags.NonPublic | BindingFlags.Instance;
 
