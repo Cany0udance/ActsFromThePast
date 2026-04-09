@@ -13,6 +13,7 @@ public sealed class ShiftingPower : PowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.None;
+    public override bool ShouldScaleInMultiplayer => true;
 
     private int _pendingStrengthRestore = 0;
 

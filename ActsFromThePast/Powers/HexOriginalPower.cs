@@ -28,15 +28,14 @@ public sealed class HexOriginalPower : PowerModel
         PlayerChoiceContext choiceContext,
         CardPlay cardPlay)
     {
+        if (cardPlay.Card.Owner?.Creature != Owner)
+            return;
         if (cardPlay.Card.Type == CardType.Attack)
             return;
-
         Flash();
-
         var player = cardPlay.Card.Owner?.Creature;
         if (player == null)
             return;
-
         var statusCards = new CardPileAddResult[Amount];
         for (int i = 0; i < Amount; ++i)
         {
