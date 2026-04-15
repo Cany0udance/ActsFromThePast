@@ -94,7 +94,6 @@ public sealed class TheCityAct : ActModel
                 ModelDb.Event<TheMausoleum>(),
                 ModelDb.Event<TheNest>(),
                 ModelDb.Event<Nloth>(),
-                ModelDb.Event<MindBloom>(), // PLACEHOLDER!!!!!1!
                 ModelDb.Event<OldBeggar>(),
                 ModelDb.Event<PleadingVagrant>(),
                 ModelDb.Event<Vampires>(),

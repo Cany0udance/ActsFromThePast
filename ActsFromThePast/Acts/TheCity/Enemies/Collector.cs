@@ -87,10 +87,6 @@ public sealed class Collector : MonsterModel
         _alive = true;
         Creature.Died += OnCollectorDeath;
 
-        var root = (SceneTree)Engine.GetMainLoop();
-        var bg = root.Root.FindChild("the_city_act_background", true, false) as TheCityBackground;
-        bg?.SetBossMode(true);
-
         StartFireLoop();
     }
 
@@ -149,7 +145,6 @@ public sealed class Collector : MonsterModel
     private void SpawnFireParticles(object creatureNode, GodotObject leftEye, GodotObject rightEye, GodotObject staff, SceneTree tree)
     {
         if (!_alive) return;
-
         try
         {
             Vector2 globalPos = GetCreatureGlobalPos(creatureNode);
@@ -162,14 +157,12 @@ public sealed class Collector : MonsterModel
                 var effect = GlowyFireEyesEffect.Create(pos);
                 vfxContainer.AddChildSafely(effect);
             }
-
             if (rightEye != null)
             {
                 var pos = GetBoneWorldPosition(rightEye, globalPos);
                 var effect = GlowyFireEyesEffect.Create(pos);
                 vfxContainer.AddChildSafely(effect);
             }
-
             if (staff != null)
             {
                 var pos = GetBoneWorldPosition(staff, globalPos);
@@ -178,14 +171,14 @@ public sealed class Collector : MonsterModel
                 effect.ZIndex = -1;
                 vfxContainer.AddChildSafely(effect);
             }
+
+            var timer = tree.CreateTimer(FireInterval);
+            timer.Connect("timeout", Callable.From(() => SpawnFireParticles(creatureNode, leftEye, rightEye, staff, tree)));
         }
         catch (Exception e)
         {
             Log.Info($"[Collector] Fire particle error: {e.Message}");
         }
-
-        var timer = tree.CreateTimer(FireInterval);
-        timer.Connect("timeout", Callable.From(() => SpawnFireParticles(creatureNode, leftEye, rightEye, staff, tree)));
     }
 
     private static Vector2 GetCreatureGlobalPos(object creatureNode)
@@ -207,14 +200,11 @@ public sealed class Collector : MonsterModel
 
     private bool IsMinionDead()
     {
-        return CombatState.GetTeammatesOf(Creature)
-            .Any(t => t != Creature && t.IsDead);
-    }
-
-    private int NumAliveMinions()
-    {
-        return CombatState.GetTeammatesOf(Creature)
+        int aliveMinions = CombatState.GetTeammatesOf(Creature)
             .Count(t => t != Creature && t.IsAlive);
+        int torchSlots = CombatState.Encounter.Slots
+            .Count(s => s.StartsWith("torch"));
+        return aliveMinions < torchSlots;
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -224,7 +214,7 @@ public sealed class Collector : MonsterModel
         var spawnState = new MoveState(
             SPAWN,
             SpawnMove,
-            new AbstractIntent[] { new UnknownIntent() }
+            new AbstractIntent[] { new SummonIntent() }
         );
 
         var fireballState = new MoveState(
@@ -248,7 +238,7 @@ public sealed class Collector : MonsterModel
         var reviveState = new MoveState(
             REVIVE,
             ReviveMove,
-            new AbstractIntent[] { new UnknownIntent() }
+            new AbstractIntent[] { new SummonIntent() }
         );
 
         var moveBranch = new ConditionalBranchState("MOVE_BRANCH", SelectNextMove);

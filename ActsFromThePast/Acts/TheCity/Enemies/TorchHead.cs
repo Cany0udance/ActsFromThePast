@@ -65,14 +65,11 @@ public sealed class TorchHead : MonsterModel
     private void SpawnFireParticle(object creatureNode, GodotObject spineBone, SceneTree tree)
     {
         if (!_alive) return;
-
         try
         {
             var boneX = (float)spineBone.Call("get_world_x");
             var boneY = (float)spineBone.Call("get_world_y");
-
             var globalPos = ((dynamic)creatureNode).GlobalPosition;
-
             var firePos = new Vector2(
                 globalPos.X + boneX * 1.1f,
                 globalPos.Y + boneY * 1.1f - 20f
@@ -80,14 +77,14 @@ public sealed class TorchHead : MonsterModel
 
             var effect = TorchHeadFireEffect.Create(firePos);
             NCombatRoom.Instance?.CombatVfxContainer?.AddChildSafely(effect);
+
+            _fireTimer = tree.CreateTimer(FireInterval);
+            _fireTimer.Connect("timeout", Callable.From(() => SpawnFireParticle(creatureNode, spineBone, tree)));
         }
         catch (Exception e)
         {
             Log.Info($"[TorchHead] Fire particle error: {e.Message}");
         }
-
-        _fireTimer = tree.CreateTimer(FireInterval);
-        _fireTimer.Connect("timeout", Callable.From(() => SpawnFireParticle(creatureNode, spineBone, tree)));
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()

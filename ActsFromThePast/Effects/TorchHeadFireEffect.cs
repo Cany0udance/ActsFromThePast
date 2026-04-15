@@ -18,6 +18,14 @@ public partial class TorchHeadFireEffect : NSts1Effect
     private float _scale;
     private Color _color;
     private bool _flippedX;
+    
+    private static Texture2D[] _cachedTextures;
+
+    private static Texture2D GetRandomTexture()
+    {
+        _cachedTextures ??= FireTextures.Select(GD.Load<Texture2D>).ToArray();
+        return _cachedTextures[Random.Shared.Next(_cachedTextures.Length)];
+    }
 
     public static TorchHeadFireEffect Create(Vector2 position)
     {
@@ -36,8 +44,7 @@ public partial class TorchHeadFireEffect : NSts1Effect
         Duration = 0.7f;
         StartingDuration = 0.7f;
 
-        var texturePath = FireTextures[Random.Shared.Next(FireTextures.Length)];
-        var texture = GD.Load<Texture2D>(texturePath);
+        var texture = GetRandomTexture();
         if (texture == null)
         {
             IsDone = true;

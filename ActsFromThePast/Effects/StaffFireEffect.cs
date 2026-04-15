@@ -9,6 +9,14 @@ public partial class StaffFireEffect : NSts1Effect
         "res://ActsFromThePast/vfx/fire1.png",
         "res://ActsFromThePast/vfx/fire2.png"
     };
+    
+    private static Texture2D[] _cachedTextures;
+
+    private static Texture2D GetRandomTexture()
+    {
+        _cachedTextures ??= FireTextures.Select(GD.Load<Texture2D>).ToArray();
+        return _cachedTextures[Random.Shared.Next(_cachedTextures.Length)];
+    }
 
     private Sprite2D _sprite;
     private float _x;
@@ -36,8 +44,7 @@ public partial class StaffFireEffect : NSts1Effect
         Duration = 0.7f;
         StartingDuration = 0.7f;
 
-        var texturePath = FireTextures[Random.Shared.Next(FireTextures.Length)];
-        var texture = GD.Load<Texture2D>(texturePath);
+        var texture = GetRandomTexture();
         if (texture == null)
         {
             IsDone = true;

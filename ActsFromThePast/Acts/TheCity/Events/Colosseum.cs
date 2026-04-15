@@ -18,7 +18,7 @@ public sealed class Colosseum : EventModel
     public override bool IsShared => true;
 
     public override bool IsAllowed(RunState runState) =>
-        runState.TotalFloor >= 23;
+        runState.TotalFloor >= 23 && runState.Players.Count == 1;
     
     public override void OnRoomEnter()
     {

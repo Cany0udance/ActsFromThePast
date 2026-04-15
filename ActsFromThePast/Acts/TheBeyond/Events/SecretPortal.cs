@@ -9,6 +9,8 @@ namespace ActsFromThePast.Acts.TheBeyond.Events;
 public sealed class SecretPortal : EventModel
 {
     private const int MinRunTimeSeconds = 800;
+    
+    public override bool IsShared => true;
 
     public override bool IsAllowed(RunState runState)
     {

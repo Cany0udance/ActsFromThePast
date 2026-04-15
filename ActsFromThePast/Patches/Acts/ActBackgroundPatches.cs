@@ -19,6 +19,7 @@ namespace ActsFromThePast.Patches.Acts;
 public static class LegacyActTracker
 {
     public static readonly Dictionary<BackgroundAssets, string> LegacyBackgrounds = new();
+    public static bool IsCollectorEncounter { get; set; }
 }
 
 public class ActBackgroundPatches
@@ -113,6 +114,9 @@ public class ActBackgroundPatches
                 TheBeyondAct => "the_beyond_act",
                 _ => ""
             };
+            
+            if (parentAct is TheCityAct)
+                LegacyActTracker.IsCollectorEncounter = __instance is CollectorBoss;
 
             __result = instance;
             return false;

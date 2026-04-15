@@ -2,6 +2,7 @@
 using ActsFromThePast.Acts;
 using ActsFromThePast.Acts.Exordium.Events;
 using ActsFromThePast.Acts.TheBeyond;
+using ActsFromThePast.Acts.TheBeyond.Encounters;
 using ActsFromThePast.Acts.TheBeyond.Events;
 using ActsFromThePast.Acts.TheCity;
 using ActsFromThePast.Acts.TheCity.Events;
@@ -9,6 +10,7 @@ using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Nodes.Audio;
 using MegaCrit.Sts2.Core.Nodes.Screens.Map;
@@ -42,11 +44,19 @@ public class MusicPatches
             City,
             Beyond
         }
+        
+        public static void SetBossStingerState()
+        {
+            _playingBossStinger = true;
+            _isPlayingLegacyMusic = true;
+            _currentTrackType = TrackType.Boss;
+        }
 
         private static TrackType _currentTrackType = TrackType.None;
-        private static bool _isPlayingLegacyMusic = false;
-        private static bool _isPlayingBaseGameMusic = false;
-        private static bool _hexaghostActivated = false;
+        public static bool _isPlayingLegacyMusic = false;
+        public static bool _isPlayingBaseGameMusic = false;
+        public static bool _hexaghostActivated = false;
+        public static bool _playingBossStinger = false;
 
         // Exordium tracks
         private static readonly string[] ExordiumTracks =
@@ -260,169 +270,93 @@ public class MusicPatches
             return runState?.CurrentRoom?.RoomType == RoomType.Elite;
         }
 
-        [HarmonyPatch(nameof(NRunMusicController.UpdateMusic))]
-        [HarmonyPrefix]
-        public static bool UpdateMusic_Prefix(NRunMusicController __instance)
+[HarmonyPatch(nameof(NRunMusicController.UpdateMusic))]
+[HarmonyPrefix]
+public static bool UpdateMusic_Prefix(NRunMusicController __instance)
+{
+    if (!IsLegacyAct())
+    {
+        if (_isPlayingLegacyMusic)
         {
-            if (!IsLegacyAct()) return true;
-            ResetHexaghostState();
-            __instance.StopMusic();
-            ModAudio.FadeIn(GetExplorationTracks(), 1.0f);
-            _isPlayingLegacyMusic = true;
-            _currentTrackType = TrackType.Exploration;
-            __instance.UpdateAmbience();
+            ModAudio.StopMusic();
+            ModAudio.StopAmbience();
+            _isPlayingLegacyMusic = false;
+            _currentTrackType = TrackType.None;
+            _playingBossStinger = false;
+        }
+        return true;
+    }
+    _playingBossStinger = false;
+    ResetHexaghostState();
+    __instance.StopMusic();
+    ModAudio.FadeIn(GetExplorationTracks(), 1.0f);
+    _isPlayingLegacyMusic = true;
+    _currentTrackType = TrackType.Exploration;
+    __instance.UpdateAmbience();
+    return false;
+}
+
+[HarmonyPatch(nameof(NRunMusicController.UpdateTrack), new Type[0])]
+[HarmonyPrefix]
+public static bool UpdateTrack_Prefix(NRunMusicController __instance)
+{
+    if (!IsLegacyAct())
+    {
+        if (_isPlayingLegacyMusic)
+        {
+            ModAudio.StopMusic();
+            ModAudio.StopAmbience();
+            _isPlayingLegacyMusic = false;
+            _currentTrackType = TrackType.None;
+            _playingBossStinger = false;
+        }
+        return true;
+    }
+    
+    if (_playingBossStinger)
+        return false;
+
+    var combatManager = CombatManager.Instance;
+    var combatInProgress2 = combatManager?.IsInProgress ?? false;
+
+    // Handle Boss rooms
+    if (IsBossRoom() && combatInProgress2)
+    {
+        if (GetCurrentLegacyAct() == LegacyAct.Exordium && IsHexaghostEncounter() && !_hexaghostActivated)
+        {
+            if (_isPlayingLegacyMusic)
+            {
+                ModAudio.FadeOut(0.5f);
+                _isPlayingLegacyMusic = false;
+                _currentTrackType = TrackType.None;
+            }
+            StopBaseGameMusic(__instance);
             return false;
         }
-
-        [HarmonyPatch(nameof(NRunMusicController.UpdateTrack), new Type[0])]
-        [HarmonyPrefix]
-        public static bool UpdateTrack_Prefix(NRunMusicController __instance)
+        if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Boss)
         {
-            if (!IsLegacyAct()) return true;
+            StopBaseGameMusic(__instance);
+            ModAudio.FadeIn(GetBossTracks(), 1f);
+            _isPlayingLegacyMusic = true;
+            _currentTrackType = TrackType.Boss;
+        }
+        return false;
+    }
 
-            var combatManager = CombatManager.Instance;
-            var combatInProgress = combatManager?.IsInProgress ?? false;
+    // Handle Boss rewards screen (combat ended but still in boss room)
+    if (IsBossRoom() && !combatInProgress2)
+    {
+        StopBaseGameMusic(__instance);
+        ModAudio.PlayBossStinger();
+        SetBossStingerState();
+        return false;
+    }
 
-            // Handle Boss rooms
-            if (IsBossRoom() && combatInProgress)
-            {
-                if (GetCurrentLegacyAct() == LegacyAct.Exordium && IsHexaghostEncounter() && !_hexaghostActivated)
-                {
-                    if (_isPlayingLegacyMusic)
-                    {
-                        ModAudio.FadeOut(0.5f);
-                        _isPlayingLegacyMusic = false;
-                        _currentTrackType = TrackType.None;
-                    }
-                    StopBaseGameMusic(__instance);
-                    return false;
-                }
-                if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Boss)
-                {
-                    StopBaseGameMusic(__instance);
-                    ModAudio.FadeIn(GetBossTracks(), 1f);
-                    _isPlayingLegacyMusic = true;
-                    _currentTrackType = TrackType.Boss;
-                }
-                return false;
-            }
-
-            // Handle Elite rooms
-            if (IsEliteRoom() && combatInProgress)
-            {
-                if (GetCurrentLegacyAct() == LegacyAct.Exordium && IsLagavulinEncounter() && IsLagavulinAsleep())
-                {
-                    if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Exploration)
-                    {
-                        StopBaseGameMusic(__instance);
-                        ModAudio.FadeIn(GetExplorationTracks(), 1f);
-                        _isPlayingLegacyMusic = true;
-                        _currentTrackType = TrackType.Exploration;
-                    }
-                    return false;
-                }
-                if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Elite)
-                {
-                    StopBaseGameMusic(__instance);
-                    ModAudio.FadeIn(GetEliteTracks(), 1f);
-                    _isPlayingLegacyMusic = true;
-                    _currentTrackType = TrackType.Elite;
-                }
-                return false;
-            }
-
-            // Handle Dead Adventurer event combat
-            if (IsDeadAdventurerCombat())
-            {
-                if (IsDeadAdventurerCombatEnded())
-                {
-                    if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Exploration)
-                    {
-                        StopBaseGameMusic(__instance);
-                        ModAudio.FadeIn(GetExplorationTracks(), 1f);
-                        _isPlayingLegacyMusic = true;
-                        _currentTrackType = TrackType.Exploration;
-                    }
-                    return false;
-                }
-                if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Elite)
-                {
-                    StopBaseGameMusic(__instance);
-                    ModAudio.FadeIn(GetEliteTracks(), 1f);
-                    _isPlayingLegacyMusic = true;
-                    _currentTrackType = TrackType.Elite;
-                }
-                return false;
-            }
-            
-            // Handle Mind Bloom event combat
-            if (IsMindBloomCombat())
-            {
-                if (IsMindBloomCombatEnded())
-                {
-                    if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Exploration)
-                    {
-                        StopBaseGameMusic(__instance);
-                        ModAudio.FadeIn(GetExplorationTracks(), 1f);
-                        _isPlayingLegacyMusic = true;
-                        _currentTrackType = TrackType.Exploration;
-                    }
-                    return false;
-                }
-                if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Elite)
-                {
-                    StopBaseGameMusic(__instance);
-                    ModAudio.FadeIn(new[] { "mind_bloom" }, 1f);
-                    _isPlayingLegacyMusic = true;
-                    _currentTrackType = TrackType.Elite;
-                }
-                return false;
-            }
-            
-            // Handle Masked Bandits event combat
-            if (IsMaskedBanditsCombat())
-            {
-                if (IsMaskedBanditsCombatEnded())
-                {
-                    if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Exploration)
-                    {
-                        StopBaseGameMusic(__instance);
-                        ModAudio.FadeIn(GetExplorationTracks(), 1f);
-                        _isPlayingLegacyMusic = true;
-                        _currentTrackType = TrackType.Exploration;
-                    }
-                    return false;
-                }
-                if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Elite)
-                {
-                    StopBaseGameMusic(__instance);
-                    ModAudio.FadeIn(GetEliteTracks(), 1f);
-                    _isPlayingLegacyMusic = true;
-                    _currentTrackType = TrackType.Elite;
-                }
-                return false;
-            }
-
-            // Handle Shop / Rest Site
-            var specialProgress = GetSpecialRoomProgress();
-            if (specialProgress.HasValue)
-            {
-                if (_isPlayingLegacyMusic)
-                {
-                    ModAudio.FadeOut(1f);
-                    _isPlayingLegacyMusic = false;
-                    _currentTrackType = TrackType.None;
-                    StartBaseGameMusic(__instance, specialProgress.Value, 1f);
-                }
-                else if (_isPlayingBaseGameMusic)
-                {
-                    var proxy = GetProxy(__instance);
-                    proxy?.Call("update_global_parameter", "Progress", specialProgress.Value);
-                }
-                return false;
-            }
-
-            // Default: exploration music
+    // Handle Elite rooms
+    if (IsEliteRoom() && combatInProgress2)
+    {
+        if (GetCurrentLegacyAct() == LegacyAct.Exordium && IsLagavulinEncounter() && IsLagavulinAsleep())
+        {
             if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Exploration)
             {
                 StopBaseGameMusic(__instance);
@@ -432,6 +366,117 @@ public class MusicPatches
             }
             return false;
         }
+        if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Elite)
+        {
+            StopBaseGameMusic(__instance);
+            ModAudio.FadeIn(GetEliteTracks(), 1f);
+            _isPlayingLegacyMusic = true;
+            _currentTrackType = TrackType.Elite;
+        }
+        return false;
+    }
+
+    // Handle Dead Adventurer event combat
+    if (IsDeadAdventurerCombat())
+    {
+        if (IsDeadAdventurerCombatEnded())
+        {
+            if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Exploration)
+            {
+                StopBaseGameMusic(__instance);
+                ModAudio.FadeIn(GetExplorationTracks(), 1f);
+                _isPlayingLegacyMusic = true;
+                _currentTrackType = TrackType.Exploration;
+            }
+            return false;
+        }
+        if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Elite)
+        {
+            StopBaseGameMusic(__instance);
+            ModAudio.FadeIn(GetEliteTracks(), 1f);
+            _isPlayingLegacyMusic = true;
+            _currentTrackType = TrackType.Elite;
+        }
+        return false;
+    }
+
+    // Handle Mind Bloom event combat
+    if (IsMindBloomCombat())
+    {
+        if (IsMindBloomCombatEnded())
+        {
+            if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Exploration)
+            {
+                StopBaseGameMusic(__instance);
+                ModAudio.FadeIn(GetExplorationTracks(), 1f);
+                _isPlayingLegacyMusic = true;
+                _currentTrackType = TrackType.Exploration;
+            }
+            return false;
+        }
+        if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Elite)
+        {
+            StopBaseGameMusic(__instance);
+            ModAudio.FadeIn(new[] { "mind_bloom" }, 1f);
+            _isPlayingLegacyMusic = true;
+            _currentTrackType = TrackType.Elite;
+        }
+        return false;
+    }
+
+    // Handle Masked Bandits event combat
+    if (IsMaskedBanditsCombat())
+    {
+        if (IsMaskedBanditsCombatEnded())
+        {
+            if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Exploration)
+            {
+                StopBaseGameMusic(__instance);
+                ModAudio.FadeIn(GetExplorationTracks(), 1f);
+                _isPlayingLegacyMusic = true;
+                _currentTrackType = TrackType.Exploration;
+            }
+            return false;
+        }
+        if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Elite)
+        {
+            StopBaseGameMusic(__instance);
+            ModAudio.FadeIn(GetEliteTracks(), 1f);
+            _isPlayingLegacyMusic = true;
+            _currentTrackType = TrackType.Elite;
+        }
+        return false;
+    }
+
+    // Handle Shop / Rest Site
+    var specialProgress = GetSpecialRoomProgress();
+    if (specialProgress.HasValue)
+    {
+        if (_isPlayingLegacyMusic)
+        {
+            ModAudio.FadeOut(1f);
+            _isPlayingLegacyMusic = false;
+            _currentTrackType = TrackType.None;
+            StartBaseGameMusic(__instance, specialProgress.Value, 1f);
+        }
+        else if (_isPlayingBaseGameMusic)
+        {
+            var proxy = GetProxy(__instance);
+            proxy?.Call("update_global_parameter", "Progress", specialProgress.Value);
+        }
+        return false;
+    }
+
+    // Default: exploration music
+    if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Exploration)
+    {
+        StopBaseGameMusic(__instance);
+        ModAudio.FadeIn(GetExplorationTracks(), 1f);
+        _isPlayingLegacyMusic = true;
+        _currentTrackType = TrackType.Exploration;
+    }
+    return false;
+}
 
         [HarmonyPatch(nameof(NRunMusicController.ToggleMerchantTrack))]
         [HarmonyPrefix]
@@ -481,9 +526,43 @@ public class MusicPatches
         [HarmonyPrefix]
         public static bool UpdateAmbience_Prefix()
         {
-            if (!IsLegacyAct()) return true;
+            if (!IsLegacyAct())
+            {
+                if (_isPlayingLegacyMusic)
+                {
+                    ModAudio.StopAmbience();
+                }
+                return true;
+            }
+
+            var combatInProgress = CombatManager.Instance?.IsInProgress ?? false;
+            if (IsBossRoom() && !combatInProgress && !_playingBossStinger)
+            {
+                ModAudio.StopMusic();
+                ModAudio.StopAmbience();
+                ModAudio.PlayBossStinger(1.5f);
+                SetBossStingerState();
+                return false;
+            }
+
             ModAudio.FadeInAmbience(GetAmbienceTrack(), 1f);
             return false;
+        }
+        
+        [HarmonyPatch(typeof(Hook), nameof(Hook.BeforeCombatStart))]
+        public static class BeforeCombatStartStingerPatch
+        {
+            public static void Prefix()
+            {
+                if (_playingBossStinger)
+                {
+                    _playingBossStinger = false;
+                    _isPlayingLegacyMusic = false;
+                    _currentTrackType = TrackType.None;
+                    ModAudio.StopMusic();
+                    NRunMusicController.Instance?.UpdateTrack();
+                }
+            }
         }
     }
 
@@ -502,6 +581,20 @@ public class MusicPatches
         public static void Postfix(float volume)
         {
             ModAudio.SetAmbienceVolume(volume);
+        }
+    }
+    
+    [HarmonyPatch(typeof(Hook), nameof(Hook.AfterCombatEnd))]
+    public static class AfterCombatEndPatch
+    {
+        public static void Postfix(IRunState runState, CombatState? combatState, CombatRoom room)
+        {
+            if (combatState?.Encounter is SlimeBossBoss or CollectorBoss or HexaghostBoss
+                    or GuardianBoss or ChampBoss or BronzeAutomatonBoss or TimeEaterBoss
+                        or AwakenedOneBoss or DonuAndDecaBoss)
+            {
+                LegacyBossHelper.OnBossVictory();
+            }
         }
     }
 }

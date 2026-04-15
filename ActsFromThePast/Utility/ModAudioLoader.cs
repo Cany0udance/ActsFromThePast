@@ -24,6 +24,14 @@ public static class ModAudio
     private const float AmbienceVolumeOffset = -6f;
     private const float SfxVolumeOffset = -3f;
     
+    private static readonly string[] BossStingers =
+    {
+        "boss_victory_stinger_1",
+        "boss_victory_stinger_2",
+        "boss_victory_stinger_3",
+        "boss_victory_stinger_4"
+    };
+    
     public static void Play(string folder, string soundName, float volume = 0f, float pitchVariation = 0f, float basePitch = 1f)
     {
         var stream = GetOrLoadStream(folder, soundName);
@@ -326,6 +334,33 @@ public static void SetAmbienceVolume(float volume)
     if (_ambiencePlayer != null && GodotObject.IsInstanceValid(_ambiencePlayer))
     {
         _ambiencePlayer.VolumeDb = Mathf.LinearToDb(Mathf.Pow(volume, 2f)) + AmbienceVolumeOffset;
+    }
+}
+
+public static void PlayBossStinger(float seekFrom = 0f)
+{
+    var stinger = BossStingers[GD.RandRange(0, BossStingers.Length - 1)];
+    var path = $"res://ActsFromThePast/bgm/{stinger}.ogg";
+
+    var stream = GD.Load<AudioStream>(path);
+    if (stream == null) return;
+
+    if (stream is AudioStreamOggVorbis ogg)
+        ogg.Loop = false;
+
+    _musicPlayer = new AudioStreamPlayer();
+    _musicPlayer.Stream = stream;
+    _musicPlayer.Bus = "Master";
+
+    var bgmVolume = SaveManager.Instance.SettingsSave.VolumeBgm;
+    _musicPlayer.VolumeDb = Mathf.LinearToDb(Mathf.Pow(bgmVolume, 2f)) + MusicVolumeOffset;
+
+    var runNode = NRun.Instance;
+    if (runNode != null)
+    {
+        runNode.AddChild(_musicPlayer);
+        _musicPlayer.Play(seekFrom);
+        _currentMusicPath = path;
     }
 }
 }

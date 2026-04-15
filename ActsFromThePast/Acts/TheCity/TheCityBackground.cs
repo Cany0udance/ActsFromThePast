@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using ActsFromThePast.Patches.Acts;
+using Godot;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 
@@ -468,11 +469,14 @@ public partial class TheCityBackground : NCombatBackground
         {
             var allyContainer = combatRoom.GetNodeOrNull<Control>("%AllyContainer");
             var enemyContainer = combatRoom.GetNodeOrNull<Control>("%EnemyContainer");
-        
+
             if (allyContainer != null)
                 allyContainer.Position += Vector2.Down * 30f;
             if (enemyContainer != null)
                 enemyContainer.Position += Vector2.Down * 30f;
+
+            if (LegacyActTracker.IsCollectorEncounter)
+                SetBossMode(true);
         }
     }
     

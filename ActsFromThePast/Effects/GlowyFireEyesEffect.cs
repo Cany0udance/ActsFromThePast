@@ -10,6 +10,14 @@ public partial class GlowyFireEyesEffect : NSts1Effect
         "res://ActsFromThePast/vfx/fire2.png"
     };
 
+    private static Texture2D[] _cachedTextures;
+
+    private static Texture2D GetRandomTexture()
+    {
+        _cachedTextures ??= FireTextures.Select(GD.Load<Texture2D>).ToArray();
+        return _cachedTextures[Random.Shared.Next(_cachedTextures.Length)];
+    }
+
     private Sprite2D _sprite;
     private float _x;
     private float _y;
@@ -36,8 +44,7 @@ public partial class GlowyFireEyesEffect : NSts1Effect
         Duration = 1.0f;
         StartingDuration = 1.0f;
 
-        var texturePath = FireTextures[Random.Shared.Next(FireTextures.Length)];
-        var texture = GD.Load<Texture2D>(texturePath);
+        var texture = GetRandomTexture();
         if (texture == null)
         {
             IsDone = true;
@@ -57,7 +64,6 @@ public partial class GlowyFireEyesEffect : NSts1Effect
 
         _scale = 0.45f;
         _color = new Color(0.5f, 1.0f, 0.0f, 0.0f);
-
         Position = new Vector2(_x, _y);
         UpdateSprite();
     }
@@ -66,8 +72,8 @@ public partial class GlowyFireEyesEffect : NSts1Effect
     {
         _x += _vX * delta;
         _y += _vY * delta;
-
         Duration -= delta;
+
         if (Duration < 0f)
         {
             IsDone = true;
@@ -75,7 +81,6 @@ public partial class GlowyFireEyesEffect : NSts1Effect
         }
 
         _color.A = Duration / 2f;
-
         Position = new Vector2(_x, _y);
         UpdateSprite();
     }
