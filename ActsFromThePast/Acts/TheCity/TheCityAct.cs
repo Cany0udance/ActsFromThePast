@@ -50,6 +50,9 @@ public sealed class TheCityAct : ActModel
         return AllAncients;
     }
     
+    public override bool Equals(object? obj) => obj is TheCityAct;
+    public override int GetHashCode() => typeof(TheCityAct).GetHashCode();
+    
     public override IEnumerable<EventModel> AllEvents
     {
         get

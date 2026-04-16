@@ -1,6 +1,7 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Encounters;
 using ActsFromThePast.Acts.TheBeyond.Encounters.Elite;
 using ActsFromThePast.Acts.TheBeyond.Events;
+using ActsFromThePast.Acts.TheCity;
 using ActsFromThePast.Acts.TheCity.Events;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -50,6 +51,9 @@ public sealed class TheBeyondAct : ActModel
     {
         return AllAncients;
     }
+    
+    public override bool Equals(object? obj) => obj is TheBeyondAct;
+    public override int GetHashCode() => typeof(TheBeyondAct).GetHashCode();
     
     public override IEnumerable<EventModel> AllEvents
     {

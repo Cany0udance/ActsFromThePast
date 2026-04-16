@@ -44,7 +44,7 @@ public sealed class AwakenedOne : CustomMonsterModel
     
     protected override string VisualsPath => "res://ActsFromThePast/monsters/awakened_one/awakened_one.tscn";
     
-    private static readonly LocString _deathDialog = L10NMonsterLookup("AWAKENED_ONE.deathLine");
+    private static readonly LocString _deathDialog = L10NMonsterLookup("ACTSFROMTHEPAST-AWAKENED_ONE.deathLine");
 
     private const string SLASH = "SLASH";
     private const string SOUL_STRIKE = "SOUL_STRIKE";
