@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -12,7 +13,7 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
 
-public sealed class Mystic : MonsterModel
+public sealed class Mystic : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 50, 48);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 58, 56);

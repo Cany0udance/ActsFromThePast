@@ -1,13 +1,19 @@
-﻿using Godot;
+﻿using ActsFromThePast.Acts;
+using BaseLib.Abstracts;
+using Godot;
 using MegaCrit.Sts2.Core.Entities.Encounters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class SmallSlimesWeak : EncounterModel
+public sealed class SmallSlimesWeak : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Monster;
+    public SmallSlimesWeak() : base(RoomType.Monster)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => act is ExordiumAct;
     public override IEnumerable<EncounterTag> Tags => [EncounterTag.Slimes];
     public override bool IsWeak => true;
     

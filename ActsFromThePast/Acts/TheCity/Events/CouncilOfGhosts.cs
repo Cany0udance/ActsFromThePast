@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
@@ -10,21 +11,17 @@ using MegaCrit.Sts2.Core.Models.Cards;
 
 namespace ActsFromThePast.Acts.TheCity.Events;
 
-public sealed class CouncilOfGhosts : EventModel
+public sealed class CouncilOfGhosts : CustomEventModel
 {
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheCityAct>() };
+
     private const int ApparitionCount = 3;
-    
-    protected override IEnumerable<DynamicVar> CanonicalVars
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new HpLossVar(0),
-                new IntVar("ApparitionCount", ApparitionCount)
-            };
-        }
-    }
+        new HpLossVar(0),
+        new IntVar("ApparitionCount", ApparitionCount)
+    };
 
     public override void CalculateVars()
     {
@@ -43,25 +40,21 @@ public sealed class CouncilOfGhosts : EventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        return new EventOption[]
+        return new[]
         {
-            new EventOption(this, new Func<Task>(AcceptOption),
-                "COUNCIL_OF_GHOSTS.pages.INITIAL.options.ACCEPT",
-                HoverTipFactory.FromCard(ModelDb.Card<Apparition>())),
-            new EventOption(this, new Func<Task>(RefuseOption),
-                "COUNCIL_OF_GHOSTS.pages.INITIAL.options.REFUSE",
-                Array.Empty<IHoverTip>())
+            Option(Accept, "INITIAL", HoverTipFactory.FromCard(ModelDb.Card<Apparition>())),
+            Option(Refuse)
         };
     }
 
-    private async Task AcceptOption()
+    private async Task Accept()
     {
         await CreatureCmd.LoseMaxHp(
-            new ThrowingPlayerChoiceContext(), 
-            Owner.Creature, 
-            DynamicVars.HpLoss.BaseValue, 
+            new ThrowingPlayerChoiceContext(),
+            Owner.Creature,
+            DynamicVars.HpLoss.BaseValue,
             false);
-    
+
         var apparitionResults = new List<CardPileAddResult>();
         for (var i = 0; i < ApparitionCount; i++)
         {
@@ -70,12 +63,12 @@ public sealed class CouncilOfGhosts : EventModel
         }
         CardCmd.PreviewCardPileAdd((IReadOnlyList<CardPileAddResult>)apparitionResults, 2f);
         await Cmd.Wait(0.75f);
-    
-        SetEventFinished(L10NLookup("COUNCIL_OF_GHOSTS.pages.ACCEPT.description"));
+
+        SetEventFinished(PageDescription("ACCEPT"));
     }
 
-    private async Task RefuseOption()
+    private async Task Refuse()
     {
-        SetEventFinished(L10NLookup("COUNCIL_OF_GHOSTS.pages.REFUSE.description"));
+        SetEventFinished(PageDescription("REFUSE"));
     }
 }

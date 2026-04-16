@@ -1,5 +1,7 @@
 ﻿
 using ActsFromThePast.Cards;
+using BaseLib.Abstracts;
+using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -9,11 +11,13 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.RelicPools;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast.Relics;
 
-public sealed class Necronomicon : RelicModel
+[Pool(typeof(EventRelicPool))]
+public sealed class Necronomicon : CustomRelicModel
 {
     private bool _activated = true;
 

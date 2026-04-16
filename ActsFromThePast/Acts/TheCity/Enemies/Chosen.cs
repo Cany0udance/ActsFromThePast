@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Powers;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
@@ -15,7 +16,7 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
 
-public sealed class Chosen : MonsterModel
+public sealed class Chosen : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 98, 95);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 103, 99);
@@ -31,7 +32,7 @@ public sealed class Chosen : MonsterModel
 
     protected override string VisualsPath => "res://ActsFromThePast/monsters/chosen/chosen.tscn";
 
-    private static readonly LocString _hexDialog = L10NMonsterLookup("CHOSEN.moves.HEX.dialog");
+    private static readonly LocString _hexDialog = L10NMonsterLookup("ACTSFROMTHEPAST-CHOSEN.moves.HEX.dialog");
 
     private const string ZAP = "ZAP";
     private const string DRAIN = "DRAIN";

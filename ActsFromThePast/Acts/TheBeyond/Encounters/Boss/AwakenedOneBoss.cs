@@ -1,12 +1,17 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Enemies;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast.Acts.TheBeyond.Encounters;
 
-public sealed class AwakenedOneBoss : EncounterModel
+public sealed class AwakenedOneBoss : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Boss;
+    public AwakenedOneBoss() : base(RoomType.Boss)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => act is TheBeyondAct;
     public override string BossNodePath => "res://ActsFromThePast/map_boss_icons/awakened_one";
     public override bool HasScene => true;
     public override IReadOnlyList<string> Slots => new[] { "cultist_left", "cultist_right", "awakened" };

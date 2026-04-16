@@ -1,5 +1,6 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Encounters;
 using ActsFromThePast.Patches.RoomEvents;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
@@ -8,40 +9,35 @@ using MegaCrit.Sts2.Core.Rewards;
 
 namespace ActsFromThePast.Acts.TheBeyond.Events;
 
-public sealed class MysteriousSphere : EventModel
+public sealed class MysteriousSphere : CustomEventModel
 {
     public override bool IsShared => true;
     public override EventLayoutType LayoutType => EventLayoutType.Combat;
     public override EncounterModel CanonicalEncounter =>
         ModelDb.Encounter<TwoOrbWalkersEvent>();
 
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheBeyondAct>() };
+
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
         return new[]
         {
-            new EventOption(this, OpenOption,
-                "MYSTERIOUS_SPHERE.pages.INITIAL.options.OPEN"),
-            new EventOption(this, LeaveOption,
-                "MYSTERIOUS_SPHERE.pages.INITIAL.options.LEAVE")
+            Option(Open),
+            Option(Leave)
         };
     }
 
-    private Task OpenOption()
+    private Task Open()
     {
         MysteriousSpherePatches.SwapToOpenSphere();
-
-        SetEventState(
-            L10NLookup("MYSTERIOUS_SPHERE.pages.PRE_COMBAT.description"),
-            new[]
-            {
-                new EventOption(this, FightOption,
-                    "MYSTERIOUS_SPHERE.pages.PRE_COMBAT.options.FIGHT")
-            }
-        );
+        SetEventState(PageDescription("PRE_COMBAT"), new[]
+        {
+            Option(Fight, "PRE_COMBAT")
+        });
         return Task.CompletedTask;
     }
 
-    private Task FightOption()
+    private Task Fight()
     {
         var rareRelic = RelicFactory.PullNextRelicFromFront(Owner, RelicRarity.Rare).ToMutable();
         var rewards = new List<Reward>
@@ -49,15 +45,13 @@ public sealed class MysteriousSphere : EventModel
             new GoldReward(45, 55, Owner),
             new RelicReward(rareRelic, Owner)
         };
-
         EnterCombatWithoutExitingEvent<TwoOrbWalkersEvent>(rewards, false);
         return Task.CompletedTask;
     }
 
-    private Task LeaveOption()
+    private Task Leave()
     {
-        SetEventFinished(
-            L10NLookup("MYSTERIOUS_SPHERE.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
         return Task.CompletedTask;
     }
 }

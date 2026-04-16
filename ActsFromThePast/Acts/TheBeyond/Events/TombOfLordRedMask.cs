@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Gold;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -8,21 +9,17 @@ using MegaCrit.Sts2.Core.Models.Relics;
 
 namespace ActsFromThePast.Acts.TheBeyond.Events;
 
-public sealed class TombOfLordRedMask : EventModel
+public sealed class TombOfLordRedMask : CustomEventModel
 {
     private const int GoldAmount = 222;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheBeyondAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new GoldVar(GoldAmount),
-                new IntVar("PlayerGold", 0)
-            };
-        }
-    }
+        new GoldVar(GoldAmount),
+        new IntVar("PlayerGold", 0)
+    };
 
     public override void CalculateVars()
     {
@@ -35,31 +32,28 @@ public sealed class TombOfLordRedMask : EventModel
 
         if (Owner.Relics.Any(r => r is RedMask))
         {
-            options.Add(new EventOption(this, WearMaskOption,
-                "TOMB_OF_LORD_RED_MASK.pages.INITIAL.options.WEAR_MASK"));
+            options.Add(Option(WearMask));
         }
         else
         {
             options.Add(new EventOption(this, null,
-                "TOMB_OF_LORD_RED_MASK.pages.INITIAL.options.WEAR_MASK_LOCKED"));
-            options.Add(new EventOption(this, PayRespectsOption,
-                "TOMB_OF_LORD_RED_MASK.pages.INITIAL.options.PAY_RESPECTS",
-                HoverTipFactory.FromRelic(ModelDb.Relic<RedMask>())));
+                $"{Id.Entry}.pages.INITIAL.options.WEAR_MASK_LOCKED",
+                Array.Empty<IHoverTip>()));
+            options.Add(Option(PayRespects, "INITIAL",
+                HoverTipFactory.FromRelic(ModelDb.Relic<RedMask>()).ToArray()));
         }
 
-        options.Add(new EventOption(this, LeaveOption,
-            "TOMB_OF_LORD_RED_MASK.pages.INITIAL.options.LEAVE"));
-
+        options.Add(Option(Leave));
         return options;
     }
 
-    private async Task WearMaskOption()
+    private async Task WearMask()
     {
         await PlayerCmd.GainGold(GoldAmount, Owner);
-        SetEventFinished(L10NLookup("TOMB_OF_LORD_RED_MASK.pages.WEAR_MASK.description"));
+        SetEventFinished(PageDescription("WEAR_MASK"));
     }
 
-    private async Task PayRespectsOption()
+    private async Task PayRespects()
     {
         var goldToLose = Owner.Gold;
         if (goldToLose > 0)
@@ -68,12 +62,12 @@ public sealed class TombOfLordRedMask : EventModel
         }
         var redMask = ModelDb.Relic<RedMask>().ToMutable();
         await RelicCmd.Obtain(redMask, Owner);
-        SetEventFinished(L10NLookup("TOMB_OF_LORD_RED_MASK.pages.PAY_RESPECTS.description"));
+        SetEventFinished(PageDescription("PAY_RESPECTS"));
     }
 
-    private Task LeaveOption()
+    private Task Leave()
     {
-        SetEventFinished(L10NLookup("TOMB_OF_LORD_RED_MASK.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
         return Task.CompletedTask;
     }
 }

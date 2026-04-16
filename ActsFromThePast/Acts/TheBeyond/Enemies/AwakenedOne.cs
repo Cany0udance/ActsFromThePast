@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Powers;
+using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
@@ -22,7 +23,7 @@ using Void = MegaCrit.Sts2.Core.Models.Cards.Void;
 
 namespace ActsFromThePast.Acts.TheBeyond.Enemies;
 
-public sealed class AwakenedOne : MonsterModel
+public sealed class AwakenedOne : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 320, 300);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 320, 300);

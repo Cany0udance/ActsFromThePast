@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Powers;
+using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Assets;
@@ -20,9 +21,9 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
 
-public sealed class Byrd : MonsterModel
+public sealed class Byrd : CustomMonsterModel
 {
-    private static readonly LocString _cawLine = L10NMonsterLookup("BYRD.moves.CAW.speakLine");
+    private static readonly LocString _cawLine = L10NMonsterLookup("ACTSFROMTHEPAST-BYRD.moves.CAW.speakLine");
 
     private bool _isFlying = true;
 

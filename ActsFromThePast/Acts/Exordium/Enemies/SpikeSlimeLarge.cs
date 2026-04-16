@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Powers;
+using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Audio;
@@ -20,7 +21,7 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
 
-public sealed class SpikeSlimeLarge : MonsterModel
+public sealed class SpikeSlimeLarge : CustomMonsterModel
 {
     private int? _overrideHp;
 

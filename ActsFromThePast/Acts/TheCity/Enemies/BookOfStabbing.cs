@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using BaseLib.Abstracts;
+using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
@@ -15,7 +16,7 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
 
-public sealed class BookOfStabbing : MonsterModel
+public sealed class BookOfStabbing : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 168, 160);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 172, 164);

@@ -1,11 +1,17 @@
-﻿using MegaCrit.Sts2.Core.Models;
+﻿using ActsFromThePast.Acts.TheCity;
+using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class SlaversElite : EncounterModel
+public sealed class SlaversElite : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Elite;
+    public SlaversElite() : base(RoomType.Elite)
+    {
+    }
+
+    public override bool IsValidForAct(ActModel act) => act is TheCityAct;
     public override bool HasScene => true;
     public override IReadOnlyList<string> Slots => new[] { "blue", "taskmaster", "red" };
     

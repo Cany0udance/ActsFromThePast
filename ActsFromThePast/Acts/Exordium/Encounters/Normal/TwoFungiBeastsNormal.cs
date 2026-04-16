@@ -1,12 +1,18 @@
-﻿using MegaCrit.Sts2.Core.Entities.Encounters;
+﻿using ActsFromThePast.Acts;
+using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Entities.Encounters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class TwoFungiBeastsNormal : EncounterModel
+public sealed class TwoFungiBeastsNormal : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Monster;
+    public TwoFungiBeastsNormal() : base(RoomType.Monster)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => act is ExordiumAct;
     public override IEnumerable<EncounterTag> Tags => Array.Empty<EncounterTag>();
     public override bool IsWeak => false;
 

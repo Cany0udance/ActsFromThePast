@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Powers;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
@@ -15,7 +16,7 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast.Acts.TheBeyond.Enemies;
 
-public sealed class OrbWalker : MonsterModel
+public sealed class OrbWalker : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 92, 90);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 102, 96);

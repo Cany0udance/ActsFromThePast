@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -8,10 +9,12 @@ using MegaCrit.Sts2.Core.Models.Cards;
 
 namespace ActsFromThePast.Acts.Exordium.Events;
 // 600 from left, 332 from bottom. 800x800, 30 stroke 50% opacity, big image complete gaussian blur 2750x2750
-public sealed class BigFish : EventModel
+public sealed class BigFish : CustomEventModel
 {
-    private const int MaxHpGain = 5;
+    public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };
     
+    private const int MaxHpGain = 5;
+
     protected override IEnumerable<DynamicVar> CanonicalVars
     {
         get
@@ -23,45 +26,39 @@ public sealed class BigFish : EventModel
             };
         }
     }
-    
+
     public override void CalculateVars()
     {
         DynamicVars.Heal.BaseValue = Owner.Creature.MaxHp / 3M;
     }
-    
+
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
         return new EventOption[]
         {
-            new EventOption(this, new Func<Task>(BananaOption),
-                "BIG_FISH.pages.INITIAL.options.BANANA",
-                Array.Empty<IHoverTip>()),
-            new EventOption(this, new Func<Task>(DonutOption),
-                "BIG_FISH.pages.INITIAL.options.DONUT",
-                Array.Empty<IHoverTip>()),
-            new EventOption(this, new Func<Task>(BoxOption),
-                "BIG_FISH.pages.INITIAL.options.BOX",
-                HoverTipFactory.FromCard(ModelDb.Card<Regret>()))
+            Option(Banana),
+            Option(Donut),
+            Option(Box, new[] { HoverTipFactory.FromCard(ModelDb.Card<Regret>()) })
         };
     }
-    
-    private async Task BananaOption()
+
+    private async Task Banana()
     {
         await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.BaseValue);
-        SetEventFinished(L10NLookup("BIG_FISH.pages.BANANA.description"));
+        SetEventFinished(PageDescription("BANANA"));
     }
-    
-    private async Task DonutOption()
+
+    private async Task Donut()
     {
         await CreatureCmd.GainMaxHp(Owner.Creature, MaxHpGain);
-        SetEventFinished(L10NLookup("BIG_FISH.pages.DONUT.description"));
+        SetEventFinished(PageDescription("DONUT"));
     }
-    
-    private async Task BoxOption()
+
+    private async Task Box()
     {
         await CardPileCmd.AddCurseToDeck<Regret>(Owner);
         var relic = RelicFactory.PullNextRelicFromFront(Owner).ToMutable();
         await RelicCmd.Obtain(relic, Owner);
-        SetEventFinished(L10NLookup("BIG_FISH.pages.BOX.description"));
+        SetEventFinished(PageDescription("BOX"));
     }
 }

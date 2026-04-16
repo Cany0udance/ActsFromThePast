@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using BaseLib.Abstracts;
+using Godot;
 using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
@@ -10,20 +11,16 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace ActsFromThePast.Acts.TheCity.Events;
 
-public sealed class OldBeggar : EventModel
+public sealed class OldBeggar : CustomEventModel
 {
     private const int GoldCost = 75;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheCityAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("GoldCost", GoldCost)
-            };
-        }
-    }
+        new IntVar("GoldCost", GoldCost)
+    };
 
     private bool CanAfford()
     {
@@ -35,33 +32,22 @@ public sealed class OldBeggar : EventModel
         var options = new List<EventOption>();
 
         if (CanAfford())
-        {
-            options.Add(new EventOption(this, new Func<Task>(GiveGoldOption),
-                "OLD_BEGGAR.pages.INITIAL.options.GIVE_GOLD",
-                Array.Empty<IHoverTip>()));
-        }
+            options.Add(Option(GiveGold));
         else
-        {
             options.Add(new EventOption(this, null,
-                "OLD_BEGGAR.pages.INITIAL.options.GIVE_GOLD_LOCKED",
+                $"{Id.Entry}.pages.INITIAL.options.GIVE_GOLD_LOCKED",
                 Array.Empty<IHoverTip>()));
-        }
 
-        options.Add(new EventOption(this, new Func<Task>(LeaveOption),
-            "OLD_BEGGAR.pages.INITIAL.options.LEAVE",
-            Array.Empty<IHoverTip>()));
-
+        options.Add(Option(Leave));
         return options;
     }
 
-    private async Task GiveGoldOption()
+    private async Task GiveGold()
     {
         await PlayerCmd.LoseGold(GoldCost, Owner);
-        SetEventState(L10NLookup("OLD_BEGGAR.pages.GAVE_GOLD.description"), new EventOption[]
+        SetEventState(PageDescription("GAVE_GOLD"), new[]
         {
-            new EventOption(this, new Func<Task>(RemoveCardOption),
-                "OLD_BEGGAR.pages.GAVE_GOLD.options.REMOVE_CARD",
-                Array.Empty<IHoverTip>())
+            Option(RemoveCard, "GAVE_GOLD")
         });
 
         var portrait = Node?.FindChild("Portrait", true, false) as TextureRect;
@@ -72,17 +58,16 @@ public sealed class OldBeggar : EventModel
         }
     }
 
-    private async Task RemoveCardOption()
+    private async Task RemoveCard()
     {
         var prefs = new CardSelectorPrefs(CardSelectorPrefs.RemoveSelectionPrompt, 1);
         var selectedCards = await CardSelectCmd.FromDeckForRemoval(Owner, prefs);
         await CardPileCmd.RemoveFromDeck((IReadOnlyList<CardModel>)selectedCards.ToList());
-
-        SetEventFinished(L10NLookup("OLD_BEGGAR.pages.REMOVE_CARD.description"));
+        SetEventFinished(PageDescription("REMOVE_CARD"));
     }
 
-    private async Task LeaveOption()
+    private async Task Leave()
     {
-        SetEventFinished(L10NLookup("OLD_BEGGAR.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
     }
 }

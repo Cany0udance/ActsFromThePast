@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -16,7 +17,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast;
 
-public sealed class GremlinLeader : MonsterModel
+public sealed class GremlinLeader : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 145, 140);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 155, 148);
@@ -28,11 +29,11 @@ public sealed class GremlinLeader : MonsterModel
 
     protected override string VisualsPath => "res://ActsFromThePast/monsters/gremlin_leader/gremlin_leader.tscn";
 
-    private static readonly LocString _encourageLine1 = L10NMonsterLookup("GREMLIN_LEADER.moves.ENCOURAGE.dialog1");
-    private static readonly LocString _encourageLine2 = L10NMonsterLookup("GREMLIN_LEADER.moves.ENCOURAGE.dialog2");
-    private static readonly LocString _encourageLine3 = L10NMonsterLookup("GREMLIN_LEADER.moves.ENCOURAGE.dialog3");
-    private static readonly LocString _gremlinFleeeLine1 = L10NMonsterLookup("GREMLIN_LEADER.gremlinFlee1");
-    private static readonly LocString _gremlinFleeLine2 = L10NMonsterLookup("GREMLIN_LEADER.gremlinFlee2");
+    private static readonly LocString _encourageLine1 = L10NMonsterLookup("ACTSFROMTHEPAST-GREMLIN_LEADER.moves.ENCOURAGE.dialog1");
+    private static readonly LocString _encourageLine2 = L10NMonsterLookup("ACTSFROMTHEPAST-GREMLIN_LEADER.moves.ENCOURAGE.dialog2");
+    private static readonly LocString _encourageLine3 = L10NMonsterLookup("ACTSFROMTHEPAST-GREMLIN_LEADER.moves.ENCOURAGE.dialog3");
+    private static readonly LocString _gremlinFleeeLine1 = L10NMonsterLookup("ACTSFROMTHEPAST-GREMLIN_LEADER.gremlinFlee1");
+    private static readonly LocString _gremlinFleeLine2 = L10NMonsterLookup("ACTSFROMTHEPAST-GREMLIN_LEADER.gremlinFlee2");
 
     private const string RALLY = "RALLY";
     private const string ENCOURAGE = "ENCOURAGE";

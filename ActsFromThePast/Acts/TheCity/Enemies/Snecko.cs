@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using BaseLib.Abstracts;
+using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
@@ -17,9 +18,8 @@ using MegaCrit.Sts2.Core.Nodes.Vfx.Utilities;
 
 namespace ActsFromThePast;
 
-public sealed class Snecko : MonsterModel
+public sealed class Snecko : CustomMonsterModel
 {
-    // todo fix eye
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 120, 114);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 125, 120);
 

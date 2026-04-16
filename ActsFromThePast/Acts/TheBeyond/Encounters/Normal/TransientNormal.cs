@@ -1,12 +1,17 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Enemies;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast.Acts.TheBeyond.Encounters;
 
-public sealed class TransientNormal : EncounterModel
+public sealed class TransientNormal : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Monster;
+    public TransientNormal() : base(RoomType.Monster)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => act is TheBeyondAct;
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {

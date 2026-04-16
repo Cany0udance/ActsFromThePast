@@ -1,12 +1,16 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.RelicPools;
 
 namespace ActsFromThePast.Relics;
 
-public sealed class BloodyIdol : RelicModel
+[Pool(typeof(EventRelicPool))]
+public sealed class BloodyIdol : CustomRelicModel
 {
     private const int HealAmount = 5;
 

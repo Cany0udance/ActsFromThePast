@@ -58,7 +58,7 @@ public class MaskedBanditsPatches
                 return;
             }
 
-            var locString = new LocString("events", "MASKED_BANDITS.pages.PAID_4.description");
+            var locString = new LocString("events", "ACTSFROMTHEPAST-MASKED_BANDITS.pages.PAID_4.description");
             descLabel.Text = locString.GetFormattedText();
         }
     }

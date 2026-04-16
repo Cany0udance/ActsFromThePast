@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -10,14 +11,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Acts.Exordium.Events;
 
-public sealed class ScrapOoze : EventModel
+public sealed class ScrapOoze : CustomEventModel
 {
     private const int BaseDamage = 5;
     private const int BaseRelicChance = 25;
     private const int ChanceIncreasePerAttempt = 10;
     private const int DamageIncreasePerAttempt = 1;
-
     private int _attempts;
+
+    public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };
 
     private int Attempts
     {
@@ -32,17 +34,11 @@ public sealed class ScrapOoze : EventModel
     private int CurrentDamage => BaseDamage + Attempts * DamageIncreasePerAttempt;
     private int CurrentRelicChance => BaseRelicChance + Attempts * ChanceIncreasePerAttempt;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("Damage", CurrentDamage),
-                new IntVar("RelicChance", CurrentRelicChance)
-            };
-        }
-    }
+        new IntVar("Damage", CurrentDamage),
+        new IntVar("RelicChance", CurrentRelicChance)
+    };
 
     public override void OnRoomEnter()
     {
@@ -51,18 +47,14 @@ public sealed class ScrapOoze : EventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        return new EventOption[]
+        return new[]
         {
-            new EventOption(this, new Func<Task>(ReachInsideOption),
-                "SCRAP_OOZE.pages.INITIAL.options.REACH",
-                Array.Empty<IHoverTip>()).ThatDoesDamage(CurrentDamage),
-            new EventOption(this, new Func<Task>(LeaveOption),
-                "SCRAP_OOZE.pages.INITIAL.options.LEAVE",
-                Array.Empty<IHoverTip>())
+            Option(Reach).ThatDoesDamage(CurrentDamage),
+            Option(Leave)
         };
     }
 
-    private async Task ReachInsideOption()
+    private async Task Reach()
     {
         // TODO poison sound
         await CreatureCmd.Damage(
@@ -75,34 +67,29 @@ public sealed class ScrapOoze : EventModel
 
         int roll = Rng.NextInt(100);
         int threshold = 100 - CurrentRelicChance;
-        Log.Info($"[ScrapOoze] Roll: {roll}, Threshold: {threshold}, RelicChance: {CurrentRelicChance}%, Success: {roll >= threshold}");
+     //   Log.Info($"[ScrapOoze] Roll: {roll}, Threshold: {threshold}, RelicChance: {CurrentRelicChance}%, Success: {roll >= threshold}");
 
         if (roll >= threshold)
         {
             var relic = RelicFactory.PullNextRelicFromFront(Owner).ToMutable();
             await RelicCmd.Obtain(relic, Owner);
-            SetEventFinished(L10NLookup("SCRAP_OOZE.pages.SUCCESS.description"));
+            SetEventFinished(PageDescription("SUCCESS"));
         }
         else
         {
             Attempts++;
             DynamicVars["Damage"].BaseValue = CurrentDamage;
             DynamicVars["RelicChance"].BaseValue = CurrentRelicChance;
-
-            SetEventState(L10NLookup("SCRAP_OOZE.pages.FAIL.description"), new EventOption[]
+            SetEventState(PageDescription("FAIL"), new[]
             {
-                new EventOption(this, new Func<Task>(ReachInsideOption),
-                    "SCRAP_OOZE.pages.FAIL.options.REACH",
-                    Array.Empty<IHoverTip>()).ThatDoesDamage(CurrentDamage),
-                new EventOption(this, new Func<Task>(LeaveOption),
-                    "SCRAP_OOZE.pages.FAIL.options.LEAVE",
-                    Array.Empty<IHoverTip>())
+                Option(Reach, "FAIL").ThatDoesDamage(CurrentDamage),
+                Option(Leave, "FAIL")
             });
         }
     }
 
-    private async Task LeaveOption()
+    private async Task Leave()
     {
-        SetEventFinished(L10NLookup("SCRAP_OOZE.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
     }
 }

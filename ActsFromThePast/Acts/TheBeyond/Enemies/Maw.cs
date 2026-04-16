@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -15,7 +16,7 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast.Acts.TheBeyond.Enemies;
 
-public sealed class Maw : MonsterModel
+public sealed class Maw : CustomMonsterModel
 {
     public override int MinInitialHp => 300;
     public override int MaxInitialHp => 300;
@@ -33,7 +34,7 @@ public sealed class Maw : MonsterModel
     private const string NOMNOMNOM_SINGLE = "NOMNOMNOM_SINGLE";
     private const string NOMNOMNOM_MULTI = "NOMNOMNOM_MULTI";
 
-    private static readonly LocString _roarDialog = L10NMonsterLookup("MAW.moves.ROAR.dialog");
+    private static readonly LocString _roarDialog = L10NMonsterLookup("ACTSFROMTHEPAST-MAW.moves.ROAR.dialog");
 
     private bool _roared = false;
     private int _turnCount = 1;

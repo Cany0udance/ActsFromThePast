@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Cards;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Events;
@@ -11,24 +12,20 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Acts.TheBeyond.Events;
 
-public sealed class WindingHalls : EventModel
+public sealed class WindingHalls : CustomEventModel
 {
     private const decimal HpLossPercent = 0.125M;
     private const decimal HealPercent = 0.25M;
     private const decimal MaxHpLossPercent = 0.05M;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheBeyondAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("HpLoss", 0),
-                new IntVar("HealAmt", 0),
-                new IntVar("MaxHpLoss", 0)
-            };
-        }
-    }
+        new IntVar("HpLoss", 0),
+        new IntVar("HealAmt", 0),
+        new IntVar("MaxHpLoss", 0)
+    };
 
     public override void CalculateVars()
     {
@@ -42,39 +39,27 @@ public sealed class WindingHalls : EventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        return new[]
-        {
-            new EventOption(this, IntroOption,
-                "WINDING_HALLS.pages.INITIAL.options.CONTINUE")
-        };
+        return new[] { Option(Continue) };
     }
-    
+
     public override void OnRoomEnter()
     {
         ModAudio.Play("events", "winding_halls");
     }
 
-    private Task IntroOption()
+    private Task Continue()
     {
-        SetEventState(
-            L10NLookup("WINDING_HALLS.pages.CHOICE.description"),
-            new[]
-            {
-                new EventOption(this, MadnessOption,
-                    "WINDING_HALLS.pages.CHOICE.options.MADNESS",
-                    HoverTipFactory.FromCardWithCardHoverTips<Madness>())
-                    .ThatDoesDamage(DynamicVars["HpLoss"].BaseValue),
-                new EventOption(this, WritheOption,
-                    "WINDING_HALLS.pages.CHOICE.options.WRITHE",
-                    HoverTipFactory.FromCardWithCardHoverTips<Writhe>()),
-                new EventOption(this, RetreatOption,
-                    "WINDING_HALLS.pages.CHOICE.options.RETREAT")
-            }
-        );
+        SetEventState(PageDescription("CHOICE"), new[]
+        {
+            Option(Madness, "CHOICE", HoverTipFactory.FromCardWithCardHoverTips<Madness>().ToArray())
+                .ThatDoesDamage(DynamicVars["HpLoss"].BaseValue),
+            Option(Writhe, "CHOICE", HoverTipFactory.FromCardWithCardHoverTips<Writhe>().ToArray()),
+            Option(Retreat, "CHOICE")
+        });
         return Task.CompletedTask;
     }
 
-    private async Task MadnessOption()
+    private async Task Madness()
     {
         await CreatureCmd.Damage(
             new ThrowingPlayerChoiceContext(),
@@ -82,9 +67,8 @@ public sealed class WindingHalls : EventModel
             DynamicVars["HpLoss"].BaseValue,
             ValueProp.Unblockable | ValueProp.Unpowered,
             null, null);
-        
-        ModAudio.Play("general", "attack_magic_slow_1");
 
+        ModAudio.Play("general", "attack_magic_slow_1");
         for (int i = 0; i < 2; i++)
         {
             var card = Owner.RunState.CreateCard(ModelDb.Card<Madness>(), Owner);
@@ -92,32 +76,28 @@ public sealed class WindingHalls : EventModel
             CardCmd.PreviewCardPileAdd(new[] { result }, 2f);
         }
         await Cmd.Wait(0.75f);
-
-        SetEventFinished(L10NLookup("WINDING_HALLS.pages.MADNESS.description"));
+        SetEventFinished(PageDescription("MADNESS"));
     }
 
-    private async Task WritheOption()
+    private async Task Writhe()
     {
         await CreatureCmd.Heal(
             Owner.Creature,
             DynamicVars["HealAmt"].BaseValue);
-
         var card = Owner.RunState.CreateCard(ModelDb.Card<Writhe>(), Owner);
         var result = await CardPileCmd.Add(card, PileType.Deck);
         CardCmd.PreviewCardPileAdd(new[] { result }, 2f);
         await Cmd.Wait(0.75f);
-
-        SetEventFinished(L10NLookup("WINDING_HALLS.pages.WRITHE.description"));
+        SetEventFinished(PageDescription("WRITHE"));
     }
 
-    private async Task RetreatOption()
+    private async Task Retreat()
     {
         await CreatureCmd.LoseMaxHp(
             new ThrowingPlayerChoiceContext(),
             Owner.Creature,
             DynamicVars["MaxHpLoss"].BaseValue,
             false);
-
-        SetEventFinished(L10NLookup("WINDING_HALLS.pages.RETREAT.description"));
+        SetEventFinished(PageDescription("RETREAT"));
     }
 }

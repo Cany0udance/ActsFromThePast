@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -10,7 +11,7 @@ using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 
 namespace ActsFromThePast.Acts.TheBeyond.Enemies;
 
-public sealed class SnakeDagger : MonsterModel
+public sealed class SnakeDagger : CustomMonsterModel
 {
     public override int MinInitialHp => 20;
     public override int MaxInitialHp => 25;

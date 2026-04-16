@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Acts.TheCity;
+using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
@@ -21,7 +22,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast;
 
-public sealed class Collector : MonsterModel
+public sealed class Collector : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 300, 282);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 300, 282);
@@ -33,7 +34,7 @@ public sealed class Collector : MonsterModel
 
     protected override string VisualsPath => "res://ActsFromThePast/monsters/collector/collector.tscn";
 
-    private static readonly LocString _megaDebuffDialog = L10NMonsterLookup("COLLECTOR.moves.MEGA_DEBUFF.dialog");
+    private static readonly LocString _megaDebuffDialog = L10NMonsterLookup("ACTSFROMTHEPAST-COLLECTOR.moves.MEGA_DEBUFF.dialog");
 
     private const string SPAWN = "SPAWN";
     private const string FIREBALL = "FIREBALL";

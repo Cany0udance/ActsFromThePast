@@ -1,12 +1,17 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Enemies;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast.Acts.TheBeyond.Encounters;
 
-public class TwoOrbWalkersEvent : EncounterModel
+public class TwoOrbWalkersEvent : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Monster;
+    public TwoOrbWalkersEvent() : base(RoomType.Monster)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => false;
     public override bool HasScene => true;
     public override IReadOnlyList<string> Slots => new[] { "left", "right" };
 

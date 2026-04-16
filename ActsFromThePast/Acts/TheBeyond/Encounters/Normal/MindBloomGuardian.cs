@@ -1,11 +1,16 @@
-﻿using MegaCrit.Sts2.Core.Models;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast.Acts.TheBeyond.Encounters;
 
-public sealed class MindBloomGuardian : EncounterModel
+public sealed class MindBloomGuardian : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Monster;
+    public MindBloomGuardian() : base(RoomType.Monster)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => false;
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {

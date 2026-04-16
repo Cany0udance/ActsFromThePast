@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -14,7 +15,7 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
 
-public sealed class Romeo : MonsterModel
+public sealed class Romeo : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 37, 35);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 41, 39);
@@ -25,9 +26,9 @@ public sealed class Romeo : MonsterModel
 
     protected override string VisualsPath => "res://ActsFromThePast/monsters/romeo/romeo.tscn";
 
-    private static readonly LocString _mockBearAlive = L10NMonsterLookup("ROMEO.moves.MOCK.bearAlive");
-    private static readonly LocString _mockBearDead = L10NMonsterLookup("ROMEO.moves.MOCK.bearDead");
-    private static readonly LocString _deathReactLine = L10NMonsterLookup("ROMEO.deathReactLine");
+    private static readonly LocString _mockBearAlive = L10NMonsterLookup("ACTSFROMTHEPAST-ROMEO.moves.MOCK.bearAlive");
+    private static readonly LocString _mockBearDead = L10NMonsterLookup("ACTSFROMTHEPAST-ROMEO.moves.MOCK.bearDead");
+    private static readonly LocString _deathReactLine = L10NMonsterLookup("ACTSFROMTHEPAST-ROMEO.deathReactLine");
 
     private const string CROSS_SLASH = "CROSS_SLASH";
     private const string MOCK = "MOCK";

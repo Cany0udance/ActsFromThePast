@@ -1,11 +1,15 @@
-﻿using BaseLib.Hooks;
+﻿using BaseLib.Abstracts;
+using BaseLib.Hooks;
+using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.RelicPools;
 
 namespace ActsFromThePast.Relics;
 
-public sealed class MarkOfTheBloom : RelicModel, IHealAmountModifier
+[Pool(typeof(EventRelicPool))]
+public sealed class MarkOfTheBloom : CustomRelicModel, IHealAmountModifier
 {
     public override RelicRarity Rarity => RelicRarity.Event;
 

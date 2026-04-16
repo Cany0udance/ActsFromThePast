@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -12,7 +13,7 @@ using MegaCrit.Sts2.Core.Nodes.Vfx;
 
 namespace ActsFromThePast;
 
-public sealed class Pointy : MonsterModel
+public sealed class Pointy : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 34, 30);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 34, 30);
@@ -22,7 +23,7 @@ public sealed class Pointy : MonsterModel
 
     protected override string VisualsPath => "res://ActsFromThePast/monsters/pointy/pointy.tscn";
 
-    private static readonly LocString _deathReactLine = L10NMonsterLookup("POINTY.deathReactLine");
+    private static readonly LocString _deathReactLine = L10NMonsterLookup("ACTSFROMTHEPAST-POINTY.deathReactLine");
 
     private const string STAB = "STAB";
 

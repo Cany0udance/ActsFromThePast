@@ -1,12 +1,17 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Enemies;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast.Acts.TheBeyond.Encounters.Elite;
 
-public sealed class GiantHeadElite : EncounterModel
+public sealed class GiantHeadElite : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Elite;
+    public GiantHeadElite() : base(RoomType.Elite)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => act is TheBeyondAct;
     
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {

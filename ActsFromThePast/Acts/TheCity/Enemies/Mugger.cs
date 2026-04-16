@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -16,7 +17,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast;
 
-public sealed class Mugger : MonsterModel
+public sealed class Mugger : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 50, 48);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 54, 52);
@@ -129,7 +130,7 @@ public sealed class Mugger : MonsterModel
         if (_mugCount == 1 && !_hasSpoken && Rng.Chaotic.NextFloat() < 0.6f)
         {
             _hasSpoken = true;
-            TalkCmd.Play(L10NMonsterLookup("MUGGER.moves.MUG.banter"), Creature, VfxColor.Swamp, VfxDuration.Long);
+            TalkCmd.Play(L10NMonsterLookup("ACTSFROMTHEPAST-MUGGER.moves.MUG.banter"), Creature, VfxColor.Swamp, VfxDuration.Long);
         }
 
         PlayAttackSfx();
@@ -157,7 +158,7 @@ public sealed class Mugger : MonsterModel
 
     private async Task Escape(IReadOnlyList<Creature> targets)
     {
-        TalkCmd.Play(L10NMonsterLookup("MUGGER.moves.ESCAPE.banter"), Creature, VfxColor.Swamp, VfxDuration.Short);
+        TalkCmd.Play(L10NMonsterLookup("ACTSFROMTHEPAST-MUGGER.moves.ESCAPE.banter"), Creature, VfxColor.Swamp, VfxDuration.Short);
 
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Creature);
         if (creatureNode != null)

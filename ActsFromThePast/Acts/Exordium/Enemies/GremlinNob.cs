@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using BaseLib.Abstracts;
+using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
@@ -17,7 +18,7 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
 
-public sealed class GremlinNob : MonsterModel
+public sealed class GremlinNob : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 85, 82);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 90, 86);
@@ -110,7 +111,7 @@ public sealed class GremlinNob : MonsterModel
     private async Task Bellow(IReadOnlyList<Creature> targets)
     {
         PlayBellowSfx();
-        TalkCmd.Play(L10NMonsterLookup("GREMLIN_NOB.moves.BELLOW.banter"), Creature, VfxColor.Red, VfxDuration.VeryLong);
+        TalkCmd.Play(L10NMonsterLookup("ACTSFROMTHEPAST-GREMLIN_NOB.moves.BELLOW.banter"), Creature, VfxColor.Red, VfxDuration.VeryLong);
     
         VfxCmd.PlayOnCreatureCenter(Creature, "vfx/vfx_scream");
         NGame.Instance?.ScreenShake(ShakeStrength.Strong, ShakeDuration.Long);

@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using BaseLib.Abstracts;
+using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
@@ -19,7 +20,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast;
 
-public sealed class Looter : MonsterModel
+public sealed class Looter : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 46, 44);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 50, 48);
@@ -60,7 +61,7 @@ public sealed class Looter : MonsterModel
         
         if (Rng.Chaotic.NextFloat() < 0.3f)
         {
-            TalkCmd.Play(L10NMonsterLookup("LOOTER.deathLine"), Creature, VfxColor.Blue, VfxDuration.Long);
+            TalkCmd.Play(L10NMonsterLookup("ACTSFROMTHEPAST-LOOTER.deathLine"), Creature, VfxColor.Blue, VfxDuration.Long);
         }
         
         PlayRandomDeathSfx();
@@ -141,7 +142,7 @@ public sealed class Looter : MonsterModel
         if (!_hasSpoken && Rng.Chaotic.NextFloat() < 0.6f)
         {
             _hasSpoken = true;
-            TalkCmd.Play(L10NMonsterLookup("LOOTER.moves.MUG.banter"), Creature, VfxColor.Blue, VfxDuration.Long);
+            TalkCmd.Play(L10NMonsterLookup("ACTSFROMTHEPAST-LOOTER.moves.MUG.banter"), Creature, VfxColor.Blue, VfxDuration.Long);
         }
 
         PlayAttackSfx();
@@ -165,14 +166,14 @@ public sealed class Looter : MonsterModel
 
     private async Task SmokeBomb(IReadOnlyList<Creature> targets)
     {
-        TalkCmd.Play(L10NMonsterLookup("LOOTER.moves.SMOKE_BOMB.banter"), Creature, VfxColor.Blue, VfxDuration.Long);
+        TalkCmd.Play(L10NMonsterLookup("ACTSFROMTHEPAST-LOOTER.moves.SMOKE_BOMB.banter"), Creature, VfxColor.Blue, VfxDuration.Long);
         
         await CreatureCmd.GainBlock(Creature, EscapeBlock, ValueProp.Move, null);
     }
 
     private async Task Escape(IReadOnlyList<Creature> targets)
     {
-        TalkCmd.Play(L10NMonsterLookup("LOOTER.moves.ESCAPE.banter"), Creature, VfxColor.Blue, VfxDuration.Standard);
+        TalkCmd.Play(L10NMonsterLookup("ACTSFROMTHEPAST-LOOTER.moves.ESCAPE.banter"), Creature, VfxColor.Blue, VfxDuration.Standard);
 
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Creature);
         if (creatureNode != null)

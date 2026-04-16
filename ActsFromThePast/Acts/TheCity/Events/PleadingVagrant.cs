@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
@@ -9,20 +10,16 @@ using MegaCrit.Sts2.Core.Models.Cards;
 
 namespace ActsFromThePast.Acts.TheCity.Events;
 
-public sealed class PleadingVagrant : EventModel
+public sealed class PleadingVagrant : CustomEventModel
 {
     private const int GoldCost = 85;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheCityAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("GoldCost", GoldCost)
-            };
-        }
-    }
+        new IntVar("GoldCost", GoldCost)
+    };
 
     private bool CanAfford()
     {
@@ -34,53 +31,37 @@ public sealed class PleadingVagrant : EventModel
         var options = new List<EventOption>();
 
         if (CanAfford())
-        {
-            options.Add(new EventOption(this, new Func<Task>(PayGoldOption),
-                "PLEADING_VAGRANT.pages.INITIAL.options.PAY_GOLD",
-                Array.Empty<IHoverTip>()));
-        }
+            options.Add(Option(PayGold));
         else
-        {
             options.Add(new EventOption(this, null,
-                "PLEADING_VAGRANT.pages.INITIAL.options.PAY_GOLD_LOCKED",
+                $"{Id.Entry}.pages.INITIAL.options.PAY_GOLD_LOCKED",
                 Array.Empty<IHoverTip>()));
-        }
 
-        options.Add(new EventOption(this, new Func<Task>(RobOption),
-            "PLEADING_VAGRANT.pages.INITIAL.options.ROB",
-            HoverTipFactory.FromCard(ModelDb.Card<Shame>())));
-
-        options.Add(new EventOption(this, new Func<Task>(LeaveOption),
-            "PLEADING_VAGRANT.pages.INITIAL.options.LEAVE",
-            Array.Empty<IHoverTip>()));
-
+        options.Add(Option(Rob, "INITIAL", HoverTipFactory.FromCard(ModelDb.Card<Shame>())));
+        options.Add(Option(Leave));
         return options;
     }
 
-    private async Task PayGoldOption()
+    private async Task PayGold()
     {
         await PlayerCmd.LoseGold(GoldCost, Owner);
-
         var relic = RelicFactory.PullNextRelicFromFront(Owner).ToMutable();
         await RelicCmd.Obtain(relic, Owner);
-
-        SetEventFinished(L10NLookup("PLEADING_VAGRANT.pages.PAY_GOLD.description"));
+        SetEventFinished(PageDescription("PAY_GOLD"));
     }
 
-    private async Task RobOption()
+    private async Task Rob()
     {
         var shame = Owner.RunState.CreateCard(ModelDb.Card<Shame>(), Owner);
         var curseResult = await CardPileCmd.Add(shame, PileType.Deck);
         CardCmd.PreviewCardPileAdd(curseResult, 2f);
-
         var relic = RelicFactory.PullNextRelicFromFront(Owner).ToMutable();
         await RelicCmd.Obtain(relic, Owner);
-
-        SetEventFinished(L10NLookup("PLEADING_VAGRANT.pages.ROB.description"));
+        SetEventFinished(PageDescription("ROB"));
     }
 
-    private async Task LeaveOption()
+    private async Task Leave()
     {
-        SetEventFinished(L10NLookup("PLEADING_VAGRANT.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
     }
 }

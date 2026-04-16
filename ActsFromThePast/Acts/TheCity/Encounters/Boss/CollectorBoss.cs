@@ -1,12 +1,18 @@
-﻿using MegaCrit.Sts2.Core.Entities.Encounters;
+﻿using ActsFromThePast.Acts.TheCity;
+using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Entities.Encounters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class CollectorBoss : EncounterModel
+public sealed class CollectorBoss : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Boss;
+    public CollectorBoss() : base(RoomType.Boss)
+    {
+    }
+
+    public override bool IsValidForAct(ActModel act) => act is TheCityAct;
     
     public override string BossNodePath => "res://ActsFromThePast/map_boss_icons/collector";
     public override bool HasScene => true;

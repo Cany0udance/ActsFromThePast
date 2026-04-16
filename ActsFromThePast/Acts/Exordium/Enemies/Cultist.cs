@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -15,11 +16,11 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
 
-public sealed class Cultist : MonsterModel
+public sealed class Cultist : CustomMonsterModel
 {
-    private static readonly LocString _incantationLine1 = L10NMonsterLookup("CULTIST.moves.INCANTATION.speakLine1");
-    private static readonly LocString _incantationLine2 = L10NMonsterLookup("CULTIST.moves.INCANTATION.speakLine2");
-    private static readonly LocString _deathLine = L10NMonsterLookup("CULTIST.deathLine");
+    private static readonly LocString _incantationLine1 = L10NMonsterLookup("ACTSFROMTHEPAST-CULTIST.moves.INCANTATION.speakLine1");
+    private static readonly LocString _incantationLine2 = L10NMonsterLookup("ACTSFROMTHEPAST-CULTIST.moves.INCANTATION.speakLine2");
+    private static readonly LocString _deathLine = L10NMonsterLookup("ACTSFROMTHEPAST-CULTIST.deathLine");
     
     private bool _saidPower;
     

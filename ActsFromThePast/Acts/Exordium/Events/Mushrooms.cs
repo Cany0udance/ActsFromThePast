@@ -1,6 +1,7 @@
 ﻿using ActsFromThePast.Cards;
 using ActsFromThePast.Patches.RoomEvents;
 using ActsFromThePast.Relics;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -15,29 +16,23 @@ using MegaCrit.Sts2.Core.Runs;
 
 namespace ActsFromThePast.Acts.Exordium.Events;
 
-public sealed class Mushrooms : EventModel
+public sealed class Mushrooms : CustomEventModel
 {
     private const decimal HEAL_PERCENT = 0.25M;
 
     public override bool IsShared => true;
     public override EventLayoutType LayoutType => EventLayoutType.Combat;
-
     public override EncounterModel CanonicalEncounter =>
         ModelDb.Encounter<ThreeFungiBeastsEvent>();
-
-    public override bool IsAllowed(RunState runState) =>
+    public override bool IsAllowed(IRunState runState) =>
         runState.TotalFloor >= 6;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("HealAmount", 0)
-            };
-        }
-    }
+        new IntVar("HealAmount", 0)
+    };
 
     public override void CalculateVars()
     {
@@ -49,50 +44,37 @@ public sealed class Mushrooms : EventModel
     {
         return new[]
         {
-            new EventOption(this, FightOption,
-                "MUSHROOMS.pages.INITIAL.options.FIGHT"),
-            new EventOption(this, EatOption,
-                "MUSHROOMS.pages.INITIAL.options.EAT",
-                HoverTipFactory.FromCardWithCardHoverTips<Parasite>())
+            Option(Fight),
+            Option(Eat, "INITIAL", HoverTipFactory.FromCardWithCardHoverTips<Parasite>().ToArray())
         };
     }
 
-    private Task FightOption()
+    private Task Fight()
     {
         MushroomPatches.RevealEnemies();
-
         SetEventState(
-            L10NLookup("MUSHROOMS.pages.FIGHT.description"),
-            new[]
-            {
-                new EventOption(this, EnterFightOption,
-                    "MUSHROOMS.pages.FIGHT.options.ENTER_COMBAT")
-            }
-        );
+            PageDescription("FIGHT"),
+            new[] { Option(EnterCombat, "FIGHT") });
         return Task.CompletedTask;
     }
 
-    private Task EnterFightOption()
+    private Task EnterCombat()
     {
         var mushroomRelic = ModelDb.Relic<OddMushroom>().ToMutable();
         var rewards = new List<Reward>
         {
             new RelicReward(mushroomRelic, Owner)
         };
-
         EnterCombatWithoutExitingEvent<ThreeFungiBeastsEvent>(rewards, false);
-
         return Task.CompletedTask;
     }
 
-    private async Task EatOption()
+    private async Task Eat()
     {
         await CreatureCmd.Heal(
             Owner.Creature,
             DynamicVars["HealAmount"].BaseValue);
         await CardPileCmd.AddCurseToDeck<Parasite>(Owner);
-
-        SetEventFinished(
-            L10NLookup("MUSHROOMS.pages.EAT.description"));
+        SetEventFinished(PageDescription("EAT"));
     }
 }

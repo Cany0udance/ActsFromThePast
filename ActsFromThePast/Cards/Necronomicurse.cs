@@ -1,22 +1,28 @@
 ﻿using ActsFromThePast.Relics;
+using BaseLib.Abstracts;
+using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.CardPools;
 
 namespace ActsFromThePast.Cards;
 
-public sealed class Necronomicurse : CardModel
+[Pool(typeof(CurseCardPool))]
+public sealed class Necronomicurse : CustomCardModel
 {
     public Necronomicurse() : base(
-        canonicalEnergyCost: -1,
+        baseCost: -1,
         type: CardType.Curse,
         rarity: CardRarity.Curse,
-        targetType: TargetType.None)
+        target: TargetType.None)
     {
     }
+    
+    public override bool CanBeGeneratedByModifiers => false;
 
     public override IEnumerable<CardKeyword> CanonicalKeywords
     {
@@ -32,7 +38,6 @@ public sealed class Necronomicurse : CardModel
 
     protected override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // Unplayable, so this should never be called
         return Task.CompletedTask;
     }
 
@@ -43,15 +48,12 @@ public sealed class Necronomicurse : CardModel
     {
         if (card != this)
             return;
-        // Flash the Necronomicon if player has it
         var necronomicon = Owner.Relics.FirstOrDefault(r => r is Necronomicon);
         necronomicon?.Flash();
-        // Return the same card to hand
         await CardPileCmd.Add(this, PileType.Hand);
     }
 
     protected override void OnUpgrade()
     {
-        // Cannot be upgraded
     }
 }

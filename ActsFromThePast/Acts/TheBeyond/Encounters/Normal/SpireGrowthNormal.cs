@@ -1,12 +1,17 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Enemies;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast.Acts.TheBeyond.Encounters;
 
-public sealed class SpireGrowthNormal : EncounterModel
+public sealed class SpireGrowthNormal : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Monster;
+    public SpireGrowthNormal() : base(RoomType.Monster)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => act is TheBeyondAct;
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {

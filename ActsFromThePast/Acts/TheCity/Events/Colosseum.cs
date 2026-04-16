@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
@@ -9,17 +10,17 @@ using MegaCrit.Sts2.Core.Runs;
 
 namespace ActsFromThePast.Acts.TheCity.Events;
 
-public sealed class Colosseum : EventModel
+public sealed class Colosseum : CustomEventModel
 {
     private enum FightPhase { Slavers, Nobs }
     private FightPhase _lastFight;
     public static bool NeedsReplayFix;
 
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheCityAct>() };
     public override bool IsShared => true;
-
-    public override bool IsAllowed(RunState runState) =>
+    public override bool IsAllowed(IRunState runState) =>
         runState.TotalFloor >= 23 && runState.Players.Count == 1;
-    
+
     public override void OnRoomEnter()
     {
         NeedsReplayFix = false;
@@ -27,27 +28,18 @@ public sealed class Colosseum : EventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        return new[]
-        {
-            new EventOption(this, IntroOption,
-                "COLOSSEUM.pages.INITIAL.options.ENTER")
-        };
+        return new[] { Option(Enter) };
     }
 
-    private Task IntroOption()
+    private Task Enter()
     {
         SetEventState(
-            L10NLookup("COLOSSEUM.pages.FIGHT_INTRO.description"),
-            new[]
-            {
-                new EventOption(this, StartSlaverFight,
-                    "COLOSSEUM.pages.FIGHT_INTRO.options.FIGHT")
-            }
-        );
+            PageDescription("FIGHT_INTRO"),
+            new[] { Option(Fight, "FIGHT_INTRO") });
         return Task.CompletedTask;
     }
 
-    private Task StartSlaverFight()
+    private Task Fight()
     {
         _lastFight = FightPhase.Slavers;
         EnterCombatWithoutExitingEvent(
@@ -60,33 +52,26 @@ public sealed class Colosseum : EventModel
     public override Task Resume(AbstractRoom room)
     {
         SetEventState(
-            L10NLookup("COLOSSEUM.pages.POST_SLAVERS.description"),
+            PageDescription("POST_SLAVERS"),
             new[]
             {
-                new EventOption(this, StartNobFight,
-                    "COLOSSEUM.pages.POST_SLAVERS.options.FIGHT"),
-                new EventOption(this, FleeOption,
-                    "COLOSSEUM.pages.POST_SLAVERS.options.FLEE")
-            }
-        );
+                Option(FightAgain, "POST_SLAVERS"),
+                Option(Flee, "POST_SLAVERS")
+            });
         return Task.CompletedTask;
     }
 
-
-    private Task StartNobFight()
+    private Task FightAgain()
     {
         NeedsReplayFix = true;
-
         var rareRelic = RelicFactory.PullNextRelicFromFront(Owner, RelicRarity.Rare).ToMutable();
         var uncommonRelic = RelicFactory.PullNextRelicFromFront(Owner, RelicRarity.Uncommon).ToMutable();
-
         var rewards = new List<Reward>
         {
             new RelicReward(rareRelic, Owner),
             new RelicReward(uncommonRelic, Owner),
             new GoldReward(100, Owner)
         };
-
         EnterCombatWithoutExitingEvent(
             ModelDb.Encounter<ColosseumSecondEncounter>().ToMutable(),
             rewards,
@@ -94,10 +79,9 @@ public sealed class Colosseum : EventModel
         return Task.CompletedTask;
     }
 
-    private Task FleeOption()
+    private Task Flee()
     {
-        SetEventFinished(
-            L10NLookup("COLOSSEUM.pages.FLEE.description"));
+        SetEventFinished(PageDescription("FLEE"));
         return Task.CompletedTask;
     }
 }

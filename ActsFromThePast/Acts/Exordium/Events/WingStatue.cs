@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.CardSelection;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Events;
@@ -10,25 +11,21 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Acts.Exordium.Events;
 
-public sealed class WingStatue : EventModel
+public sealed class WingStatue : CustomEventModel
 {
     private const int Damage = 7;
     private const int RequiredDamage = 10;
     private const int MinGold = 50;
     private const int MaxGold = 80;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("Damage", Damage),
-                new GoldVar(0),
-                new IntVar("RequiredDamage", RequiredDamage)
-            };
-        }
-    }
+        new IntVar("Damage", Damage),
+        new GoldVar(0),
+        new IntVar("RequiredDamage", RequiredDamage)
+    };
 
     public override void CalculateVars()
     {
@@ -37,41 +34,31 @@ public sealed class WingStatue : EventModel
 
     private bool CanAttack()
     {
-        return Owner.Deck.Cards.Any(c => 
-            c.Type == CardType.Attack && 
-            c.DynamicVars.ContainsKey("Damage") && 
+        return Owner.Deck.Cards.Any(c =>
+            c.Type == CardType.Attack &&
+            c.DynamicVars.ContainsKey("Damage") &&
             c.DynamicVars.Damage.BaseValue >= RequiredDamage);
     }
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        var options = new List<EventOption>();
-
-        options.Add(new EventOption(this, new Func<Task>(AgreeOption),
-            "WING_STATUE.pages.INITIAL.options.AGREE",
-            Array.Empty<IHoverTip>()).ThatDoesDamage(Damage));
+        var options = new List<EventOption>
+        {
+            Option(Agree).ThatDoesDamage(Damage)
+        };
 
         if (CanAttack())
-        {
-            options.Add(new EventOption(this, new Func<Task>(AttackOption),
-                "WING_STATUE.pages.INITIAL.options.ATTACK",
-                Array.Empty<IHoverTip>()));
-        }
+            options.Add(Option(Attack));
         else
-        {
             options.Add(new EventOption(this, null,
-                "WING_STATUE.pages.INITIAL.options.ATTACK_LOCKED",
+                $"{Id.Entry}.pages.INITIAL.options.ATTACK_LOCKED",
                 Array.Empty<IHoverTip>()));
-        }
 
-        options.Add(new EventOption(this, new Func<Task>(LeaveOption),
-            "WING_STATUE.pages.INITIAL.options.LEAVE",
-            Array.Empty<IHoverTip>()));
-
+        options.Add(Option(Leave));
         return options;
     }
 
-    private async Task AgreeOption()
+    private async Task Agree()
     {
         await CreatureCmd.Damage(
             new ThrowingPlayerChoiceContext(),
@@ -84,18 +71,17 @@ public sealed class WingStatue : EventModel
         var prefs = new CardSelectorPrefs(CardSelectorPrefs.RemoveSelectionPrompt, 1);
         var selectedCards = await CardSelectCmd.FromDeckForRemoval(Owner, prefs);
         await CardPileCmd.RemoveFromDeck((IReadOnlyList<CardModel>)selectedCards.ToList());
-
-        SetEventFinished(L10NLookup("WING_STATUE.pages.AGREE.description"));
+        SetEventFinished(PageDescription("AGREE"));
     }
 
-    private async Task AttackOption()
+    private async Task Attack()
     {
         await PlayerCmd.GainGold(DynamicVars.Gold.BaseValue, Owner);
-        SetEventFinished(L10NLookup("WING_STATUE.pages.ATTACK.description"));
+        SetEventFinished(PageDescription("ATTACK"));
     }
 
-    private async Task LeaveOption()
+    private async Task Leave()
     {
-        SetEventFinished(L10NLookup("WING_STATUE.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
     }
 }

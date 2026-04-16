@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
@@ -8,8 +9,10 @@ using MegaCrit.Sts2.Core.Models.Cards;
 
 namespace ActsFromThePast.Acts.TheCity.Events;
 
-public sealed class TheMausoleum : EventModel
+public sealed class TheMausoleum : CustomEventModel
 {
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheCityAct>() };
+
     public override void OnRoomEnter()
     {
         ModAudio.Play("events", "ghosts");
@@ -17,35 +20,30 @@ public sealed class TheMausoleum : EventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        return new EventOption[]
+        return new[]
         {
-            new EventOption(this, new Func<Task>(OpenOption),
-                "THE_MAUSOLEUM.pages.INITIAL.options.OPEN",
-                HoverTipFactory.FromCard(ModelDb.Card<Writhe>())),
-            new EventOption(this, new Func<Task>(LeaveOption),
-                "THE_MAUSOLEUM.pages.INITIAL.options.LEAVE",
-                Array.Empty<IHoverTip>())
+            Option(Open, "INITIAL", HoverTipFactory.FromCard(ModelDb.Card<Writhe>())),
+            Option(Leave)
         };
     }
 
-    private async Task OpenOption()
+    private async Task Open()
     {
         // TODO: Screen shake if possible
         // CardCrawlGame.sound.play("BLUNT_HEAVY");
         // CardCrawlGame.screenShake.rumble(2.0F);
-        
+
         var relic = RelicFactory.PullNextRelicFromFront(Owner).ToMutable();
         await RelicCmd.Obtain(relic, Owner);
-        
+
         var writhe = Owner.RunState.CreateCard(ModelDb.Card<Writhe>(), Owner);
         var curseResult = await CardPileCmd.Add(writhe, PileType.Deck);
         CardCmd.PreviewCardPileAdd(curseResult, 2f);
-
-        SetEventFinished(L10NLookup("THE_MAUSOLEUM.pages.OPEN_CURSED.description"));
+        SetEventFinished(PageDescription("OPEN_CURSED"));
     }
 
-    private async Task LeaveOption()
+    private async Task Leave()
     {
-        SetEventFinished(L10NLookup("THE_MAUSOLEUM.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
     }
 }

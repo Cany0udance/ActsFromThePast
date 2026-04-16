@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -7,20 +8,16 @@ using MegaCrit.Sts2.Core.Models.Cards;
 
 namespace ActsFromThePast.Acts.Exordium.Events;
 
-public sealed class Sssserpent : EventModel
+public sealed class Sssserpent : CustomEventModel
 {
     private const int GoldReward = 150;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new GoldVar(GoldReward)
-            };
-        }
-    }
+        new GoldVar(GoldReward)
+    };
 
     public override void OnRoomEnter()
     {
@@ -29,38 +26,32 @@ public sealed class Sssserpent : EventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        return new EventOption[]
+        return new[]
         {
-            new EventOption(this, new Func<Task>(AgreeOption),
-                "SSSSERPENT.pages.INITIAL.options.AGREE",
-                HoverTipFactory.FromCard(ModelDb.Card<Doubt>())),
-            new EventOption(this, new Func<Task>(DisagreeOption),
-                "SSSSERPENT.pages.INITIAL.options.DISAGREE",
-                Array.Empty<IHoverTip>())
+            Option(Agree, "INITIAL", HoverTipFactory.FromCard(ModelDb.Card<Doubt>())),
+            Option(Disagree)
         };
     }
 
-    private Task AgreeOption()
+    private Task Agree()
     {
-        SetEventState(L10NLookup("SSSSERPENT.pages.AGREE.description"), new EventOption[]
+        SetEventState(PageDescription("AGREE"), new[]
         {
-            new EventOption(this, new Func<Task>(TakeGoldOption),
-                "SSSSERPENT.pages.AGREE.options.TAKE_GOLD",
-                Array.Empty<IHoverTip>())
+            Option(TakeGold, "AGREE")
         });
         return Task.CompletedTask;
     }
 
-    private async Task TakeGoldOption()
+    private async Task TakeGold()
     {
         await CardPileCmd.AddCurseToDeck<Doubt>(Owner);
         await PlayerCmd.GainGold(DynamicVars.Gold.BaseValue, Owner);
-        SetEventFinished(L10NLookup("SSSSERPENT.pages.TAKE_GOLD.description"));
+        SetEventFinished(PageDescription("TAKE_GOLD"));
     }
 
-    private Task DisagreeOption()
+    private Task Disagree()
     {
-        SetEventFinished(L10NLookup("SSSSERPENT.pages.DISAGREE.description"));
+        SetEventFinished(PageDescription("DISAGREE"));
         return Task.CompletedTask;
     }
 }

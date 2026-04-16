@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Powers;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
@@ -20,7 +21,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Acts.TheBeyond.Enemies;
 
-public sealed class TimeEater : MonsterModel
+public sealed class TimeEater : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 480, 456);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 480, 456);
@@ -39,8 +40,8 @@ public sealed class TimeEater : MonsterModel
     private const string HEAD_SLAM = "HEAD_SLAM";
     private const string HASTE = "HASTE";
 
-    private static readonly LocString _hasteDialog = L10NMonsterLookup("TIME_EATER.banter.haste");
-    private static readonly LocString _introDialog = L10NMonsterLookup("TIME_EATER.banter.intro");
+    private static readonly LocString _hasteDialog = L10NMonsterLookup("ACTSFROMTHEPAST-TIME_EATER.banter.haste");
+    private static readonly LocString _introDialog = L10NMonsterLookup("ACTSFROMTHEPAST-TIME_EATER.banter.intro");
 
     private bool _usedHaste;
     private bool _firstTurn = true;

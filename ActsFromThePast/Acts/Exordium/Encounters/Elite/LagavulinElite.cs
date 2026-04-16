@@ -1,11 +1,18 @@
-﻿using MegaCrit.Sts2.Core.Models;
+﻿using ActsFromThePast.Acts;
+using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class LagavulinElite : EncounterModel
+public sealed class LagavulinElite : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Elite;
+    
+    public LagavulinElite() : base(RoomType.Elite)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => act is ExordiumAct;
     
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {

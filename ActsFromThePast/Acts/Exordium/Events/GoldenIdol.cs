@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Relics;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -11,22 +12,18 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Acts.Exordium.Events;
 
-public sealed class GoldenIdol : EventModel
+public sealed class GoldenIdol : CustomEventModel
 {
+    public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };
+
     private const decimal HpLossPercent = 0.35M;
     private const decimal MaxHpLossPercent = 0.10M;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("Damage", 0),
-                new IntVar("MaxHpLoss", 0)
-            };
-        }
-    }
+        new IntVar("Damage", 0),
+        new IntVar("MaxHpLoss", 0)
+    };
 
     public override void CalculateVars()
     {
@@ -44,43 +41,32 @@ public sealed class GoldenIdol : EventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        return new EventOption[]
+        return new[]
         {
-            new EventOption(this, new Func<Task>(TakeIdolOption),
-                "GOLDEN_IDOL.pages.INITIAL.options.TAKE",
-                HoverTipFactory.FromRelic(ModelDb.Relic<GoldenIdolOriginal>())),
-            new EventOption(this, new Func<Task>(LeaveOption),
-                "GOLDEN_IDOL.pages.INITIAL.options.LEAVE",
-                Array.Empty<IHoverTip>())
+            Option(Take, "INITIAL", HoverTipFactory.FromRelic(ModelDb.Relic<Relics.GoldenIdol>()).ToArray()),
+            Option(Leave)
         };
     }
 
-    private async Task TakeIdolOption()
+    private async Task Take()
     {
-        var relic = ModelDb.Relic<GoldenIdolOriginal>().ToMutable();
+        var relic = ModelDb.Relic<Relics.GoldenIdol>().ToMutable();
         await RelicCmd.Obtain(relic, Owner);
-
-        SetEventState(L10NLookup("GOLDEN_IDOL.pages.BOULDER.description"), new EventOption[]
+        SetEventState(PageDescription("BOULDER"), new[]
         {
-            new EventOption(this, new Func<Task>(OutrunOption),
-                "GOLDEN_IDOL.pages.BOULDER.options.OUTRUN",
-                HoverTipFactory.FromCard(ModelDb.Card<Injury>())),
-            new EventOption(this, new Func<Task>(SmashOption),
-                "GOLDEN_IDOL.pages.BOULDER.options.SMASH",
-                Array.Empty<IHoverTip>()).ThatDoesDamage(DynamicVars["Damage"].BaseValue),
-            new EventOption(this, new Func<Task>(CrawlOption),
-                "GOLDEN_IDOL.pages.BOULDER.options.CRAWL",
-                Array.Empty<IHoverTip>())
+            Option(Outrun, "BOULDER", HoverTipFactory.FromCard(ModelDb.Card<Injury>())),
+            Option(Smash, "BOULDER").ThatDoesDamage(DynamicVars["Damage"].BaseValue),
+            Option(Crawl, "BOULDER")
         });
     }
 
-    private async Task OutrunOption()
+    private async Task Outrun()
     {
         await CardPileCmd.AddCurseToDeck<Injury>(Owner);
-        SetEventFinished(L10NLookup("GOLDEN_IDOL.pages.OUTRUN.description"));
+        SetEventFinished(PageDescription("OUTRUN"));
     }
 
-    private async Task SmashOption()
+    private async Task Smash()
     {
         await CreatureCmd.Damage(
             new ThrowingPlayerChoiceContext(),
@@ -89,21 +75,21 @@ public sealed class GoldenIdol : EventModel
             ValueProp.Unblockable | ValueProp.Unpowered,
             null,
             null);
-        SetEventFinished(L10NLookup("GOLDEN_IDOL.pages.SMASH.description"));
+        SetEventFinished(PageDescription("SMASH"));
     }
 
-    private async Task CrawlOption()
+    private async Task Crawl()
     {
         await CreatureCmd.LoseMaxHp(
             new ThrowingPlayerChoiceContext(),
             Owner.Creature,
             DynamicVars["MaxHpLoss"].BaseValue,
             false);
-        SetEventFinished(L10NLookup("GOLDEN_IDOL.pages.CRAWL.description"));
+        SetEventFinished(PageDescription("CRAWL"));
     }
 
-    private async Task LeaveOption()
+    private async Task Leave()
     {
-        SetEventFinished(L10NLookup("GOLDEN_IDOL.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
     }
 }

@@ -1,11 +1,17 @@
-﻿using MegaCrit.Sts2.Core.Models;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class DeadAdventurerGremlinNob : EncounterModel
+public sealed class DeadAdventurerGremlinNob : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Elite;
+    public DeadAdventurerGremlinNob() : base(RoomType.Elite)
+    {
+    }
+
+    public override bool IsValidForAct(ActModel act) => false;
+
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {
         get { yield return ModelDb.Monster<GremlinNob>(); }

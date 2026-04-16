@@ -1,12 +1,18 @@
-﻿using MegaCrit.Sts2.Core.Entities.Encounters;
+﻿using ActsFromThePast.Acts;
+using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Entities.Encounters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class SentriesElite : EncounterModel
+public sealed class SentriesElite : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Elite;
+    public SentriesElite() : base(RoomType.Elite)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => act is ExordiumAct;
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {

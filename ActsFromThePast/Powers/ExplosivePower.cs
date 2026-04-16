@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Combat;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -11,7 +12,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Powers;
 
-public sealed class ExplosivePower : PowerModel
+public sealed class ExplosivePower : CustomPowerModel
 {
     private const int ExplodeDamage = 30;
 

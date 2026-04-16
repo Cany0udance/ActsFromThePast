@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Powers;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
@@ -11,7 +12,7 @@ using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 
 namespace ActsFromThePast.Acts.TheBeyond.Enemies;
 
-public sealed class Transient : MonsterModel
+public sealed class Transient : CustomMonsterModel
 {
     public override int MinInitialHp => 999;
     public override int MaxInitialHp => 999;

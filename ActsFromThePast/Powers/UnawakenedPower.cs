@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Enemies;
+using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -7,7 +8,7 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace ActsFromThePast.Powers;
 
-public sealed class UnawakenedPower : PowerModel
+public sealed class UnawakenedPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;

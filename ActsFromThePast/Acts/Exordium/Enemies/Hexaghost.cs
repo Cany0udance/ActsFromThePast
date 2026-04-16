@@ -1,5 +1,6 @@
 ﻿using ActsFromThePast.Patches.Audio;
 using ActsFromThePast.Patches.Cards;
+using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Assets;
@@ -28,7 +29,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast;
 
-public sealed class Hexaghost : MonsterModel
+public sealed class Hexaghost : CustomMonsterModel
 {
     // HACK: Hexaghost scene includes a hidden DummySpine node because 
 // Sprite2D-only scenes fail to load from the mod folder for unknown reasons.

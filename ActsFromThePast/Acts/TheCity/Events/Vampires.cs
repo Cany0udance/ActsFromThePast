@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Cards;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Events;
@@ -11,21 +12,17 @@ using MegaCrit.Sts2.Core.Models.Relics;
 
 namespace ActsFromThePast.Acts.TheCity.Events;
 
-public sealed class Vampires : EventModel
+public sealed class Vampires : CustomEventModel
 {
     private const decimal HpDrainPercent = 0.3M;
     private const int BiteCount = 5;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheCityAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("MaxHpLoss", 0)
-            };
-        }
-    }
+        new IntVar("MaxHpLoss", 0)
+    };
 
     public override void CalculateVars()
     {
@@ -44,22 +41,13 @@ public sealed class Vampires : EventModel
     {
         var options = new List<EventOption>
         {
-            new EventOption(this, new Func<Task>(AcceptOption),
-                "VAMPIRES.pages.INITIAL.options.ACCEPT",
-                HoverTipFactory.FromCard(ModelDb.Card<Bite>()))
+            Option(Accept, "INITIAL", HoverTipFactory.FromCard(ModelDb.Card<Bite>()))
         };
 
         if (HasBloodVial())
-        {
-            options.Add(new EventOption(this, new Func<Task>(VialOption),
-                "VAMPIRES.pages.INITIAL.options.VIAL",
-                HoverTipFactory.FromCard(ModelDb.Card<Bite>())));
-        }
+            options.Add(Option(Vial, "INITIAL", HoverTipFactory.FromCard(ModelDb.Card<Bite>())));
 
-        options.Add(new EventOption(this, new Func<Task>(LeaveOption),
-            "VAMPIRES.pages.INITIAL.options.LEAVE",
-            Array.Empty<IHoverTip>()));
-
+        options.Add(Option(Leave));
         return options;
     }
 
@@ -68,7 +56,6 @@ public sealed class Vampires : EventModel
         var strikesToRemove = Owner.Deck.Cards
             .Where(c => c.Rarity == CardRarity.Basic && c.Tags.Contains(CardTag.Strike))
             .ToList();
-
         foreach (var strike in strikesToRemove)
         {
             await CardPileCmd.RemoveFromDeck(new[] { strike });
@@ -84,7 +71,7 @@ public sealed class Vampires : EventModel
         await Cmd.Wait(0.75f);
     }
 
-    private async Task AcceptOption()
+    private async Task Accept()
     {
         ModAudio.Play("general", "bite");
         var maxHpLoss = (int)DynamicVars["MaxHpLoss"].BaseValue;
@@ -94,20 +81,20 @@ public sealed class Vampires : EventModel
             maxHpLoss,
             false);
         await ReplaceStrikesWithBites();
-        SetEventFinished(L10NLookup("VAMPIRES.pages.ACCEPT.description"));
+        SetEventFinished(PageDescription("ACCEPT"));
     }
 
-    private async Task VialOption()
+    private async Task Vial()
     {
         ModAudio.Play("general", "bite");
         var vial = Owner.Relics.First(r => r is BloodVial);
         await RelicCmd.Remove(vial);
         await ReplaceStrikesWithBites();
-        SetEventFinished(L10NLookup("VAMPIRES.pages.VIAL.description"));
+        SetEventFinished(PageDescription("VIAL"));
     }
 
-    private async Task LeaveOption()
+    private async Task Leave()
     {
-        SetEventFinished(L10NLookup("VAMPIRES.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
     }
 }

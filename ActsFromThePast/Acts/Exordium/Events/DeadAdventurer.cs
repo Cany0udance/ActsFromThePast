@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Patches.RoomEvents;
+using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
@@ -17,8 +18,10 @@ using MegaCrit.Sts2.Core.Runs;
 
 namespace ActsFromThePast.Acts.Exordium.Events;
 
-public sealed class DeadAdventurer : EventModel
+public sealed class DeadAdventurer : CustomEventModel
 {
+    public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };
+
     private const int GoldReward = 30;
     private const int EncounterChanceStart = 35;
     private const int EncounterChanceRamp = 25;
@@ -42,16 +45,10 @@ public sealed class DeadAdventurer : EventModel
 
     private enum RewardType { Gold, Nothing, Relic }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("EncounterChance", EncounterChanceStart)
-            };
-        }
-    }
+        new IntVar("EncounterChance", EncounterChanceStart)
+    };
 
     public override void CalculateVars()
     {
@@ -76,9 +73,9 @@ public sealed class DeadAdventurer : EventModel
         {
             var key = _enemyType switch
             {
-                0 => "DEAD_ADVENTURER.pages.INITIAL.description.SENTRIES",
-                1 => "DEAD_ADVENTURER.pages.INITIAL.description.NOB",
-                _ => "DEAD_ADVENTURER.pages.INITIAL.description.LAGAVULIN"
+                0 => "ACTSFROMTHEPAST-DEAD_ADVENTURER.pages.INITIAL.description.SENTRIES",
+                1 => "ACTSFROMTHEPAST-DEAD_ADVENTURER.pages.INITIAL.description.NOB",
+                _ => "ACTSFROMTHEPAST-DEAD_ADVENTURER.pages.INITIAL.description.LAGAVULIN"
             };
             return L10NLookup(key);
         }
@@ -88,16 +85,12 @@ public sealed class DeadAdventurer : EventModel
     {
         return new[]
         {
-            new EventOption(this, SearchOption,
-                "DEAD_ADVENTURER.pages.INITIAL.options.SEARCH",
-                Array.Empty<IHoverTip>()),
-            new EventOption(this, LeaveOption,
-                "DEAD_ADVENTURER.pages.INITIAL.options.LEAVE",
-                Array.Empty<IHoverTip>())
+            Option(Search),
+            Option(Leave)
         };
     }
 
-    private async Task SearchOption()
+    private async Task Search()
     {
         if (Rng.NextInt(100) < _encounterChance)
         {
@@ -113,20 +106,13 @@ public sealed class DeadAdventurer : EventModel
     {
         CombatActive = true;
         DeadAdventurerPatches.RevealEnemies();
-
         SetEventState(
-            L10NLookup("DEAD_ADVENTURER.pages.FIGHT.description"),
-            new[]
-            {
-                new EventOption(this, EnterCombatOption,
-                    "DEAD_ADVENTURER.pages.FIGHT.options.ENTER_COMBAT",
-                    Array.Empty<IHoverTip>())
-            }
-        );
+            PageDescription("FIGHT"),
+            new[] { Option(EnterCombat, "FIGHT") });
         return Task.CompletedTask;
     }
 
-    private Task EnterCombatOption()
+    private Task EnterCombat()
     {
         var rewards = new List<Reward>
         {
@@ -141,12 +127,10 @@ public sealed class DeadAdventurer : EventModel
             switch (rewardType)
             {
                 case RewardType.Gold:
-                    rewards.Add(
-                        new GoldReward(GoldReward, GoldReward, Owner));
+                    rewards.Add(new GoldReward(GoldReward, GoldReward, Owner));
                     break;
                 case RewardType.Relic:
-                    var relic = RelicFactory
-                        .PullNextRelicFromFront(Owner).ToMutable();
+                    var relic = RelicFactory.PullNextRelicFromFront(Owner).ToMutable();
                     rewards.Add(new RelicReward(relic, Owner));
                     break;
             }
@@ -156,7 +140,6 @@ public sealed class DeadAdventurer : EventModel
             CanonicalEncounter.ToMutable(),
             rewards,
             false);
-
         return Task.CompletedTask;
     }
 
@@ -168,7 +151,6 @@ public sealed class DeadAdventurer : EventModel
 
         var reward = _rewards[0];
         _rewards.RemoveAt(0);
-
         bool wasLastReward = _numSearches >= 3;
 
         switch (reward)
@@ -179,34 +161,25 @@ public sealed class DeadAdventurer : EventModel
             case RewardType.Nothing:
                 break;
             case RewardType.Relic:
-                var relic = RelicFactory
-                    .PullNextRelicFromFront(Owner).ToMutable();
+                var relic = RelicFactory.PullNextRelicFromFront(Owner).ToMutable();
                 await RelicCmd.Obtain(relic, Owner);
                 break;
         }
 
         if (wasLastReward)
         {
-            SetEventFinished(
-                L10NLookup(
-                    "DEAD_ADVENTURER.pages.SUCCESS.description"));
+            SetEventFinished(PageDescription("SUCCESS"));
         }
         else
         {
-            var descriptionKey = reward switch
+            var pageKey = reward switch
             {
-                RewardType.Gold =>
-                    "DEAD_ADVENTURER.pages.GOLD.description",
-                RewardType.Nothing =>
-                    "DEAD_ADVENTURER.pages.NOTHING.description",
-                RewardType.Relic =>
-                    "DEAD_ADVENTURER.pages.RELIC.description",
-                _ => "DEAD_ADVENTURER.pages.NOTHING.description"
+                RewardType.Gold => "GOLD",
+                RewardType.Nothing => "NOTHING",
+                RewardType.Relic => "RELIC",
+                _ => "NOTHING"
             };
-
-            SetEventState(
-                L10NLookup(descriptionKey),
-                GetPostRewardOptions());
+            SetEventState(PageDescription(pageKey), GetPostRewardOptions());
         }
     }
 
@@ -214,29 +187,19 @@ public sealed class DeadAdventurer : EventModel
     {
         if (_numSearches >= 3)
         {
-            return new[]
-            {
-                new EventOption(this, LeaveOption,
-                    "DEAD_ADVENTURER.pages.SUCCESS.options.LEAVE",
-                    Array.Empty<IHoverTip>())
-            };
+            return new[] { Option(Leave, "SUCCESS") };
         }
 
         return new[]
         {
-            new EventOption(this, SearchOption,
-                "DEAD_ADVENTURER.pages.INITIAL.options.SEARCH",
-                Array.Empty<IHoverTip>()),
-            new EventOption(this, LeaveOption,
-                "DEAD_ADVENTURER.pages.INITIAL.options.LEAVE",
-                Array.Empty<IHoverTip>())
+            Option(Search),
+            Option(Leave)
         };
     }
 
-    private Task LeaveOption()
+    private Task Leave()
     {
-        SetEventFinished(
-            L10NLookup("DEAD_ADVENTURER.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
         return Task.CompletedTask;
     }
 

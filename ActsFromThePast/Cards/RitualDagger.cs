@@ -1,16 +1,20 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Saves.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Cards;
 
-public sealed class RitualDagger : CardModel
+[Pool(typeof(EventCardPool))]
+public sealed class RitualDagger : CustomCardModel
 {
     private const string _increaseKey = "Increase";
     private const int _baseDamage = 15;
@@ -18,10 +22,10 @@ public sealed class RitualDagger : CardModel
     private int _increasedDamage;
 
     public RitualDagger() : base(
-        canonicalEnergyCost: 1,
+        baseCost: 1,
         type: CardType.Attack,
         rarity: CardRarity.Event,
-        targetType: TargetType.AnyEnemy)
+        target: TargetType.AnyEnemy)
     {
     }
 

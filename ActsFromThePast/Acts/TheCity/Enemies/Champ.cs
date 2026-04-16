@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Powers;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
@@ -19,7 +20,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast;
 
-public sealed class Champ : MonsterModel
+public sealed class Champ : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 440, 420);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 440, 420);
@@ -37,15 +38,15 @@ public sealed class Champ : MonsterModel
 
     protected override string VisualsPath => "res://ActsFromThePast/monsters/champ/champ.tscn";
 
-    private static readonly LocString _tauntLine1 = L10NMonsterLookup("CHAMP.moves.TAUNT.dialog1");
-    private static readonly LocString _tauntLine2 = L10NMonsterLookup("CHAMP.moves.TAUNT.dialog2");
-    private static readonly LocString _tauntLine3 = L10NMonsterLookup("CHAMP.moves.TAUNT.dialog3");
-    private static readonly LocString _tauntLine4 = L10NMonsterLookup("CHAMP.moves.TAUNT.dialog4");
-    private static readonly LocString _limitBreakLine1 = L10NMonsterLookup("CHAMP.moves.ANGER.dialog1");
-    private static readonly LocString _limitBreakLine2 = L10NMonsterLookup("CHAMP.moves.ANGER.dialog2");
-    private static readonly LocString _deathLine1 = L10NMonsterLookup("CHAMP.moves.EXECUTE.dialog1");
-    private static readonly LocString _deathLine2 = L10NMonsterLookup("CHAMP.moves.EXECUTE.dialog2");
-    private static readonly LocString _beltLine = L10NMonsterLookup("CHAMP.beltDialog");
+    private static readonly LocString _tauntLine1 = L10NMonsterLookup("ACTSFROMTHEPAST-CHAMP.moves.TAUNT.dialog1");
+    private static readonly LocString _tauntLine2 = L10NMonsterLookup("ACTSFROMTHEPAST-CHAMP.moves.TAUNT.dialog2");
+    private static readonly LocString _tauntLine3 = L10NMonsterLookup("ACTSFROMTHEPAST-CHAMP.moves.TAUNT.dialog3");
+    private static readonly LocString _tauntLine4 = L10NMonsterLookup("ACTSFROMTHEPAST-CHAMP.moves.TAUNT.dialog4");
+    private static readonly LocString _limitBreakLine1 = L10NMonsterLookup("ACTSFROMTHEPAST-CHAMP.moves.ANGER.dialog1");
+    private static readonly LocString _limitBreakLine2 = L10NMonsterLookup("ACTSFROMTHEPAST-CHAMP.moves.ANGER.dialog2");
+    private static readonly LocString _deathLine1 = L10NMonsterLookup("ACTSFROMTHEPAST-CHAMP.moves.EXECUTE.dialog1");
+    private static readonly LocString _deathLine2 = L10NMonsterLookup("ACTSFROMTHEPAST-CHAMP.moves.EXECUTE.dialog2");
+    private static readonly LocString _beltLine = L10NMonsterLookup("ACTSFROMTHEPAST-CHAMP.beltDialog");
 
     private const string HEAVY_SLASH = "HEAVY_SLASH";
     private const string DEFENSIVE_STANCE = "DEFENSIVE_STANCE";

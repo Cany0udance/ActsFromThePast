@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Powers;
+using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Audio;
@@ -20,15 +21,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast;
 
-public sealed class Lagavulin : MonsterModel
+public sealed class Lagavulin : CustomMonsterModel
 {
     public const string SLEEP = "SLEEP";
     public const string ATTACK = "ATTACK";
     public const string DEBUFF = "DEBUFF";
 
-    private static readonly LocString _sleepLine1 = L10NMonsterLookup("LAGAVULIN.dialog.SLEEP_1");
-    private static readonly LocString _sleepLine2 = L10NMonsterLookup("LAGAVULIN.dialog.SLEEP_2");
-    private static readonly LocString _wakeLine = L10NMonsterLookup("LAGAVULIN.dialog.WAKE");
+    private static readonly LocString _sleepLine1 = L10NMonsterLookup("ACTSFROMTHEPAST-LAGAVULIN.dialog.SLEEP_1");
+    private static readonly LocString _sleepLine2 = L10NMonsterLookup("ACTSFROMTHEPAST-LAGAVULIN.dialog.SLEEP_2");
+    private static readonly LocString _wakeLine = L10NMonsterLookup("ACTSFROMTHEPAST-LAGAVULIN.dialog.WAKE");
 
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 112, 109);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 115, 111);

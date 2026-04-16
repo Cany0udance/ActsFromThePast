@@ -1,11 +1,17 @@
-﻿using MegaCrit.Sts2.Core.Models;
+﻿using ActsFromThePast.Acts.TheCity;
+using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class BronzeAutomatonBoss : EncounterModel
+public sealed class BronzeAutomatonBoss : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Boss;
+    public BronzeAutomatonBoss() : base(RoomType.Boss)
+    {
+    }
+
+    public override bool IsValidForAct(ActModel act) => act is TheCityAct;
     
     public override string BossNodePath => "res://ActsFromThePast/map_boss_icons/bronze_automaton";
     public override bool HasScene => true;

@@ -10,8 +10,8 @@ namespace ActsFromThePast;
 
 public static class GremlinLeaderHelper
 {
-    private static readonly LocString _fleeLine1 = MonsterModel.L10NMonsterLookup("GREMLIN_LEADER.gremlinFlee1");
-    private static readonly LocString _fleeLine2 = MonsterModel.L10NMonsterLookup("GREMLIN_LEADER.gremlinFlee2");
+    private static readonly LocString _fleeLine1 = MonsterModel.L10NMonsterLookup("ACTSFROMTHEPAST-GREMLIN_LEADER.gremlinFlee1");
+    private static readonly LocString _fleeLine2 = MonsterModel.L10NMonsterLookup("ACTSFROMTHEPAST-GREMLIN_LEADER.gremlinFlee2");
 
     public static void SubscribeToLeaderDeath(Creature gremlin, CombatState combatState)
     {

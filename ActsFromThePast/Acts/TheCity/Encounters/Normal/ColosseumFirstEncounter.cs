@@ -1,11 +1,16 @@
-﻿using MegaCrit.Sts2.Core.Models;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class ColosseumFirstEncounter : EncounterModel
+public sealed class ColosseumFirstEncounter : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Monster;
+    public ColosseumFirstEncounter() : base(RoomType.Monster)
+    {
+    }
+
+    public override bool IsValidForAct(ActModel act) => false;
     public override bool ShouldGiveRewards => false;
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters

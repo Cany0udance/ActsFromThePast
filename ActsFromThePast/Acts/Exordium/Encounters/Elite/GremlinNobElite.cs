@@ -1,11 +1,20 @@
-﻿using MegaCrit.Sts2.Core.Entities.Encounters;
+﻿using ActsFromThePast.Acts;
+using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Entities.Encounters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class GremlinNobElite : EncounterModel
+public sealed class GremlinNobElite : CustomEncounterModel
 {
+    
+    public GremlinNobElite() : base(RoomType.Elite)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => act is ExordiumAct;
+    
     public override RoomType RoomType => RoomType.Elite;
     
     public override IEnumerable<MonsterModel> AllPossibleMonsters

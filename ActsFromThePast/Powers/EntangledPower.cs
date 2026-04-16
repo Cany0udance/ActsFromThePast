@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Afflictions;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -9,7 +10,7 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace ActsFromThePast.Powers;
 
-public sealed class EntangledPower : PowerModel
+public sealed class EntangledPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Debuff;
     public override PowerStackType StackType => PowerStackType.Single;

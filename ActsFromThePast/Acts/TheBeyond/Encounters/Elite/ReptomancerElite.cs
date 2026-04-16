@@ -1,13 +1,18 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Enemies;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Entities.Encounters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast.Acts.TheBeyond.Encounters.Elite;
 
-public sealed class ReptomancerElite : EncounterModel
+public sealed class ReptomancerElite : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Elite;
+    public ReptomancerElite() : base(RoomType.Elite)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => act is TheBeyondAct;
     public override bool HasScene => true;
 
     public override IReadOnlyList<string> Slots => new[]

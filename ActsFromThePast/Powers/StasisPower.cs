@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -10,7 +11,7 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace ActsFromThePast.Powers;
 
-public sealed class StasisPower : PowerModel
+public sealed class StasisPower : CustomPowerModel
 {
     private CardModel? _stolenCard;
     public override PowerType Type => PowerType.Buff;

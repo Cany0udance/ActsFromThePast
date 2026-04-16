@@ -1,6 +1,9 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
@@ -10,23 +13,19 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Acts.TheBeyond.Events;
 
-public sealed class SensoryStone : EventModel
+public sealed class SensoryStone : CustomEventModel
 {
     private const int Dmg2 = 5;
     private const int Dmg3 = 10;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheBeyondAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("Dmg2", Dmg2),
-                new IntVar("Dmg3", Dmg3)
-            };
-        }
-    }
-    
+        new IntVar("Dmg2", Dmg2),
+        new IntVar("Dmg3", Dmg3)
+    };
+
     public override void OnRoomEnter()
     {
         ModAudio.Play("events", "sensory_stone");
@@ -34,35 +33,30 @@ public sealed class SensoryStone : EventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        return new[]
-        {
-            new EventOption(this, IntroOption,
-                "SENSORY_STONE.pages.INITIAL.options.CONTINUE")
-        };
+        return new[] { Option(Continue) };
     }
 
-    private Task IntroOption()
+    private Task Continue()
     {
-        SetEventState(
-            L10NLookup("SENSORY_STONE.pages.INTRO_2.description"),
-            new[]
-            {
-                new EventOption(this, () => MemoryOption(1),
-                    "SENSORY_STONE.pages.INTRO_2.options.MEMORY_1"),
-                new EventOption(this, () => MemoryOption(2),
-                    "SENSORY_STONE.pages.INTRO_2.options.MEMORY_2").ThatDoesDamage(Dmg2),
-                new EventOption(this, () => MemoryOption(3),
-                    "SENSORY_STONE.pages.INTRO_2.options.MEMORY_3").ThatDoesDamage(Dmg3)
-            }
-        );
+        SetEventState(PageDescription("INTRO_2"), new[]
+        {
+            new EventOption(this, () => Memory(1),
+                $"{Id.Entry}.pages.INTRO_2.options.MEMORY_1",
+                Array.Empty<IHoverTip>()),
+            new EventOption(this, () => Memory(2),
+                $"{Id.Entry}.pages.INTRO_2.options.MEMORY_2",
+                Array.Empty<IHoverTip>()).ThatDoesDamage(Dmg2),
+            new EventOption(this, () => Memory(3),
+                $"{Id.Entry}.pages.INTRO_2.options.MEMORY_3",
+                Array.Empty<IHoverTip>()).ThatDoesDamage(Dmg3)
+        });
         return Task.CompletedTask;
     }
 
-    private async Task MemoryOption(int choice)
+    private async Task Memory(int choice)
     {
-        
         // TODO add 50/50 chance for rare colorless
-        
+
         if (choice == 2)
         {
             await CreatureCmd.Damage(
@@ -82,8 +76,7 @@ public sealed class SensoryStone : EventModel
                 null, null);
         }
 
-        var memoryKey = GetRandomMemoryKey();
-
+        var memoryText = GetRandomMemoryText();
         var rewards = new List<Reward>(choice);
         for (int i = 0; i < choice; i++)
         {
@@ -93,19 +86,18 @@ public sealed class SensoryStone : EventModel
                 3, Owner));
         }
         await RewardsCmd.OfferCustom(Owner, rewards);
-
-        SetEventFinished(L10NLookup(memoryKey));
+        SetEventFinished(memoryText);
     }
 
-    private string GetRandomMemoryKey()
+    private LocString GetRandomMemoryText()
     {
         var keys = new[]
         {
-            "SENSORY_STONE.pages.MEMORY_1.description",
-            "SENSORY_STONE.pages.MEMORY_2.description",
-            "SENSORY_STONE.pages.MEMORY_3.description",
-            "SENSORY_STONE.pages.MEMORY_4.description"
+            $"{Id.Entry}.pages.MEMORY_1.description",
+            $"{Id.Entry}.pages.MEMORY_2.description",
+            $"{Id.Entry}.pages.MEMORY_3.description",
+            $"{Id.Entry}.pages.MEMORY_4.description"
         };
-        return Rng.NextItem(keys);
+        return L10NLookup(Rng.NextItem(keys));
     }
 }

@@ -1,12 +1,18 @@
-﻿using MegaCrit.Sts2.Core.Entities.Encounters;
+﻿using ActsFromThePast.Acts.TheCity;
+using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Entities.Encounters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class PairOfParasitesNormal : EncounterModel
+public sealed class PairOfParasitesNormal : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Monster;
+    public PairOfParasitesNormal() : base(RoomType.Monster)
+    {
+    }
+
+    public override bool IsValidForAct(ActModel act) => act is TheCityAct;
     public override IEnumerable<EncounterTag> Tags => Array.Empty<EncounterTag>();
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters

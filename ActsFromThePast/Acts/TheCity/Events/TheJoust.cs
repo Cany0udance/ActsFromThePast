@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -8,75 +9,61 @@ using MegaCrit.Sts2.Core.Nodes.Vfx.Utilities;
 
 namespace ActsFromThePast.Acts.TheCity.Events;
 
-public sealed class TheJoust : EventModel
+public sealed class TheJoust : CustomEventModel
 {
     private const int BetAmount = 50;
     private const int WinMurderer = 100;
     private const int WinOwner = 250;
     private const float OwnerWinChance = 0.3f;
-
     private bool _betForOwner;
     private bool _ownerWins;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheCityAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("BetAmount", BetAmount),
-                new IntVar("WinMurderer", WinMurderer),
-                new IntVar("WinOwner", WinOwner)
-            };
-        }
-    }
+        new IntVar("BetAmount", BetAmount),
+        new IntVar("WinMurderer", WinMurderer),
+        new IntVar("WinOwner", WinOwner)
+    };
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        return new EventOption[]
-        {
-            new EventOption(this, new Func<Task>(ContinueToExplanation),
-                "THE_JOUST.pages.INITIAL.options.CONTINUE",
-                Array.Empty<IHoverTip>())
-        };
+        return new[] { Option(Continue) };
     }
 
-    private Task ContinueToExplanation()
+    private Task Continue()
     {
-        SetEventState(L10NLookup("THE_JOUST.pages.EXPLANATION.description"), new EventOption[]
+        SetEventState(PageDescription("EXPLANATION"), new[]
         {
-            new EventOption(this, new Func<Task>(BetOnMurderer),
-                "THE_JOUST.pages.EXPLANATION.options.BET_MURDERER",
-                Array.Empty<IHoverTip>()),
-            new EventOption(this, new Func<Task>(BetOnOwner),
-                "THE_JOUST.pages.EXPLANATION.options.BET_OWNER",
-                Array.Empty<IHoverTip>())
+            Option(BetMurderer, "EXPLANATION"),
+            Option(BetOwner, "EXPLANATION")
         });
         return Task.CompletedTask;
     }
 
-    private async Task BetOnMurderer()
+    private async Task BetMurderer()
     {
         _betForOwner = false;
         await PlayerCmd.LoseGold(BetAmount, Owner);
-        
-        SetEventState(L10NLookup("THE_JOUST.pages.BET_MURDERER.description"), new EventOption[]
+
+        SetEventState(PageDescription("BET_MURDERER"), new[]
         {
-            new EventOption(this, new Func<Task>(WatchJoust),
-                "THE_JOUST.pages.BET_MURDERER.options.WATCH",
+            new EventOption(this, WatchJoust,
+                $"{Id.Entry}.pages.BET_MURDERER.options.WATCH",
                 Array.Empty<IHoverTip>())
         });
     }
 
-    private async Task BetOnOwner()
+    private async Task BetOwner()
     {
         _betForOwner = true;
         await PlayerCmd.LoseGold(BetAmount, Owner);
-        
-        SetEventState(L10NLookup("THE_JOUST.pages.BET_OWNER.description"), new EventOption[]
+
+        SetEventState(PageDescription("BET_OWNER"), new[]
         {
-            new EventOption(this, new Func<Task>(WatchJoust),
-                "THE_JOUST.pages.BET_OWNER.options.WATCH",
+            new EventOption(this, WatchJoust,
+                $"{Id.Entry}.pages.BET_OWNER.options.WATCH",
                 Array.Empty<IHoverTip>())
         });
     }
@@ -84,26 +71,23 @@ public sealed class TheJoust : EventModel
     private async Task WatchJoust()
     {
         _ownerWins = Rng.NextFloat() < OwnerWinChance;
-
         NGame.Instance?.ScreenShake(ShakeStrength.Weak, ShakeDuration.Short);
         SfxCmd.Play("event:/sfx/enemy/enemy_attacks/cultists/cultists_attack");
         await Cmd.Wait(1.0f);
-
         NGame.Instance?.ScreenShake(ShakeStrength.Weak, ShakeDuration.Short);
         SfxCmd.Play("event:/sfx/enemy/enemy_attacks/assassin_ruby_raider/assassin_ruby_raider_attack");
         await Cmd.Wait(0.25f);
-
         NGame.Instance?.ScreenShake(ShakeStrength.Weak, ShakeDuration.Short);
         SfxCmd.Play("event:/sfx/enemy/enemy_attacks/cultists/cultists_attack");
 
-        SetEventState(L10NLookup("THE_JOUST.pages.COMBAT.description"), new EventOption[]
+        SetEventState(PageDescription("COMBAT"), new[]
         {
-            new EventOption(this, new Func<Task>(ResolveJoust),
-                "THE_JOUST.pages.COMBAT.options.CONTINUE",
+            new EventOption(this, ResolveJoust,
+                $"{Id.Entry}.pages.COMBAT.options.CONTINUE",
                 Array.Empty<IHoverTip>())
         });
     }
-    
+
     private async Task ResolveJoust()
     {
         if (_ownerWins)
@@ -111,23 +95,23 @@ public sealed class TheJoust : EventModel
             if (_betForOwner)
             {
                 await PlayerCmd.GainGold(WinOwner, Owner);
-                SetEventFinished(L10NLookup("THE_JOUST.pages.OWNER_WINS_BET_WON.description"));
+                SetEventFinished(PageDescription("OWNER_WINS_BET_WON"));
             }
             else
             {
-                SetEventFinished(L10NLookup("THE_JOUST.pages.OWNER_WINS_BET_LOST.description"));
+                SetEventFinished(PageDescription("OWNER_WINS_BET_LOST"));
             }
         }
         else
         {
             if (_betForOwner)
             {
-                SetEventFinished(L10NLookup("THE_JOUST.pages.MURDERER_WINS_BET_LOST.description"));
+                SetEventFinished(PageDescription("MURDERER_WINS_BET_LOST"));
             }
             else
             {
                 await PlayerCmd.GainGold(WinMurderer, Owner);
-                SetEventFinished(L10NLookup("THE_JOUST.pages.MURDERER_WINS_BET_WON.description"));
+                SetEventFinished(PageDescription("MURDERER_WINS_BET_WON"));
             }
         }
     }

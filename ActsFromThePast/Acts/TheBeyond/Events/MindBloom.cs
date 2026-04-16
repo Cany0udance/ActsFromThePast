@@ -1,5 +1,6 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Encounters;
 using ActsFromThePast.Relics;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -13,7 +14,7 @@ using MegaCrit.Sts2.Core.Rewards;
 
 namespace ActsFromThePast.Acts.TheBeyond.Events;
 
-public sealed class MindBloom : EventModel
+public sealed class MindBloom : CustomEventModel
 {
     private const int FightGold = 50;
     private const int GoldRewardAmount = 999;
@@ -21,16 +22,12 @@ public sealed class MindBloom : EventModel
     private bool _isBeforeTreasure;
     internal static bool CombatActive { get; private set; }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheBeyondAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new GoldVar(GoldRewardAmount)
-            };
-        }
-    }
+        new GoldVar(GoldRewardAmount)
+    };
 
     public override void CalculateVars()
     {
@@ -42,30 +39,19 @@ public sealed class MindBloom : EventModel
     {
         var options = new List<EventOption>
         {
-            new EventOption(this, FightOption,
-                "MIND_BLOOM.pages.INITIAL.options.FIGHT"),
-            new EventOption(this, UpgradeOption,
-                "MIND_BLOOM.pages.INITIAL.options.UPGRADE",
-                HoverTipFactory.FromRelic(ModelDb.Relic<MarkOfTheBloom>()))
+            Option(Fight),
+            Option(Upgrade, "INITIAL", HoverTipFactory.FromRelic(ModelDb.Relic<MarkOfTheBloom>()).ToArray())
         };
 
         if (_isBeforeTreasure)
-        {
-            options.Add(new EventOption(this, GoldOption,
-                "MIND_BLOOM.pages.INITIAL.options.GOLD",
-                HoverTipFactory.FromCardWithCardHoverTips<Normality>()));
-        }
+            options.Add(Option(Gold, "INITIAL", HoverTipFactory.FromCardWithCardHoverTips<Normality>().ToArray()));
         else
-        {
-            options.Add(new EventOption(this, HealOption,
-                "MIND_BLOOM.pages.INITIAL.options.HEAL",
-                HoverTipFactory.FromCardWithCardHoverTips<Doubt>()));
-        }
+            options.Add(Option(Heal, "INITIAL", HoverTipFactory.FromCardWithCardHoverTips<Doubt>().ToArray()));
 
         return options;
     }
 
-    private Task FightOption()
+    private Task Fight()
     {
         CombatActive = true;
         var bosses = new List<EncounterModel>
@@ -85,7 +71,7 @@ public sealed class MindBloom : EventModel
         return Task.CompletedTask;
     }
 
-    private async Task UpgradeOption()
+    private async Task Upgrade()
     {
         var deck = PileType.Deck.GetPile(Owner).Cards;
         foreach (var card in deck)
@@ -93,17 +79,14 @@ public sealed class MindBloom : EventModel
             if (card.IsUpgradable)
                 CardCmd.Upgrade(card);
         }
-
         var markOfTheBloom = ModelDb.Relic<MarkOfTheBloom>().ToMutable();
         await RelicCmd.Obtain(markOfTheBloom, Owner);
-
-        SetEventFinished(L10NLookup("MIND_BLOOM.pages.UPGRADE.description"));
+        SetEventFinished(PageDescription("UPGRADE"));
     }
 
-    private async Task GoldOption()
+    private async Task Gold()
     {
         await PlayerCmd.GainGold(GoldRewardAmount, Owner);
-
         for (int i = 0; i < 2; i++)
         {
             var card = Owner.RunState.CreateCard(ModelDb.Card<Normality>(), Owner);
@@ -111,22 +94,19 @@ public sealed class MindBloom : EventModel
             CardCmd.PreviewCardPileAdd(new[] { result }, 2f);
         }
         await Cmd.Wait(0.75f);
-
-        SetEventFinished(L10NLookup("MIND_BLOOM.pages.GOLD.description"));
+        SetEventFinished(PageDescription("GOLD"));
     }
 
-    private async Task HealOption()
+    private async Task Heal()
     {
         await CreatureCmd.Heal(Owner.Creature, Owner.Creature.MaxHp);
-
         var card = Owner.RunState.CreateCard(ModelDb.Card<Doubt>(), Owner);
         var result = await CardPileCmd.Add(card, PileType.Deck);
         CardCmd.PreviewCardPileAdd(new[] { result }, 2f);
         await Cmd.Wait(0.75f);
-
-        SetEventFinished(L10NLookup("MIND_BLOOM.pages.HEAL.description"));
+        SetEventFinished(PageDescription("HEAL"));
     }
-    
+
     protected override void OnEventFinished()
     {
         CombatActive = false;

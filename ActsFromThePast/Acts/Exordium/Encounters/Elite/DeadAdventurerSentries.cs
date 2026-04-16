@@ -1,18 +1,20 @@
-﻿using MegaCrit.Sts2.Core.Models;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class DeadAdventurerSentries : EncounterModel
+public sealed class DeadAdventurerSentries : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Elite;
+    public DeadAdventurerSentries() : base(RoomType.Elite)
+    {
+    }
+
+    public override bool IsValidForAct(ActModel act) => false;
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {
-        get
-        {
-            yield return ModelDb.Monster<Sentry>();
-        }
+        get { yield return ModelDb.Monster<Sentry>(); }
     }
 
     protected override IReadOnlyList<(MonsterModel, string?)> GenerateMonsters()
@@ -20,11 +22,11 @@ public sealed class DeadAdventurerSentries : EncounterModel
         var sentry0 = (Sentry)ModelDb.Monster<Sentry>().ToMutable();
         var sentry1 = (Sentry)ModelDb.Monster<Sentry>().ToMutable();
         var sentry2 = (Sentry)ModelDb.Monster<Sentry>().ToMutable();
-    
+
         sentry0.BoltFirst = true;
         sentry1.BoltFirst = false;
         sentry2.BoltFirst = true;
-    
+
         return new List<(MonsterModel, string?)>
         {
             (sentry0, null),

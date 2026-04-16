@@ -31,7 +31,7 @@ public class RelicPatches
             if (__instance.Reward is not GoldReward goldReward)
                 return;
             
-            if (!GoldenIdolOriginal.BoostedRewards.TryGetValue(goldReward, out var info))
+            if (!GoldenIdol.BoostedRewards.TryGetValue(goldReward, out var info))
                 return;
 
             var labelField = AccessTools.Field(typeof(NRewardButton), "_label");

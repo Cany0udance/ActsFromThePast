@@ -18,32 +18,7 @@ public sealed class TheCityAct : ActModel
     {
         return new EncounterModel[]
         {
-            // Weak encounters
-            ModelDb.Encounter<ThreeByrdsWeak>(),
-            ModelDb.Encounter<ChosenWeak>(),
-            ModelDb.Encounter<SphericGuardianWeak>(),
-            ModelDb.Encounter<TwoThievesWeak>(),
-            ModelDb.Encounter<ShelledParasiteWeak>(),
-            
-            // Normal encounters
-            ModelDb.Encounter<ByrdAndChosenNormal>(),
-            ModelDb.Encounter<CenturionAndMysticNormal>(),
-            ModelDb.Encounter<CityProtectorsNormal>(),
-            ModelDb.Encounter<CultistAndChosenNormal>(),
-            ModelDb.Encounter<PairOfParasitesNormal>(),
-            ModelDb.Encounter<SnakePlantNormal>(),
-            ModelDb.Encounter<SneckoNormal>(),
-            ModelDb.Encounter<ThreeCultistsNormal>(),
-            
-            // Elite encounters
-            ModelDb.Encounter<BookOfStabbingElite>(),
-            ModelDb.Encounter<SlaversElite>(),
-            ModelDb.Encounter<GremlinLeaderElite>(),
-            
-            // Boss encounters
-            ModelDb.Encounter<ChampBoss>(),
-            ModelDb.Encounter<BronzeAutomatonBoss>(),
-            ModelDb.Encounter<CollectorBoss>()
+
         };
     }
     
@@ -81,22 +56,7 @@ public sealed class TheCityAct : ActModel
         {
             return new EventModel[]
             {
-                ModelDb.Event<AncientWriting>(),
-                ModelDb.Event<Augmenter>(),
-                ModelDb.Event<Colosseum>(),
-                ModelDb.Event<CouncilOfGhosts>(),
-                ModelDb.Event<CursedTome>(),
-                ModelDb.Event<ForgottenAltar>(),
-                ModelDb.Event<TheJoust>(),
-                ModelDb.Event<KnowingSkull>(),
-                ModelDb.Event<TheLibrary>(),
-                ModelDb.Event<MaskedBandits>(),
-                ModelDb.Event<TheMausoleum>(),
-                ModelDb.Event<TheNest>(),
-                ModelDb.Event<Nloth>(),
-                ModelDb.Event<OldBeggar>(),
-                ModelDb.Event<PleadingVagrant>(),
-                ModelDb.Event<Vampires>(),
+                ModelDb.Event<TrashHeap>(),
             };
         }
     }

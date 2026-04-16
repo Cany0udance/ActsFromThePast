@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -14,7 +15,7 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast.Acts.TheBeyond.Enemies;
 
-public sealed class GiantHead : MonsterModel
+public sealed class GiantHead : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 520, 500);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 520, 500);
@@ -32,10 +33,10 @@ public sealed class GiantHead : MonsterModel
 
     private static readonly LocString[] _timeDialogs = new[]
     {
-        L10NMonsterLookup("GIANT_HEAD.moves.IT_IS_TIME.dialog1"),
-        L10NMonsterLookup("GIANT_HEAD.moves.IT_IS_TIME.dialog2"),
-        L10NMonsterLookup("GIANT_HEAD.moves.IT_IS_TIME.dialog3"),
-        L10NMonsterLookup("GIANT_HEAD.moves.IT_IS_TIME.dialog4"),
+        L10NMonsterLookup("ACTSFROMTHEPAST-GIANT_HEAD.moves.IT_IS_TIME.dialog1"),
+        L10NMonsterLookup("ACTSFROMTHEPAST-GIANT_HEAD.moves.IT_IS_TIME.dialog2"),
+        L10NMonsterLookup("ACTSFROMTHEPAST-GIANT_HEAD.moves.IT_IS_TIME.dialog3"),
+        L10NMonsterLookup("ACTSFROMTHEPAST-GIANT_HEAD.moves.IT_IS_TIME.dialog4"),
     };
 
     private int _count;
@@ -154,7 +155,7 @@ public sealed class GiantHead : MonsterModel
 
     private LocString GetCountDialog()
     {
-        var dialog = L10NMonsterLookup("GIANT_HEAD.moves.COUNT.dialog");
+        var dialog = L10NMonsterLookup("ACTSFROMTHEPAST-GIANT_HEAD.moves.COUNT.dialog");
         dialog.Add("count", Count.ToString());
         return dialog;
     }

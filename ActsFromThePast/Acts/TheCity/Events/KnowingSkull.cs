@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
@@ -12,30 +13,25 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Acts.TheCity.Events;
 
-public sealed class KnowingSkull : EventModel
+public sealed class KnowingSkull : CustomEventModel
 {
     private const int BaseCost = 6;
     private const int GoldReward = 90;
-
     private int _potionCost = BaseCost;
     private int _cardCost = BaseCost;
     private int _goldCost = BaseCost;
     private int _leaveCost = BaseCost;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheCityAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("PotionCost", BaseCost),
-                new IntVar("CardCost", BaseCost),
-                new IntVar("GoldCost", BaseCost),
-                new IntVar("LeaveCost", BaseCost),
-                new IntVar("GoldReward", GoldReward)
-            };
-        }
-    }
+        new IntVar("PotionCost", BaseCost),
+        new IntVar("CardCost", BaseCost),
+        new IntVar("GoldCost", BaseCost),
+        new IntVar("LeaveCost", BaseCost),
+        new IntVar("GoldReward", GoldReward)
+    };
 
     private void UpdateDynamicVars()
     {
@@ -52,41 +48,28 @@ public sealed class KnowingSkull : EventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
-        return new EventOption[]
-        {
-            new EventOption(this, new Func<Task>(ContinueToAsk),
-                "KNOWING_SKULL.pages.INITIAL.options.CONTINUE",
-                Array.Empty<IHoverTip>())
-        };
+        return new[] { Option(Continue) };
     }
 
-    private Task ContinueToAsk()
+    private Task Continue()
     {
-        SetAskState(L10NLookup("KNOWING_SKULL.pages.ASK.description"));
+        SetAskState(PageDescription("ASK"));
         return Task.CompletedTask;
     }
 
     private void SetAskState(LocString description)
     {
         UpdateDynamicVars();
-        SetEventState(description, new EventOption[]
+        SetEventState(description, new[]
         {
-            new EventOption(this, new Func<Task>(PotionOption),
-                "KNOWING_SKULL.pages.ASK.options.POTION",
-                Array.Empty<IHoverTip>()),
-            new EventOption(this, new Func<Task>(GoldOption),
-                "KNOWING_SKULL.pages.ASK.options.GOLD",
-                Array.Empty<IHoverTip>()),
-            new EventOption(this, new Func<Task>(CardOption),
-                "KNOWING_SKULL.pages.ASK.options.CARD",
-                Array.Empty<IHoverTip>()),
-            new EventOption(this, new Func<Task>(LeaveOption),
-                "KNOWING_SKULL.pages.ASK.options.LEAVE",
-                Array.Empty<IHoverTip>())
+            Option(Potion, "ASK"),
+            Option(Gold, "ASK"),
+            Option(Card, "ASK"),
+            Option(Leave, "ASK")
         });
     }
 
-    private async Task PotionOption()
+    private async Task Potion()
     {
         await CreatureCmd.Damage(
             new ThrowingPlayerChoiceContext(),
@@ -96,14 +79,13 @@ public sealed class KnowingSkull : EventModel
             null,
             null);
         _potionCost++;
-        
+
         var potion = PotionFactory.CreateRandomPotionOutOfCombat(Owner, Owner.RunState.Rng.Niche).ToMutable();
         await PotionCmd.TryToProcure(potion, Owner);
-
-        SetAskState(L10NLookup("KNOWING_SKULL.pages.POTION.description"));
+        SetAskState(PageDescription("POTION"));
     }
 
-    private async Task GoldOption()
+    private async Task Gold()
     {
         await CreatureCmd.Damage(
             new ThrowingPlayerChoiceContext(),
@@ -113,13 +95,11 @@ public sealed class KnowingSkull : EventModel
             null,
             null);
         _goldCost++;
-
         await PlayerCmd.GainGold(GoldReward, Owner);
-
-        SetAskState(L10NLookup("KNOWING_SKULL.pages.GOLD.description"));
+        SetAskState(PageDescription("GOLD"));
     }
 
-    private async Task CardOption()
+    private async Task Card()
     {
         await CreatureCmd.Damage(
             new ThrowingPlayerChoiceContext(),
@@ -130,22 +110,19 @@ public sealed class KnowingSkull : EventModel
             null);
         _cardCost++;
 
-        // Colorless uncommon card
         var colorlessCards = ModelDb.CardPool<ColorlessCardPool>()
             .GetUnlockedCards(Owner.UnlockState, Owner.RunState.CardMultiplayerConstraint)
             .Where(c => c.Rarity == CardRarity.Uncommon)
             .ToList();
-        
+
         var chosenCard = Owner.RunState.Rng.Niche.NextItem(colorlessCards);
         var card = Owner.RunState.CreateCard(chosenCard, Owner);
         var result = await CardPileCmd.Add(card, PileType.Deck);
         CardCmd.PreviewCardPileAdd(result, 2f);
-      //  await Cmd.Wait(0.75f);
-
-        SetAskState(L10NLookup("KNOWING_SKULL.pages.CARD.description"));
+        SetAskState(PageDescription("CARD"));
     }
 
-    private async Task LeaveOption()
+    private async Task Leave()
     {
         await CreatureCmd.Damage(
             new ThrowingPlayerChoiceContext(),
@@ -154,7 +131,6 @@ public sealed class KnowingSkull : EventModel
             ValueProp.Unblockable | ValueProp.Unpowered,
             null,
             null);
-
-        SetEventFinished(L10NLookup("KNOWING_SKULL.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
     }
 }

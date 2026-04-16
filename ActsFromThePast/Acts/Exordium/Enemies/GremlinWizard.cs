@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Animation;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
@@ -13,10 +14,10 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
 
-public sealed class GremlinWizard : MonsterModel
+public sealed class GremlinWizard : CustomMonsterModel
 {
-    private static readonly LocString _chargingDialog = L10NMonsterLookup("GREMLIN_WIZARD.moves.CHARGING.dialog");
-    private static readonly LocString _ultimateDialog = L10NMonsterLookup("GREMLIN_WIZARD.moves.ULTIMATE_BLAST.dialog");
+    private static readonly LocString _chargingDialog = L10NMonsterLookup("ACTSFROMTHEPAST-GREMLIN_WIZARD.moves.CHARGING.dialog");
+    private static readonly LocString _ultimateDialog = L10NMonsterLookup("ACTSFROMTHEPAST-GREMLIN_WIZARD.moves.ULTIMATE_BLAST.dialog");
 
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 22, 21);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 26, 25);

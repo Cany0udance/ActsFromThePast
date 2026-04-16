@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Extensions;
@@ -10,22 +11,18 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Acts.Exordium.Events;
 
-public sealed class ShiningLight : EventModel
+public sealed class ShiningLight : CustomEventModel
 {
     private const decimal HpLossPercent = 0.30M;
     private const int UpgradeCount = 2;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("Damage", 0),
-                new CardsVar(UpgradeCount)
-            };
-        }
-    }
+        new IntVar("Damage", 0),
+        new CardsVar(UpgradeCount)
+    };
 
     public override void CalculateVars()
     {
@@ -47,26 +44,17 @@ public sealed class ShiningLight : EventModel
         var options = new List<EventOption>();
 
         if (HasUpgradableCards())
-        {
-            options.Add(new EventOption(this, new Func<Task>(EnterLightOption),
-                "SHINING_LIGHT.pages.INITIAL.options.ENTER",
-                Array.Empty<IHoverTip>()).ThatDoesDamage(DynamicVars["Damage"].BaseValue));
-        }
+            options.Add(Option(Enter).ThatDoesDamage(DynamicVars["Damage"].BaseValue));
         else
-        {
             options.Add(new EventOption(this, null,
-                "SHINING_LIGHT.pages.INITIAL.options.ENTER_LOCKED",
+                $"{Id.Entry}.pages.INITIAL.options.ENTER_LOCKED",
                 Array.Empty<IHoverTip>()));
-        }
 
-        options.Add(new EventOption(this, new Func<Task>(LeaveOption),
-            "SHINING_LIGHT.pages.INITIAL.options.LEAVE",
-            Array.Empty<IHoverTip>()));
-
+        options.Add(Option(Leave));
         return options;
     }
 
-    private async Task EnterLightOption()
+    private async Task Enter()
     {
         await CreatureCmd.Damage(
             new ThrowingPlayerChoiceContext(),
@@ -87,11 +75,11 @@ public sealed class ShiningLight : EventModel
             CardCmd.Upgrade(card);
         }
 
-        SetEventFinished(L10NLookup("SHINING_LIGHT.pages.ENTER.description"));
+        SetEventFinished(PageDescription("ENTER"));
     }
 
-    private async Task LeaveOption()
+    private async Task Leave()
     {
-        SetEventFinished(L10NLookup("SHINING_LIGHT.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
     }
 }

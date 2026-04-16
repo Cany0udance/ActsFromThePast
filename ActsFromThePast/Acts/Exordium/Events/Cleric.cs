@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.CardSelection;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Gold;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -10,24 +11,20 @@ using MegaCrit.Sts2.Core.Runs;
 
 namespace ActsFromThePast.Acts.Exordium.Events;
 
-public sealed class Cleric : EventModel
+public sealed class Cleric : CustomEventModel
 {
+    public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };
+
     private const int HealCost = 35;
     private const int PurifyCost = 75;
     private const decimal HealPercent = 0.25M;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new HealVar(0M),
-                new IntVar("HealCost", HealCost),
-                new IntVar("PurifyCost", PurifyCost)
-            };
-        }
-    }
+        new HealVar(0M),
+        new IntVar("HealCost", HealCost),
+        new IntVar("PurifyCost", PurifyCost)
+    };
 
     public override void CalculateVars()
     {
@@ -39,57 +36,48 @@ public sealed class Cleric : EventModel
         var options = new List<EventOption>();
 
         if (Owner.Gold >= HealCost)
-        {
-            options.Add(new EventOption(this, new Func<Task>(HealOption),
-                "CLERIC.pages.INITIAL.options.HEAL"));
-        }
+            options.Add(Option(Heal));
         else
-        {
             options.Add(new EventOption(this, null,
-                "CLERIC.pages.INITIAL.options.HEAL_LOCKED"));
-        }
+                $"{Id.Entry}.pages.INITIAL.options.HEAL_LOCKED",
+                Array.Empty<IHoverTip>()));
 
-        bool canPurify = Owner.Gold >= PurifyCost && 
+        bool canPurify = Owner.Gold >= PurifyCost &&
                          Owner.Deck.Cards.Any<CardModel>(c => c.IsRemovable);
+
         if (canPurify)
-        {
-            options.Add(new EventOption(this, new Func<Task>(PurifyOption),
-                "CLERIC.pages.INITIAL.options.PURIFY"));
-        }
+            options.Add(Option(Purify));
         else
-        {
             options.Add(new EventOption(this, null,
-                "CLERIC.pages.INITIAL.options.PURIFY_LOCKED"));
-        }
+                $"{Id.Entry}.pages.INITIAL.options.PURIFY_LOCKED",
+                Array.Empty<IHoverTip>()));
 
-        options.Add(new EventOption(this, new Func<Task>(LeaveOption),
-            "CLERIC.pages.INITIAL.options.LEAVE"));
-
+        options.Add(Option(Leave));
         return options;
     }
 
-    private async Task HealOption()
+    private async Task Heal()
     {
         await PlayerCmd.LoseGold(HealCost, Owner, GoldLossType.Spent);
         await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.BaseValue);
-        SetEventFinished(L10NLookup("CLERIC.pages.HEAL.description"));
+        SetEventFinished(PageDescription("HEAL"));
     }
 
-    private async Task PurifyOption()
+    private async Task Purify()
     {
         await PlayerCmd.LoseGold(PurifyCost, Owner, GoldLossType.Spent);
         var prefs = new CardSelectorPrefs(CardSelectorPrefs.RemoveSelectionPrompt, 1);
         var selectedCards = await CardSelectCmd.FromDeckForRemoval(Owner, prefs);
         await CardPileCmd.RemoveFromDeck((IReadOnlyList<CardModel>)selectedCards.ToList<CardModel>());
-        SetEventFinished(L10NLookup("CLERIC.pages.PURIFY.description"));
+        SetEventFinished(PageDescription("PURIFY"));
     }
 
-    private async Task LeaveOption()
+    private async Task Leave()
     {
-        SetEventFinished(L10NLookup("CLERIC.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
     }
-    
-    public override bool IsAllowed(RunState runState)
+
+    public override bool IsAllowed(IRunState runState)
     {
         return runState.Players.All<Player>(p => p.Gold >= HealCost);
     }

@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Powers;
+using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Audio;
@@ -22,7 +23,7 @@ using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast;
 
-public sealed class SlimeBoss : MonsterModel
+public sealed class SlimeBoss : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 150, 140);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 150, 140);
@@ -139,7 +140,7 @@ public sealed class SlimeBoss : MonsterModel
     private async Task PrepSlam(IReadOnlyList<Creature> targets)
     {
         PlayPrepSfx();
-        TalkCmd.Play(L10NMonsterLookup("SLIME_BOSS.moves.PREP_SLAM.banter"), Creature, VfxColor.Green, VfxDuration.Long);
+        TalkCmd.Play(L10NMonsterLookup("ACTSFROMTHEPAST-SLIME_BOSS.moves.PREP_SLAM.banter"), Creature, VfxColor.Green, VfxDuration.Long);
         NGame.Instance?.ScreenShake(ShakeStrength.Weak, ShakeDuration.Long);
         await Cmd.Wait(0.3f);
     }

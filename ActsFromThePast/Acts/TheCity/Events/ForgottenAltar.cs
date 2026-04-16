@@ -1,5 +1,6 @@
 ﻿using ActsFromThePast.Acts.Exordium.Events;
 using ActsFromThePast.Relics;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Events;
@@ -10,25 +11,22 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
+using GoldenIdol = ActsFromThePast.Relics.GoldenIdol;
 
 namespace ActsFromThePast.Acts.TheCity.Events;
 
-public sealed class ForgottenAltar : EventModel
+public sealed class ForgottenAltar : CustomEventModel
 {
     private const float HpLossPercent = 0.35f;
     private const int MaxHpGain = 5;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheCityAct>() };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        get
-        {
-            return new DynamicVar[]
-            {
-                new IntVar("HpLoss", 0),
-                new IntVar("MaxHpGain", MaxHpGain)
-            };
-        }
-    }
+        new IntVar("HpLoss", 0),
+        new IntVar("MaxHpGain", MaxHpGain)
+    };
 
     public override void CalculateVars()
     {
@@ -36,9 +34,8 @@ public sealed class ForgottenAltar : EventModel
         DynamicVars["HpLoss"].BaseValue = hpLoss;
     }
 
-    private bool HasVisitedExordium(RunState runState)
+    private bool HasVisitedExordium(IRunState runState)
     {
-        // Check if any previously visited act was Exordium
         for (int i = 0; i < runState.CurrentActIndex; i++)
         {
             if (runState.Acts[i] is ExordiumAct)
@@ -47,7 +44,7 @@ public sealed class ForgottenAltar : EventModel
         return false;
     }
 
-    public override bool IsAllowed(RunState runState)
+    public override bool IsAllowed(IRunState runState)
     {
         return HasVisitedExordium(runState);
     }
@@ -61,49 +58,39 @@ public sealed class ForgottenAltar : EventModel
     {
         var options = new List<EventOption>();
 
-        if (Owner.Relics.Any(r => r is GoldenIdolOriginal))
-        {
-            options.Add(new EventOption(this, new Func<Task>(OfferIdolOption),
-                "FORGOTTEN_ALTAR.pages.INITIAL.options.OFFER_IDOL",
-                HoverTipFactory.FromRelic(ModelDb.Relic<BloodyIdol>())));
-        }
+        if (Owner.Relics.Any(r => r is GoldenIdol))
+            options.Add(Option(OfferIdol, "INITIAL",
+                HoverTipFactory.FromRelic(ModelDb.Relic<BloodyIdol>()).ToArray()));
         else
-        {
             options.Add(new EventOption(this, null,
-                "FORGOTTEN_ALTAR.pages.INITIAL.options.OFFER_IDOL_LOCKED",
+                $"{Id.Entry}.pages.INITIAL.options.OFFER_IDOL_LOCKED",
                 Array.Empty<IHoverTip>()));
-        }
 
         var netDamage = DynamicVars["HpLoss"].BaseValue - MaxHpGain;
-        options.Add(new EventOption(this, new Func<Task>(SacrificeOption),
-                "FORGOTTEN_ALTAR.pages.INITIAL.options.SACRIFICE",
-                Array.Empty<IHoverTip>())
-            .ThatDoesDamage(netDamage));
+        options.Add(Option(Sacrifice).ThatDoesDamage(netDamage));
 
-        options.Add(new EventOption(this, new Func<Task>(DesecrateOption),
-            "FORGOTTEN_ALTAR.pages.INITIAL.options.DESECRATE",
+        options.Add(Option(Desecrate, "INITIAL",
             HoverTipFactory.FromCard(ModelDb.Card<Decay>())));
 
         return options;
     }
 
-    private async Task OfferIdolOption()
+    private async Task OfferIdol()
     {
         SfxCmd.Play("event:/sfx/heal_1");
-    
-        var goldenIdol = Owner.Relics.First(r => r is GoldenIdolOriginal);
+
+        var goldenIdol = Owner.Relics.First(r => r is GoldenIdol);
         var bloodyIdol = ModelDb.Relic<BloodyIdol>().ToMutable();
         await RelicCmd.Replace(goldenIdol, bloodyIdol);
-
-        SetEventFinished(L10NLookup("FORGOTTEN_ALTAR.pages.OFFER_IDOL.description"));
+        SetEventFinished(PageDescription("OFFER_IDOL"));
     }
 
-    private async Task SacrificeOption()
+    private async Task Sacrifice()
     {
         SfxCmd.Play("event:/sfx/heal_3");
-        
+
         await CreatureCmd.GainMaxHp(Owner.Creature, MaxHpGain);
-        
+
         await CreatureCmd.Damage(
             new ThrowingPlayerChoiceContext(),
             Owner.Creature,
@@ -111,19 +98,17 @@ public sealed class ForgottenAltar : EventModel
             ValueProp.Unblockable | ValueProp.Unpowered,
             null,
             null);
-
-        SetEventFinished(L10NLookup("FORGOTTEN_ALTAR.pages.SACRIFICE.description"));
+        SetEventFinished(PageDescription("SACRIFICE"));
     }
 
-    private async Task DesecrateOption()
+    private async Task Desecrate()
     {
         SfxCmd.Play("event:/sfx/blunt_heavy");
-        
+
         var decay = Owner.RunState.CreateCard(ModelDb.Card<Decay>(), Owner);
         var addResult = await CardPileCmd.Add(decay, PileType.Deck);
         CardCmd.PreviewCardPileAdd(new[] { addResult }, 2f);
         await Cmd.Wait(0.75f);
-
-        SetEventFinished(L10NLookup("FORGOTTEN_ALTAR.pages.DESECRATE.description"));
+        SetEventFinished(PageDescription("DESECRATE"));
     }
 }

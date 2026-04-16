@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -11,7 +12,7 @@ using MegaCrit.Sts2.Core.Nodes.Rooms;
 
 namespace ActsFromThePast.Powers;
 
-public sealed class TimeWarpPower : PowerModel
+public sealed class TimeWarpPower : CustomPowerModel
 {
     private const int StrengthAmount = 2;
     private const int CountdownAmount = 12;

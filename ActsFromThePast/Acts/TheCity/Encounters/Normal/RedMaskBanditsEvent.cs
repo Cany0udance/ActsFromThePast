@@ -1,12 +1,17 @@
-﻿using MegaCrit.Sts2.Core.Entities.Encounters;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Entities.Encounters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast;
 
-public sealed class RedMaskBanditsEvent : EncounterModel
+public sealed class RedMaskBanditsEvent : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Monster;
+    public RedMaskBanditsEvent() : base(RoomType.Monster)
+    {
+    }
+
+    public override bool IsValidForAct(ActModel act) => false;
     public override IEnumerable<EncounterTag> Tags => Array.Empty<EncounterTag>();
     public override bool IsWeak => false;
 

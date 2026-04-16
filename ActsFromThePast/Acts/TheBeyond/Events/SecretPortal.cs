@@ -1,22 +1,26 @@
-﻿using MegaCrit.Sts2.Core.Events;
+﻿using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Map;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
 
 namespace ActsFromThePast.Acts.TheBeyond.Events;
 
-public sealed class SecretPortal : EventModel
+public sealed class SecretPortal : CustomEventModel
 {
     private const int MinRunTimeSeconds = 800;
-    
+
     public override bool IsShared => true;
 
-    public override bool IsAllowed(RunState runState)
+    public override ActModel[] Acts => new[] { ModelDb.Act<TheBeyondAct>() };
+
+    public override bool IsAllowed(IRunState runState)
     {
         return RunManager.Instance.RunTime > MinRunTimeSeconds;
     }
-    
+
     public override void OnRoomEnter()
     {
         ModAudio.Play("events", "secret_portal");
@@ -26,23 +30,19 @@ public sealed class SecretPortal : EventModel
     {
         return new[]
         {
-            new EventOption(this, EnterPortalOption,
-                "SECRET_PORTAL.pages.INITIAL.options.ENTER"),
-            new EventOption(this, LeaveOption,
-                "SECRET_PORTAL.pages.INITIAL.options.LEAVE")
+            Option(Enter),
+            Option(Leave)
         };
     }
 
-    private Task EnterPortalOption()
+    private Task Enter()
     {
-        SetEventState(
-            L10NLookup("SECRET_PORTAL.pages.ENTER.description"),
-            new[]
-            {
-                new EventOption(this, TeleportToBoss,
-                    "SECRET_PORTAL.pages.ENTER.options.CONTINUE")
-            }
-        );
+        SetEventState(PageDescription("ENTER"), new[]
+        {
+            new EventOption(this, TeleportToBoss,
+                $"{Id.Entry}.pages.ENTER.options.CONTINUE",
+                Array.Empty<IHoverTip>())
+        });
         return Task.CompletedTask;
     }
 
@@ -53,10 +53,9 @@ public sealed class SecretPortal : EventModel
         return Task.CompletedTask;
     }
 
-    private Task LeaveOption()
+    private Task Leave()
     {
-        SetEventFinished(
-            L10NLookup("SECRET_PORTAL.pages.LEAVE.description"));
+        SetEventFinished(PageDescription("LEAVE"));
         return Task.CompletedTask;
     }
 }

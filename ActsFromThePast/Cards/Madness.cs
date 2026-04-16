@@ -1,11 +1,15 @@
-﻿using MegaCrit.Sts2.Core.Entities.Cards;
+﻿using BaseLib.Abstracts;
+using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Random;
 
 namespace ActsFromThePast.Cards;
 
-public sealed class Madness : CardModel
+[Pool(typeof(EventCardPool))]
+public sealed class Madness : CustomCardModel
 {
     public Madness() : base(1, CardType.Skill, CardRarity.Event, TargetType.Self)
     {
@@ -24,10 +28,8 @@ public sealed class Madness : CardModel
         var hand = PileType.Hand.GetPile(Owner).Cards
             .Where(c => c.CostsEnergyOrStars(false) || c.CostsEnergyOrStars(true))
             .ToList();
-
         if (hand.Count == 0)
             return;
-
         var target = Owner.RunState.Rng.CombatCardSelection.NextItem(hand);
         target?.SetToFreeThisCombat();
     }

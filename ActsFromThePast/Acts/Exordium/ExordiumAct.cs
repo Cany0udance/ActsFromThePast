@@ -16,32 +16,7 @@ public sealed class ExordiumAct : ActModel
     {
         return new EncounterModel[]
         {
-            // Weak encounters
-            ModelDb.Encounter<LiceWeak>(),
-            ModelDb.Encounter<CultistWeak>(),
-            ModelDb.Encounter<JawWormWeak>(),
-            ModelDb.Encounter<SmallSlimesWeak>(),
-            
-            // Normal encounters
-            ModelDb.Encounter<LargeSlimeNormal>(),
-            ModelDb.Encounter<LooterNormal>(),
-            ModelDb.Encounter<ExordiumThugsNormal>(),
-            ModelDb.Encounter<ExordiumWildlifeNormal>(),
-            ModelDb.Encounter<TwoFungiBeastsNormal>(),
-            ModelDb.Encounter<LotsOfSlimesNormal>(),
-            ModelDb.Encounter<SlaverNormal>(),
-            ModelDb.Encounter<LiceNormal>(),
-            ModelDb.Encounter<GremlinGangNormal>(),
-            
-            // Elite encounters
-            ModelDb.Encounter<GremlinNobElite>(),
-            ModelDb.Encounter<LagavulinElite>(),
-            ModelDb.Encounter<SentriesElite>(),
-            
-            // Boss encounters
-            ModelDb.Encounter<SlimeBossBoss>(),
-            ModelDb.Encounter<GuardianBoss>(),
-            ModelDb.Encounter<HexaghostBoss>()
+
         };
     }
 
@@ -70,6 +45,9 @@ public sealed class ExordiumAct : ActModel
     {
         return AllAncients;
     }
+    
+    public override bool Equals(object? obj) => obj is ExordiumAct;
+    public override int GetHashCode() => typeof(ExordiumAct).GetHashCode();
 
     public override IEnumerable<EventModel> AllEvents
     {
@@ -77,17 +55,6 @@ public sealed class ExordiumAct : ActModel
         {
             return new EventModel[]
             {
-                ModelDb.Event<BigFish>(),
-                ModelDb.Event<Cleric>(),
-                ModelDb.Event<WingStatue>(),
-                ModelDb.Event<WorldOfGoop>(),
-                ModelDb.Event<Sssserpent>(),
-                ModelDb.Event<ShiningLight>(),
-                ModelDb.Event<ScrapOoze>(),
-                ModelDb.Event<LivingWall>(),
-                ModelDb.Event<GoldenIdol>(),
-                ModelDb.Event<Mushrooms>(),
-                ModelDb.Event<DeadAdventurer>(),
                 ModelDb.Event<TrashHeap>(),
             };
         }

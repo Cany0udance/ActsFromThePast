@@ -19,29 +19,7 @@ public sealed class TheBeyondAct : ActModel
     {
         return new EncounterModel[]
         {
-            // Weak encounters
-            ModelDb.Encounter<OrbWalkerWeak>(),
-            ModelDb.Encounter<ThreeShapesWeak>(),
-            ModelDb.Encounter<DarklingsWeak>(),
-            
-            // Normal encounters
-            ModelDb.Encounter<FourShapesNormal>(),
-            ModelDb.Encounter<JawWormHordeNormal>(),
-            ModelDb.Encounter<MawNormal>(),
-            ModelDb.Encounter<SphereAndTwoShapesNormal>(),
-            ModelDb.Encounter<SpireGrowthNormal>(),
-            ModelDb.Encounter<TransientNormal>(),
-            ModelDb.Encounter<WrithingMassNormal>(),
-            
-            // Elite encounters
-            ModelDb.Encounter<GiantHeadElite>(),
-            ModelDb.Encounter<NemesisElite>(),
-            ModelDb.Encounter<ReptomancerElite>(),
-            
-            // Boss encounters
-            ModelDb.Encounter<DonuAndDecaBoss>(),
-            ModelDb.Encounter<AwakenedOneBoss>(),
-            ModelDb.Encounter<TimeEaterBoss>()
+
         };
     }
     
@@ -79,14 +57,6 @@ public sealed class TheBeyondAct : ActModel
         {
             return new EventModel[]
             {
-                ModelDb.Event<Falling>(),
-                ModelDb.Event<MindBloom>(),
-                ModelDb.Event<MoaiHead>(),
-                ModelDb.Event<MysteriousSphere>(),
-                ModelDb.Event<SecretPortal>(),
-                ModelDb.Event<SensoryStone>(),
-                ModelDb.Event<TombOfLordRedMask>(),
-                ModelDb.Event<WindingHalls>(),
                 ModelDb.Event<TrashHeap>()
             };
         }

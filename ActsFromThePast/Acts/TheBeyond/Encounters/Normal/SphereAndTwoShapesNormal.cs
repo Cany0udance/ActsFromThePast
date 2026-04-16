@@ -1,13 +1,18 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Enemies;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Entities.Encounters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace ActsFromThePast.Acts.TheBeyond.Encounters;
 
-public sealed class SphereAndTwoShapesNormal : EncounterModel
+public sealed class SphereAndTwoShapesNormal : CustomEncounterModel
 {
-    public override RoomType RoomType => RoomType.Monster;
+    public SphereAndTwoShapesNormal() : base(RoomType.Monster)
+    {
+    }
+    
+    public override bool IsValidForAct(ActModel act) => act is TheBeyondAct;
     public override IEnumerable<EncounterTag> Tags => [CustomEncounterTags.Shapes];
     public override bool IsWeak => false;
 

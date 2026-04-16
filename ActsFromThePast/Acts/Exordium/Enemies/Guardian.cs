@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Powers;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
@@ -16,7 +17,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast;
 
-public sealed class Guardian : MonsterModel
+public sealed class Guardian : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 250, 240);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 250, 240);
@@ -63,7 +64,7 @@ public sealed class Guardian : MonsterModel
     }
 
     private MoveState _closeUpState;
-    private static readonly LocString _destroyDialog = L10NMonsterLookup("GUARDIAN.moves.CHARGE_UP.dialog");
+    private static readonly LocString _destroyDialog = L10NMonsterLookup("ACTSFROMTHEPAST-GUARDIAN.moves.CHARGE_UP.dialog");
 
     protected override string VisualsPath => "res://ActsFromThePast/monsters/guardian/guardian.tscn";
 
