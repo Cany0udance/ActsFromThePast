@@ -71,7 +71,7 @@ public sealed class SlaverRed : CustomMonsterModel
         var entangleState = new MoveState(
             ENTANGLE,
             Entangle,
-            new AbstractIntent[] { new DebuffIntent() }
+            new AbstractIntent[] { new CardDebuffIntent() }
         );
 
         var scrapeState = new MoveState(
