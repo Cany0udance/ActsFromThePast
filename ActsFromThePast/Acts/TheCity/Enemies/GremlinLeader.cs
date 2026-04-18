@@ -243,7 +243,7 @@ public sealed class GremlinLeader : CustomMonsterModel
 
     private async Task Stab(IReadOnlyList<Creature> targets)
     {
-        await CreatureCmd.TriggerAnim(Creature, "Attack", 0.0f);
+        await CreatureCmd.TriggerAnim(Creature, "Multislash", 0.0f);
         await Cmd.Wait(0.5f);
 
         for (int i = 0; i < StabHits; i++)
@@ -259,16 +259,16 @@ public sealed class GremlinLeader : CustomMonsterModel
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)
     {
         var idle = new AnimState("Idle", true);
-        var attack = new AnimState("Attack");
+        var multislash = new AnimState("Attack");
         var call = new AnimState("Call");
         var hit = new AnimState("Hit");
 
-        attack.NextState = idle;
+        multislash.NextState = idle;
         call.NextState = idle;
         hit.NextState = idle;
 
         var animator = new CreatureAnimator(idle, controller);
-        animator.AddAnyState("Attack", attack);
+        animator.AddAnyState("Multislash", multislash);
         animator.AddAnyState("Call", call);
         animator.AddAnyState("Hit", hit);
         controller.GetAnimationState().SetTimeScale(0.8f);

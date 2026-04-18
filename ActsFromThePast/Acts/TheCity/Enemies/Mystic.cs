@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Models.Singleton;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Random;
@@ -19,10 +20,10 @@ public sealed class Mystic : CustomMonsterModel
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 58, 56);
 
     private int MagicDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 9, 8);
-    private int HealAmount => 20;
+    private int HealAmount => 20 * CombatState.Players.Count;
     private int StrengthAmount => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 4, 3);
     private const int FrailAmount = 2;
-    private const int HealThreshold = 20;
+    private int HealThreshold => 20 * CombatState.Players.Count;
 
     protected override string VisualsPath => "res://ActsFromThePast/monsters/mystic/mystic.tscn";
 

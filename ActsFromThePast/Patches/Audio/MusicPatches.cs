@@ -204,6 +204,13 @@ public class MusicPatches
             }
             return false;
         }
+        
+        private static bool IsMindBloomEncounter()
+        {
+            var runState = StateProperty?.GetValue(RunManager.Instance) as RunState;
+            var room = runState?.CurrentRoom as CombatRoom;
+            return room?.Encounter is MindBloomGuardian or MindBloomHexaghost or MindBloomSlimeBoss;
+        }
 
         private static bool IsDeadAdventurerCombat() => DeadAdventurer.CombatActive;
         private static bool IsMindBloomCombat() => MindBloom.CombatActive;
@@ -312,12 +319,53 @@ public static bool UpdateTrack_Prefix(NRunMusicController __instance)
         }
         return true;
     }
-    
-    if (_playingBossStinger)
-        return false;
 
     var combatManager = CombatManager.Instance;
     var combatInProgress2 = combatManager?.IsInProgress ?? false;
+
+    // Handle Shop / Rest Site (must be before stinger guard so stinger fades on room transition)
+    var specialProgress = GetSpecialRoomProgress();
+    if (specialProgress.HasValue)
+    {
+        if (_playingBossStinger || _isPlayingLegacyMusic)
+        {
+            _playingBossStinger = false;
+            ModAudio.FadeOut(1f);
+            _isPlayingLegacyMusic = false;
+            _currentTrackType = TrackType.None;
+            StartBaseGameMusic(__instance, specialProgress.Value, 1f);
+        }
+        else if (_isPlayingBaseGameMusic)
+        {
+            var proxy = GetProxy(__instance);
+            proxy?.Call("update_global_parameter", "Progress", specialProgress.Value);
+        }
+        return false;
+    }
+
+    if (_playingBossStinger && (IsBossRoom() || IsMindBloomEncounter()))
+        return false;
+
+    // Handle Mind Bloom event combat (must be before Boss check since RoomType reports Boss during combat)
+    if (IsMindBloomEncounter())
+    {
+        if (!combatInProgress2)
+        {
+            StopBaseGameMusic(__instance);
+            ModAudio.StopMusic();
+            ModAudio.StopAmbience();
+            LegacyBossHelper.OnBossVictory();
+            return false;
+        }
+        if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Elite)
+        {
+            StopBaseGameMusic(__instance);
+            ModAudio.FadeIn(new[] { "mind_bloom" }, 1f);
+            _isPlayingLegacyMusic = true;
+            _currentTrackType = TrackType.Elite;
+        }
+        return false;
+    }
 
     // Handle Boss rooms
     if (IsBossRoom() && combatInProgress2)
@@ -400,30 +448,6 @@ public static bool UpdateTrack_Prefix(NRunMusicController __instance)
         return false;
     }
 
-    // Handle Mind Bloom event combat
-    if (IsMindBloomCombat())
-    {
-        if (IsMindBloomCombatEnded())
-        {
-            if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Exploration)
-            {
-                StopBaseGameMusic(__instance);
-                ModAudio.FadeIn(GetExplorationTracks(), 1f);
-                _isPlayingLegacyMusic = true;
-                _currentTrackType = TrackType.Exploration;
-            }
-            return false;
-        }
-        if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Elite)
-        {
-            StopBaseGameMusic(__instance);
-            ModAudio.FadeIn(new[] { "mind_bloom" }, 1f);
-            _isPlayingLegacyMusic = true;
-            _currentTrackType = TrackType.Elite;
-        }
-        return false;
-    }
-
     // Handle Masked Bandits event combat
     if (IsMaskedBanditsCombat())
     {
@@ -444,25 +468,6 @@ public static bool UpdateTrack_Prefix(NRunMusicController __instance)
             ModAudio.FadeIn(GetEliteTracks(), 1f);
             _isPlayingLegacyMusic = true;
             _currentTrackType = TrackType.Elite;
-        }
-        return false;
-    }
-
-    // Handle Shop / Rest Site
-    var specialProgress = GetSpecialRoomProgress();
-    if (specialProgress.HasValue)
-    {
-        if (_isPlayingLegacyMusic)
-        {
-            ModAudio.FadeOut(1f);
-            _isPlayingLegacyMusic = false;
-            _currentTrackType = TrackType.None;
-            StartBaseGameMusic(__instance, specialProgress.Value, 1f);
-        }
-        else if (_isPlayingBaseGameMusic)
-        {
-            var proxy = GetProxy(__instance);
-            proxy?.Call("update_global_parameter", "Progress", specialProgress.Value);
         }
         return false;
     }
@@ -536,6 +541,14 @@ public static bool UpdateTrack_Prefix(NRunMusicController __instance)
             }
 
             var combatInProgress = CombatManager.Instance?.IsInProgress ?? false;
+            if (IsMindBloomEncounter() && !combatInProgress && !_playingBossStinger)
+            {
+                ModAudio.StopMusic();
+                ModAudio.StopAmbience();
+                ModAudio.PlayBossStinger(1.5f);
+                SetBossStingerState();
+                return false;
+            }
             if (IsBossRoom() && !combatInProgress && !_playingBossStinger)
             {
                 ModAudio.StopMusic();
@@ -559,8 +572,6 @@ public static bool UpdateTrack_Prefix(NRunMusicController __instance)
                     _playingBossStinger = false;
                     _isPlayingLegacyMusic = false;
                     _currentTrackType = TrackType.None;
-                    ModAudio.StopMusic();
-                    NRunMusicController.Instance?.UpdateTrack();
                 }
             }
         }
@@ -589,9 +600,15 @@ public static bool UpdateTrack_Prefix(NRunMusicController __instance)
     {
         public static void Postfix(IRunState runState, CombatState? combatState, CombatRoom room)
         {
+            
+            // Putting Mind Bloom logic here since I don't want to patch the same hook twice in multiple classes
+            
+            if (combatState?.Encounter is MindBloomGuardian or MindBloomHexaghost or MindBloomSlimeBoss)
+                MindBloom.CombatActive = false;
+
             if (combatState?.Encounter is SlimeBossBoss or CollectorBoss or HexaghostBoss
-                    or GuardianBoss or ChampBoss or BronzeAutomatonBoss or TimeEaterBoss
-                        or AwakenedOneBoss or DonuAndDecaBoss)
+                or GuardianBoss or ChampBoss or BronzeAutomatonBoss or TimeEaterBoss
+                or AwakenedOneBoss or DonuAndDecaBoss)
             {
                 LegacyBossHelper.OnBossVictory();
             }

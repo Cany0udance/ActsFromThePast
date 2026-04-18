@@ -1,4 +1,6 @@
 ﻿using ActsFromThePast.Acts.TheBeyond.Encounters;
+using ActsFromThePast.Acts.TheBeyond.Events;
+using BaseLib.Abstracts;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Rewards;
 using MegaCrit.Sts2.Core.Rooms;
@@ -31,7 +33,17 @@ public class MindBloomPatches
 
             __result.Rewards.RemoveAll(r =>
                 !extraRewards.Contains(r) &&
-                r is GoldReward or RelicReward or CardReward);
+                r is GoldReward or RelicReward);
+        }
+    }
+    
+    [HarmonyPatch(typeof(CustomEncounterModel), nameof(CustomEncounterModel.RoomType), MethodType.Getter)]
+    public class MindBloomEncounterRoomTypePatch
+    {
+        public static void Postfix(CustomEncounterModel __instance, ref RoomType __result)
+        {
+            if (MindBloom.CombatActive && __instance is MindBloomGuardian or MindBloomHexaghost or MindBloomSlimeBoss)
+                __result = RoomType.Boss;
         }
     }
 }

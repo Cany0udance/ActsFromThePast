@@ -151,7 +151,6 @@ public sealed class Centurion : CustomMonsterModel
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)
     {
-        // TODO fix extremely cursed animations
         var idle = new AnimState("Idle", true);
         var maceSlam = new AnimState("Attack");
         var hit = new AnimState("Hit");

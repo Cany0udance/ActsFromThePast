@@ -54,7 +54,7 @@ public sealed class OldBeggar : CustomEventModel
         if (portrait != null)
         {
             portrait.Texture = PreloadManager.Cache.GetTexture2D(
-                ImageHelper.GetImagePath("events/cleric.png"));
+                ImageHelper.GetImagePath("events/actsfromthepast-cleric.png"));
         }
     }
 

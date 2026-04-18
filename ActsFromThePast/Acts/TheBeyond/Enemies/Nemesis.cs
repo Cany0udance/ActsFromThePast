@@ -40,6 +40,7 @@ public sealed class Nemesis : CustomMonsterModel
     
     private bool _alive = true;
     private SceneTreeTimer _fireTimer;
+    private Tween _opacityTween;
 
     private bool FirstMove
     {
@@ -120,6 +121,35 @@ private void SpawnFireParticles(object creatureNode, GodotObject[] bones, SceneT
 
     _fireTimer = tree.CreateTimer(0.05f);
     _fireTimer.Connect("timeout", Callable.From(() => SpawnFireParticles(creatureNode, bones, tree)));
+}
+
+public override Task AfterPowerAmountChanged(
+    PowerModel power,
+    decimal amount,
+    Creature? applier,
+    CardModel? cardSource)
+{
+    if (power is IntangiblePower && power.Owner == Creature)
+    {
+        var targetAlpha = amount > 0 ? 0.5f : 1.0f;
+        UpdateOpacity(targetAlpha);
+    }
+    return Task.CompletedTask;
+}
+
+private void UpdateOpacity(float targetAlpha)
+{
+    var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Creature);
+    var body = creatureNode?.Visuals?.GetCurrentBody();
+    if (body == null) return;
+
+    _opacityTween?.Kill();
+    _opacityTween = creatureNode.CreateTween();
+    var c = body.Modulate;
+    _opacityTween.TweenProperty(body, "modulate",
+            new Color(c.R, c.G, c.B, targetAlpha), 0.35f)
+        .SetEase(Tween.EaseType.InOut)
+        .SetTrans(Tween.TransitionType.Sine);
 }
 
 

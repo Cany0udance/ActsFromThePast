@@ -4,6 +4,7 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
@@ -419,6 +420,15 @@ public class StaggerAnimationPatch
             var queued = animState.AddAnimation(idleAnim, 0.0f, true, 0);
             queued?.SetMixDuration(mixDuration);
         }
+    }
+}
+
+[HarmonyPatch(typeof(Hook), nameof(Hook.AfterRoomEntered))]
+public class StaggerCleanupPatch
+{
+    public static void Postfix()
+    {
+        StaggerAnimation.Reset();
     }
 }
 

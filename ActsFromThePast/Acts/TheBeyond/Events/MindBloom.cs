@@ -20,8 +20,7 @@ public sealed class MindBloom : CustomEventModel
     private const int GoldRewardAmount = 999;
     public override bool IsShared => true;
     private bool _isBeforeTreasure;
-    internal static bool CombatActive { get; private set; }
-
+    internal static bool CombatActive { get; set; }
     public override ActModel[] Acts => new[] { ModelDb.Act<TheBeyondAct>() };
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]

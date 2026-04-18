@@ -117,8 +117,10 @@ public sealed class GremlinNob : CustomMonsterModel
         NGame.Instance?.ScreenShake(ShakeStrength.Strong, ShakeDuration.Long);
     
         await Cmd.Wait(0.8f);
-    
-        await PowerCmd.Apply<EnragePower>(Creature, EnrageAmount, Creature, null);
+        
+        // Special multiplayer logic to make Nob less of a menace
+        var enrage = Creature.CombatState.Players.Count > 2 ? 1 : EnrageAmount;
+        await PowerCmd.Apply<EnragePower>(Creature, enrage, Creature, null);
     }
 
     private async Task Rush(IReadOnlyList<Creature> targets)

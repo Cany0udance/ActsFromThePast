@@ -25,6 +25,9 @@ public sealed class DeadAdventurer : CustomEventModel
     private const int GoldReward = 30;
     private const int EncounterChanceStart = 35;
     private const int EncounterChanceRamp = 25;
+    
+    public override bool IsAllowed(IRunState runState) =>
+        runState.TotalFloor >= 7;
 
     public override bool IsShared => true;
     public override EventLayoutType LayoutType => EventLayoutType.Combat;

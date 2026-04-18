@@ -88,8 +88,11 @@ public sealed class AwakenedOne : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
+        
+        var curiosity = Creature.CombatState.Players.Count >= 2 ? 1 : CuriosityAmount;
+        
         await PowerCmd.Apply<RegenEnemyPower>(Creature, RegenAmount, Creature, null);
-        await PowerCmd.Apply<CuriosityPower>(Creature, CuriosityAmount, Creature, null);
+        await PowerCmd.Apply<CuriosityPower>(Creature, curiosity, Creature, null);
         await PowerCmd.Apply<UnawakenedPower>(Creature, 1, Creature, null);
 
         if (StartingStrength > 0)

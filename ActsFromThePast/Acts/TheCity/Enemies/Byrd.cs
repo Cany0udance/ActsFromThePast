@@ -35,7 +35,9 @@ public sealed class Byrd : CustomMonsterModel
     private int SwoopDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 14, 12);
     private const int HeadbuttDamage = 3;
     private const int CawStrength = 1;
-    private int FlightAmount => 4;
+
+    private int FlightAmountPerPlayer => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 4, 3);
+    private int FlightAmount => FlightAmountPerPlayer * Creature.CombatState.Players.Count;
 
     private const string FlyingVisualsPath = "res://ActsFromThePast/monsters/byrd/byrd_flying.tscn";
     private const string GroundedVisualsPath = "res://ActsFromThePast/monsters/byrd/byrd_grounded.tscn";

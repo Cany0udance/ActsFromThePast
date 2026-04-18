@@ -1,4 +1,5 @@
-﻿using ActsFromThePast.Patches.Audio;
+﻿using ActsFromThePast.Acts.TheBeyond.Events;
+using ActsFromThePast.Patches.Audio;
 using ActsFromThePast.Patches.Cards;
 using BaseLib.Abstracts;
 using Godot;
@@ -184,7 +185,8 @@ public sealed class Hexaghost : CustomMonsterModel
         _visuals?.SetTargetRotationSpeed(120f);
 
         // Trigger the boss music
-        MusicPatches.LegacyActMusicPatches.OnHexaghostActivated();
+        if (!MindBloom.CombatActive)
+            MusicPatches.LegacyActMusicPatches.OnHexaghostActivated();
 
         // Calculate divider damage based on average HP among targets
         var livingTargets = targets.Where(t => t.IsAlive).ToList();
