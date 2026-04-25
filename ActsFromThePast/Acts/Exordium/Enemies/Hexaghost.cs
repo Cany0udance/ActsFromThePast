@@ -257,7 +257,7 @@ public sealed class Hexaghost : CustomMonsterModel
         NPowerUpVfx.CreateGhostly(Creature);
     
         await CreatureCmd.GainBlock(Creature, StrengthenBlock, ValueProp.Move, null);
-        await PowerCmd.Apply<StrengthPower>(Creature, StrengthAmount, Creature, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, StrengthAmount, Creature, null);
     
         await ActivateOrb();
     }
@@ -354,7 +354,7 @@ public sealed class Hexaghost : CustomMonsterModel
                     var burn = combatState.CreateCard<Burn>(player);
                     burn.UpgradeInternal();
                     burn.FinalizeUpgradeInternal();
-                    statusCards[i] = await CardPileCmd.AddGeneratedCardToCombat(burn, PileType.Discard, false);
+                    statusCards[i] = await CardPileCmd.AddGeneratedCardToCombat(burn, PileType.Discard, (Player)null);
                 }
             
                 CardCmd.PreviewCardPileAdd((IReadOnlyList<CardPileAddResult>)statusCards, style: CardPreviewStyle.HorizontalLayout);
@@ -372,7 +372,7 @@ public sealed class Hexaghost : CustomMonsterModel
     {
         if (!_burnUpgraded)
         {
-            await CardPileCmd.AddToCombatAndPreview<Burn>(targets, PileType.Discard, count, false);
+            await CardPileCmd.AddToCombatAndPreview<Burn>(targets, PileType.Discard, count, (Player)null);
             return;
         }
     
@@ -390,7 +390,7 @@ public sealed class Hexaghost : CustomMonsterModel
                     var burn = combatState.CreateCard<Burn>(player);
                     burn.UpgradeInternal();
                     burn.FinalizeUpgradeInternal();
-                    statusCards[i] = await CardPileCmd.AddGeneratedCardToCombat(burn, PileType.Discard, false);
+                    statusCards[i] = await CardPileCmd.AddGeneratedCardToCombat(burn, PileType.Discard, (Player)null);
                 }
             
                 CardCmd.PreviewCardPileAdd((IReadOnlyList<CardPileAddResult>)statusCards, style: count > 5 ? CardPreviewStyle.MessyLayout : CardPreviewStyle.HorizontalLayout);

@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -46,7 +47,7 @@ public sealed class GremlinLeader : CustomMonsterModel
         // Apply Minion power to starting gremlins
         foreach (var teammate in CombatState.GetTeammatesOf(Creature).Where(t => t != Creature))
         {
-            await PowerCmd.Apply<MinionPower>(teammate, 1, Creature, null);
+            await PowerCmd.Apply<MinionPower>(new ThrowingPlayerChoiceContext(), teammate, 1, Creature, null);
         }
     }
 
@@ -205,7 +206,7 @@ public sealed class GremlinLeader : CustomMonsterModel
                 if (node != null)
                     node.Visible = false;
 
-                await PowerCmd.Apply<MinionPower>(summoned, 1, Creature, null);
+                await PowerCmd.Apply<MinionPower>(new ThrowingPlayerChoiceContext(), summoned, 1, Creature, null);
                 await SummonSlideInAnimation.Play(summoned);
             }
         }
@@ -232,11 +233,11 @@ public sealed class GremlinLeader : CustomMonsterModel
         TalkCmd.Play(line, Creature, VfxColor.Orange, VfxDuration.Long);
 
         // Strength to self and all living allies; Block to living allies only
-        await PowerCmd.Apply<StrengthPower>(Creature, StrengthAmount, Creature, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, StrengthAmount, Creature, null);
 
         foreach (var teammate in CombatState.GetTeammatesOf(Creature).Where(t => t != Creature && t.IsAlive))
         {
-            await PowerCmd.Apply<StrengthPower>(teammate, StrengthAmount, Creature, null);
+            await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), teammate, StrengthAmount, Creature, null);
             await CreatureCmd.GainBlock(teammate, BlockAmount, ValueProp.Move, null);
         }
     }

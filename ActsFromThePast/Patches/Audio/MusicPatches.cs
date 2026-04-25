@@ -12,6 +12,8 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Logging;
+using MegaCrit.Sts2.Core.Models.Encounters;
+using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Nodes.Audio;
 using MegaCrit.Sts2.Core.Nodes.Screens.Map;
 using MegaCrit.Sts2.Core.Rooms;
@@ -276,11 +278,31 @@ public class MusicPatches
             var runState = StateProperty?.GetValue(RunManager.Instance) as RunState;
             return runState?.CurrentRoom?.RoomType == RoomType.Elite;
         }
+        
+        private static bool IsArchitectEvent()
+        {
+            var runState = StateProperty?.GetValue(RunManager.Instance) as RunState;
+            return runState?.CurrentRoom is EventRoom eventRoom && eventRoom.CanonicalEvent is TheArchitect;
+        }
 
 [HarmonyPatch(nameof(NRunMusicController.UpdateMusic))]
 [HarmonyPrefix]
 public static bool UpdateMusic_Prefix(NRunMusicController __instance)
 {
+    
+    if (IsArchitectEvent())
+    {
+        if (_isPlayingLegacyMusic)
+        {
+            ModAudio.StopMusic();
+            ModAudio.StopAmbience();
+            _isPlayingLegacyMusic = false;
+            _currentTrackType = TrackType.None;
+            _playingBossStinger = false;
+        }
+        return true;
+    }
+    
     if (!IsLegacyAct())
     {
         if (_isPlayingLegacyMusic)
@@ -307,6 +329,20 @@ public static bool UpdateMusic_Prefix(NRunMusicController __instance)
 [HarmonyPrefix]
 public static bool UpdateTrack_Prefix(NRunMusicController __instance)
 {
+    
+    if (IsArchitectEvent())
+    {
+        if (_isPlayingLegacyMusic)
+        {
+            ModAudio.StopMusic();
+            ModAudio.StopAmbience();
+            _isPlayingLegacyMusic = false;
+            _currentTrackType = TrackType.None;
+            _playingBossStinger = false;
+        }
+        return true;
+    }
+    
     if (!IsLegacyAct())
     {
         if (_isPlayingLegacyMusic)

@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -120,7 +121,7 @@ public sealed class GremlinNob : CustomMonsterModel
         
         // Special multiplayer logic to make Nob less of a menace
         var enrage = Creature.CombatState.Players.Count > 2 ? 1 : EnrageAmount;
-        await PowerCmd.Apply<EnragePower>(Creature, enrage, Creature, null);
+        await PowerCmd.Apply<EnragePower>(new ThrowingPlayerChoiceContext(), Creature, enrage, Creature, null);
     }
 
     private async Task Rush(IReadOnlyList<Creature> targets)
@@ -146,7 +147,7 @@ public sealed class GremlinNob : CustomMonsterModel
     
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<VulnerablePower>(target, VulnerableAmount, Creature, null);
+            await PowerCmd.Apply<VulnerablePower>(new ThrowingPlayerChoiceContext(), target, VulnerableAmount, Creature, null);
         }
     }
 

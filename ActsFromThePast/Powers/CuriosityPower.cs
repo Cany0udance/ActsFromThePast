@@ -18,6 +18,6 @@ public sealed class CuriosityPower : CustomPowerModel
         if (cardPlay.Card.Type != CardType.Power)
             return;
         await Cmd.Wait(0.5f);
-        await PowerCmd.Apply<StrengthPower>(Owner, Amount, Owner, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Owner, Amount, Owner, null);
     }
 }

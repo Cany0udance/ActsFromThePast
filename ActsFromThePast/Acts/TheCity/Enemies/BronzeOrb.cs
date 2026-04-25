@@ -9,6 +9,7 @@ using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Extensions;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
@@ -268,7 +269,7 @@ public sealed class BronzeOrb : CustomMonsterModel
 
             var stasis = (StasisPower)ModelDb.Power<StasisPower>().ToMutable();
             await stasis.Capture(cardToSteal, target);
-            await PowerCmd.Apply(stasis, Creature, 1, Creature, null);
+            await PowerCmd.Apply(new ThrowingPlayerChoiceContext(), stasis, Creature, 1, Creature, null);
         }
     }
 }

@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -83,7 +84,7 @@ public sealed class Darkling : CustomMonsterModel
             : RunRng.MonsterAi.NextInt(7, 12);
 
         int healAmount = Creature.MaxHp / 2;
-        await PowerCmd.Apply<LifeLinkPower>(Creature, healAmount, Creature, null);
+        await PowerCmd.Apply<LifeLinkPower>(new ThrowingPlayerChoiceContext(), Creature, healAmount, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -234,7 +235,7 @@ public sealed class Darkling : CustomMonsterModel
 
         if (HardenStrength > 0)
         {
-            await PowerCmd.Apply<StrengthPower>(Creature, HardenStrength, Creature, null);
+            await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, HardenStrength, Creature, null);
         }
     }
 

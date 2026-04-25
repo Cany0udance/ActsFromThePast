@@ -7,6 +7,8 @@ using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
@@ -33,7 +35,7 @@ public sealed class OrbWalker : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<StrengthUpPower>(Creature, StrengthUpAmount, Creature, null);
+        await PowerCmd.Apply<StrengthUpPower>(new ThrowingPlayerChoiceContext(), Creature, StrengthUpAmount, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -108,10 +110,10 @@ public sealed class OrbWalker : CustomMonsterModel
             var statusCards = new CardPileAddResult[2];
 
             var burn1 = CombatState.CreateCard<Burn>(player);
-            statusCards[0] = await CardPileCmd.AddGeneratedCardToCombat(burn1, PileType.Discard, false);
+            statusCards[0] = await CardPileCmd.AddGeneratedCardToCombat(burn1, PileType.Discard, (Player)null);
 
             var burn2 = CombatState.CreateCard<Burn>(player);
-            statusCards[1] = await CardPileCmd.AddGeneratedCardToCombat(burn2, PileType.Draw, false, CardPilePosition.Random);
+            statusCards[1] = await CardPileCmd.AddGeneratedCardToCombat(burn2, PileType.Draw, (Player)null, CardPilePosition.Random);
 
             if (LocalContext.IsMe(player))
             {

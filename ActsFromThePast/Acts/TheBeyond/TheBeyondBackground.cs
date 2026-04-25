@@ -223,7 +223,7 @@ public partial class TheBeyondBackground : NCombatBackground
         if (_renderF3)
         {
             float offsetX = -80f * scale;
-            float offsetY = Mathf.Cos(Mathf.DegToRad((float)(ms + 73))) * 10f - 90f * scale;
+            float offsetY = Mathf.Cos(Mathf.DegToRad((float)((ms + 73) / 2000 % 360))) * 10f - 90f * scale;
             float rotDeg = (float)(ms / 1000 % 360) * 2f;
             _f3.Position = _f3Base + new Vector2(offsetX, offsetY);
             _f3.Rotation = Mathf.DegToRad(rotDeg);
@@ -269,6 +269,7 @@ public partial class TheBeyondBackground : NCombatBackground
 
             rect.Position = new Vector2(offsetX, offsetY);
             rect.Size = new Vector2(regionInfo.Value.Width, regionInfo.Value.Height);
+            rect.PivotOffset = rect.Size / 2f;
         }
 
         AddChild(rect);

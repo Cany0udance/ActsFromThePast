@@ -6,6 +6,8 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
@@ -124,6 +126,7 @@ private void SpawnFireParticles(object creatureNode, GodotObject[] bones, SceneT
 }
 
 public override Task AfterPowerAmountChanged(
+    PlayerChoiceContext choiceContext,
     PowerModel power,
     decimal amount,
     Creature? applier,
@@ -291,7 +294,7 @@ private void UpdateOpacity(float targetAlpha)
         if (player != null)
         {
             var results = new List<CardPileAddResult>();
-            await CardPileCmd.AddToCombatAndPreview<Burn>(targets, PileType.Discard, BurnAmount, false);
+            await CardPileCmd.AddToCombatAndPreview<Burn>(targets, PileType.Discard, BurnAmount, (Player)null);
             CardCmd.PreviewCardPileAdd(results, 2f);
         }
 
@@ -302,7 +305,7 @@ private void UpdateOpacity(float targetAlpha)
     {
         if (!Creature.HasPower<IntangiblePower>())
         {
-            var intangible = await PowerCmd.Apply<IntangiblePower>(Creature, 1, Creature, null);
+            var intangible = await PowerCmd.Apply<IntangiblePower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
             if (intangible != null)
                 intangible.SkipNextDurationTick = true;
         }

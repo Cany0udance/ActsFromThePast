@@ -35,6 +35,6 @@ public sealed class Enchiridion : CustomRelicModel
             Owner.RunState.Rng.CombatCardGeneration).First();
 
         card.SetToFreeThisTurn();
-        await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, true);
+        await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, Owner);
     }
 }

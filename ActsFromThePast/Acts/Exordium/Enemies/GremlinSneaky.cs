@@ -1,6 +1,7 @@
 ﻿using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -52,7 +53,7 @@ public sealed class GremlinSneaky : CustomMonsterModel
     {
         await base.AfterAddedToRoom();
         Creature.Died += OnDeath;
-        GremlinLeaderHelper.SubscribeToLeaderDeath(Creature, CombatState);
+        GremlinLeaderHelper.SubscribeToLeaderDeath(Creature, (CombatState)CombatState);
     }
 
     private void OnDeath(Creature _)

@@ -32,4 +32,9 @@ public sealed class CultistAndChosenNormal : CustomEncounterModel
             (ModelDb.Monster<Chosen>().ToMutable(), null)
         };
     }
+    
+    public override IEnumerable<string> ExtraAssetPaths => new[]
+    {
+        "res://scenes/vfx/vfx_fire_burst.tscn"
+    };
 }

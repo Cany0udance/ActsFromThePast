@@ -6,7 +6,9 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -61,7 +63,7 @@ public sealed class TimeEater : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<TimeWarpPower>(Creature, 1M, Creature, null);
+        await PowerCmd.Apply<TimeWarpPower>(new ThrowingPlayerChoiceContext(), Creature, 1M, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -186,9 +188,9 @@ public sealed class TimeEater : CustomMonsterModel
         await CreatureCmd.GainBlock(Creature, RippleBlock, ValueProp.Move, null);
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<VulnerablePower>(target, DebuffTurns, Creature, null);
-            await PowerCmd.Apply<WeakPower>(target, DebuffTurns, Creature, null);
-            await PowerCmd.Apply<FrailPower>(target, DebuffTurns, Creature, null);
+            await PowerCmd.Apply<VulnerablePower>(new ThrowingPlayerChoiceContext(), target, DebuffTurns, Creature, null);
+            await PowerCmd.Apply<WeakPower>(new ThrowingPlayerChoiceContext(), target, DebuffTurns, Creature, null);
+            await PowerCmd.Apply<FrailPower>(new ThrowingPlayerChoiceContext(), target, DebuffTurns, Creature, null);
         }
     }
 
@@ -203,12 +205,12 @@ public sealed class TimeEater : CustomMonsterModel
             .Execute(null);
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<DrawReductionPower>(target, 1, Creature, null);
+            await PowerCmd.Apply<DrawReductionPower>(new ThrowingPlayerChoiceContext(), target, 1, Creature, null);
         }
         try
         {
             ClassicSlimedTracker.CreatingClassicSlimed = ActsFromThePastConfig.LegacyEnemiesGiveClassicSlimed;
-            await CardPileCmd.AddToCombatAndPreview<Slimed>(targets, PileType.Discard, SlimedCount, false);
+            await CardPileCmd.AddToCombatAndPreview<Slimed>(targets, PileType.Discard, SlimedCount, (Player)null);
         }
         finally
         {

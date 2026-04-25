@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -35,7 +36,7 @@ public sealed class FungiBeast : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<SporeCloudPower>(Creature, VulnerableAmount, Creature, null);
+        await PowerCmd.Apply<SporeCloudPower>(new ThrowingPlayerChoiceContext(), Creature, VulnerableAmount, Creature, null);
     //    Creature.Died += OnDeath;
     }
 
@@ -138,7 +139,7 @@ public sealed class FungiBeast : CustomMonsterModel
 
     private async Task Grow(IReadOnlyList<Creature> targets)
     {
-        await PowerCmd.Apply<StrengthPower>(Creature, StrengthAmount, Creature, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, StrengthAmount, Creature, null);
     }
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)

@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -44,7 +45,7 @@ public sealed class Spiker : CustomMonsterModel
     {
         await base.AfterAddedToRoom();
         _thornsCount = 0;
-        await PowerCmd.Apply<ThornsPower>(Creature, StartingThorns, Creature, null);
+        await PowerCmd.Apply<ThornsPower>(new ThrowingPlayerChoiceContext(), Creature, StartingThorns, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -124,7 +125,7 @@ public sealed class Spiker : CustomMonsterModel
     private async Task BuffThorns(IReadOnlyList<Creature> targets)
     {
         ThornsCount++;
-        await PowerCmd.Apply<ThornsPower>(Creature, BuffAmount, Creature, null);
+        await PowerCmd.Apply<ThornsPower>(new ThrowingPlayerChoiceContext(), Creature, BuffAmount, Creature, null);
     }
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)

@@ -42,6 +42,6 @@ public sealed class NilrysCodex : CustomRelicModel
         if (selectedCard == null)
             return;
 
-        CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(selectedCard, PileType.Draw, true));
+        CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(selectedCard, PileType.Draw, Owner, CardPilePosition.Random));
     }
 }

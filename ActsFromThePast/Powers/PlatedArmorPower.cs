@@ -30,7 +30,7 @@ public sealed class PlatedArmorPower : CustomPowerModel
     public override Task BeforeSideTurnStart(
         PlayerChoiceContext choiceContext,
         CombatSide side,
-        CombatState combatState)
+        ICombatState combatState)
     {
         if (Owner.Side != CombatSide.Enemy || side != CombatSide.Player || combatState.RoundNumber != 1)
             return Task.CompletedTask;

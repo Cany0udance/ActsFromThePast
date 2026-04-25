@@ -1,9 +1,11 @@
 ﻿using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -55,10 +57,10 @@ public sealed class GremlinFat : CustomMonsterModel
     
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<WeakPower>(target, WeakAmount, Creature, null);
+            await PowerCmd.Apply<WeakPower>(new ThrowingPlayerChoiceContext(), target, WeakAmount, Creature, null);
             if (AppliesFrail)
             {
-                await PowerCmd.Apply<FrailPower>(target, FrailAmount, Creature, null);
+                await PowerCmd.Apply<FrailPower>(new ThrowingPlayerChoiceContext(), target, FrailAmount, Creature, null);
             }
         }
     }
@@ -67,7 +69,7 @@ public sealed class GremlinFat : CustomMonsterModel
     {
         await base.AfterAddedToRoom();
         Creature.Died += OnDeath;
-        GremlinLeaderHelper.SubscribeToLeaderDeath(Creature, CombatState);
+        GremlinLeaderHelper.SubscribeToLeaderDeath(Creature, (CombatState)CombatState);
     }
 
     private void OnDeath(Creature _)

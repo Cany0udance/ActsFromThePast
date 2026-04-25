@@ -1,4 +1,5 @@
-﻿using BaseLib.Abstracts;
+﻿using ActsFromThePast.Acts.TheBeyond.Enemies;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -42,8 +43,15 @@ public sealed class ReactivePower : CustomPowerModel
     
             if (candidates.Count > 0)
             {
-                var next = candidates[monster.RunRng.MonsterAi.NextInt(candidates.Count)];
-                monster.SetMoveImmediate((MoveState)next);
+                // Filter out one-time moves that have already been used
+                if (monster is WrithingMass wm && wm.UsedMegaDebuff)
+                    candidates.RemoveAll(s => s.Id == "MEGA_DEBUFF");
+    
+                if (candidates.Count > 0)
+                {
+                    var next = candidates[monster.RunRng.MonsterAi.NextInt(candidates.Count)];
+                    monster.SetMoveImmediate((MoveState)next);
+                }
             }
         }
     }

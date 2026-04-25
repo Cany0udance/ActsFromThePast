@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -33,7 +34,7 @@ public sealed class SnakePlant : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<MalleablePower>(Creature, 3, Creature, null);
+        await PowerCmd.Apply<MalleablePower>(new ThrowingPlayerChoiceContext(), Creature, 3, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -136,8 +137,8 @@ public sealed class SnakePlant : CustomMonsterModel
     {
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<FrailPower>(target, DebuffAmount, Creature, null);
-            await PowerCmd.Apply<WeakPower>(target, DebuffAmount, Creature, null);
+            await PowerCmd.Apply<FrailPower>(new ThrowingPlayerChoiceContext(), target, DebuffAmount, Creature, null);
+            await PowerCmd.Apply<WeakPower>(new ThrowingPlayerChoiceContext(), target, DebuffAmount, Creature, null);
         }
     }
 

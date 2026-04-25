@@ -20,6 +20,6 @@ public class StrengthUpPower : CustomPowerModel
         if (side != strengthUpPower.Owner.Side)
             return;
         strengthUpPower.Flash();
-        StrengthPower strengthPower = await PowerCmd.Apply<StrengthPower>(strengthUpPower.Owner, (Decimal) strengthUpPower.Amount, strengthUpPower.Owner, (CardModel) null);
+        StrengthPower strengthPower = await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), strengthUpPower.Owner, (Decimal) strengthUpPower.Amount, strengthUpPower.Owner, (CardModel) null);
     }
 }

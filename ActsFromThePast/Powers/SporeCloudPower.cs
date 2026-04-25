@@ -45,7 +45,7 @@ public sealed class SporeCloudPower : CustomPowerModel
 
         foreach (var player in players)
         {
-            await PowerCmd.Apply<VulnerablePower>(player, Amount, null, null);
+            await PowerCmd.Apply<VulnerablePower>(new ThrowingPlayerChoiceContext(), player, Amount, null, null);
         }
     }
 }

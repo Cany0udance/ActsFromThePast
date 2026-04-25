@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
@@ -58,7 +59,7 @@ public sealed class SnakeDagger : CustomMonsterModel
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(null);
 
-        await CardPileCmd.AddToCombatAndPreview<Wound>(targets, PileType.Discard, 1, false);
+        await CardPileCmd.AddToCombatAndPreview<Wound>(targets, PileType.Discard, 1, (Player)null);
     }
 
     private async Task Explode(IReadOnlyList<Creature> targets)

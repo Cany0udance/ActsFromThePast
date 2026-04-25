@@ -1,6 +1,7 @@
 ﻿using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -41,7 +42,7 @@ public sealed class HexOriginalPower : CustomPowerModel
         for (int i = 0; i < Amount; ++i)
         {
             CardModel card = (CardModel) CombatState.CreateCard<Dazed>(player.Player);
-            statusCards[i] = await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Draw, false, CardPilePosition.Random);
+            statusCards[i] = await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Draw, (Player)null, CardPilePosition.Random);
         }
         CardCmd.PreviewCardPileAdd((IReadOnlyList<CardPileAddResult>) statusCards);
         await Cmd.Wait(0.5f);

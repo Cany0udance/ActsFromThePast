@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -40,7 +41,7 @@ public sealed class ShelledParasite : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<PlatedArmorPower>(Creature, PlatedArmorAmount, Creature, null);
+        await PowerCmd.Apply<PlatedArmorPower>(new ThrowingPlayerChoiceContext(), Creature, PlatedArmorAmount, Creature, null);
     }
 
     public override async Task BeforeDeath(Creature creature)
@@ -162,7 +163,7 @@ public sealed class ShelledParasite : CustomMonsterModel
 
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<FrailPower>(target, FellFrailAmount, Creature, null);
+            await PowerCmd.Apply<FrailPower>(new ThrowingPlayerChoiceContext(), target, FellFrailAmount, Creature, null);
         }
     }
 

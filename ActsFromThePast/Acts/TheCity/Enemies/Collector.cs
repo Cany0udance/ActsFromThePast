@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Logging;
@@ -323,7 +324,7 @@ public sealed class Collector : CustomMonsterModel
         {
             ModAudio.Play("collector", "collector_summon");
             var summoned = await CreatureCmd.Add<TorchHead>(CombatState, slot);
-            await PowerCmd.Apply<MinionPower>(summoned, 1, Creature, null);
+            await PowerCmd.Apply<MinionPower>(new ThrowingPlayerChoiceContext(), summoned, 1, Creature, null);
         }
     }
 
@@ -342,7 +343,7 @@ public sealed class Collector : CustomMonsterModel
 
         foreach (var teammate in CombatState.GetTeammatesOf(Creature).Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<StrengthPower>(teammate, StrengthAmount, Creature, null);
+            await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), teammate, StrengthAmount, Creature, null);
         }
     }
 
@@ -367,9 +368,9 @@ public sealed class Collector : CustomMonsterModel
 
         foreach (var t in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<WeakPower>(t, MegaDebuffAmount, Creature, null);
-            await PowerCmd.Apply<VulnerablePower>(t, MegaDebuffAmount, Creature, null);
-            await PowerCmd.Apply<FrailPower>(t, MegaDebuffAmount, Creature, null);
+            await PowerCmd.Apply<WeakPower>(new ThrowingPlayerChoiceContext(), t, MegaDebuffAmount, Creature, null);
+            await PowerCmd.Apply<VulnerablePower>(new ThrowingPlayerChoiceContext(), t, MegaDebuffAmount, Creature, null);
+            await PowerCmd.Apply<FrailPower>(new ThrowingPlayerChoiceContext(), t, MegaDebuffAmount, Creature, null);
         }
 
         UltUsed = true;
@@ -393,7 +394,7 @@ public sealed class Collector : CustomMonsterModel
         {
             ModAudio.Play("collector", "collector_summon");
             var summoned = await CreatureCmd.Add<TorchHead>(CombatState, slot);
-            await PowerCmd.Apply<MinionPower>(summoned, 1, Creature, null);
+            await PowerCmd.Apply<MinionPower>(new ThrowingPlayerChoiceContext(), summoned, 1, Creature, null);
         }
     }
 

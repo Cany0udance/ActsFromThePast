@@ -64,4 +64,9 @@ public sealed class GremlinLeaderElite : CustomEncounterModel
 
         return result;
     }
+    
+    public override IEnumerable<string> ExtraAssetPaths => new[]
+    {
+        "res://scenes/vfx/vfx_fire_burst.tscn"
+    };
 }

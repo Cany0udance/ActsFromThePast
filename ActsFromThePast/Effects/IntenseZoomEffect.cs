@@ -23,21 +23,13 @@ public partial class IntenseZoomEffect : NSts1Effect
 
     protected override void Initialize()
     {
-        Duration = 0.1f;
-        StartingDuration = 0.1f;
-        _spawned = false;
-    }
-
-    protected override void Update(float delta)
-    {
-        if (!_spawned)
-        {
-            _spawned = true;
-            SpawnEffects();
-        }
-        
+        Duration = 0f;
+        StartingDuration = 0f;
+        SpawnEffects();
         IsDone = true;
     }
+
+    protected override void Update(float delta) { }
 
     private void SpawnEffects()
     {
@@ -46,11 +38,11 @@ public partial class IntenseZoomEffect : NSts1Effect
     
         if (_isBlack)
         {
-          //  BorderFlashEffect.Play(Colors.Black);
+            BorderFlashEffect.Play(Colors.Black);
         }
         else
         {
-          //  BorderFlashEffect.PlayGold();
+            BorderFlashEffect.PlayGold();
         }
     
         for (int i = 0; i < ParticleCount; i++)

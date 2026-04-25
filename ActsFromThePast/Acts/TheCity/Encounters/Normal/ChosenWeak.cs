@@ -3,6 +3,7 @@ using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Entities.Encounters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
+using MegaCrit.Sts2.Core.Runs;
 
 namespace ActsFromThePast;
 
@@ -30,4 +31,9 @@ public sealed class ChosenWeak : CustomEncounterModel
             (ModelDb.Monster<Chosen>().ToMutable(), null) 
         };
     }
+    
+    public override IEnumerable<string> ExtraAssetPaths => new[]
+    {
+        "res://scenes/vfx/vfx_fire_burst.tscn"
+    };
 }

@@ -6,6 +6,8 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
@@ -36,7 +38,7 @@ public sealed class Deca : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<ArtifactPower>(Creature, ArtifactAmount, Creature, null);
+        await PowerCmd.Apply<ArtifactPower>(new ThrowingPlayerChoiceContext(), Creature, ArtifactAmount, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -73,7 +75,7 @@ public sealed class Deca : CustomMonsterModel
             .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
 
-        await CardPileCmd.AddToCombatAndPreview<Dazed>(targets, PileType.Discard, BeamDazeAmount, false);
+        await CardPileCmd.AddToCombatAndPreview<Dazed>(targets, PileType.Discard, BeamDazeAmount, (Player)null);
     }
 
     private async Task SquareOfProtection(IReadOnlyList<Creature> targets)
@@ -84,7 +86,7 @@ public sealed class Deca : CustomMonsterModel
             if (teammate.IsAlive)
             {
                 await CreatureCmd.GainBlock(teammate, ProtectBlock, ValueProp.Move, null);
-                await PowerCmd.Apply<PlatedArmorPower>(teammate, (decimal)ProtectPlatedArmorAmount, Creature, (CardModel)null);
+                await PowerCmd.Apply<PlatedArmorPower>(new ThrowingPlayerChoiceContext(), teammate, (decimal)ProtectPlatedArmorAmount, Creature, (CardModel)null);
             }
         }
     }

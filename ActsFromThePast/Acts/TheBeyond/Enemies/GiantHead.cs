@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -53,7 +54,7 @@ public sealed class GiantHead : CustomMonsterModel
     {
         await base.AfterAddedToRoom();
         _count = AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 4, 5);
-        await PowerCmd.Apply<SlowPower>(Creature, 1M, Creature, null);
+        await PowerCmd.Apply<SlowPower>(new ThrowingPlayerChoiceContext(), Creature, 1M, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -126,7 +127,7 @@ public sealed class GiantHead : CustomMonsterModel
         await Cmd.Wait(0.5f);
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<WeakPower>(target, GlareDuration, Creature, null);
+            await PowerCmd.Apply<WeakPower>(new ThrowingPlayerChoiceContext(), target, GlareDuration, Creature, null);
         }
     }
 

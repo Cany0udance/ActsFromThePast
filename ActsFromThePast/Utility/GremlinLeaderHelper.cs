@@ -42,7 +42,7 @@ public static class GremlinLeaderHelper
             await CreatureCmd.Escape(gremlin, removeCreatureNode: false);
 
             // Remove from escaped list so it doesn't affect rewards
-            combatState.EscapedCreatures.Remove(gremlin);
+            ((List<Creature>)combatState.EscapedCreatures).Remove(gremlin);
 
             await EscapeAnimation.Play(gremlin);
             if (creatureNode != null)

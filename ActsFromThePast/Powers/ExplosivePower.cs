@@ -14,8 +14,6 @@ namespace ActsFromThePast.Powers;
 
 public sealed class ExplosivePower : CustomPowerModel
 {
-    private const int ExplodeDamage = 30;
-
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
@@ -23,23 +21,7 @@ public sealed class ExplosivePower : CustomPowerModel
     {
         if (side != Owner.Side)
             return;
-
-        if (Amount <= 1)
-        {
-            if (!Owner.IsDead)
-            {
-                Flash();
-                NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(
-                    NFireSmokePuffVfx.Create(Owner));
-                await Cmd.Wait(0.1f);
-                foreach (var player in Owner.CombatState?.Players ?? Enumerable.Empty<Player>())
-                {
-                    await CreatureCmd.Damage(choiceContext, player.Creature, ExplodeDamage, ValueProp.Unpowered, Owner, null);
-                }
-                await CreatureCmd.Kill(Owner);
-            }
-        }
-        else
+        if (Amount > 1)
         {
             Flash();
             await PowerCmd.Decrement(this);

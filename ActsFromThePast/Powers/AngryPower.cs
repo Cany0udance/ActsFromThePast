@@ -35,6 +35,6 @@ public sealed class AngryPower : CustomPowerModel
             return;
 
         Flash();
-        await PowerCmd.Apply<StrengthPower>(Owner, Amount, Owner, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Owner, Amount, Owner, null);
     }
 }

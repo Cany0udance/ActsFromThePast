@@ -60,6 +60,7 @@ public sealed class Jax : CustomCardModel
             this);
 
         await PowerCmd.Apply<StrengthPower>(
+            new ThrowingPlayerChoiceContext(), 
             Owner.Creature,
             DynamicVars.Strength.BaseValue,
             Owner.Creature,

@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -42,7 +43,7 @@ public sealed class Donu : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<ArtifactPower>(Creature, ArtifactAmount, Creature, null);
+        await PowerCmd.Apply<ArtifactPower>(new ThrowingPlayerChoiceContext(), Creature, ArtifactAmount, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -77,7 +78,7 @@ public sealed class Donu : CustomMonsterModel
         {
             if (teammate.IsAlive)
             {
-                await PowerCmd.Apply<StrengthPower>(teammate, (decimal)CircleStrengthAmount, Creature, (CardModel)null);
+                await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), teammate, (decimal)CircleStrengthAmount, Creature, (CardModel)null);
             }
         }
     }

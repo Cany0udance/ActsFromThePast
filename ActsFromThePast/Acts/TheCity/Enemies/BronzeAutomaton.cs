@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -54,7 +55,7 @@ public sealed class BronzeAutomaton : CustomMonsterModel
     {
         await base.AfterAddedToRoom();
         _numTurns = 0;
-        await PowerCmd.Apply<ArtifactPower>(Creature, ArtifactAmount, Creature, null);
+        await PowerCmd.Apply<ArtifactPower>(new ThrowingPlayerChoiceContext(), Creature, ArtifactAmount, Creature, null);
     }
 
     public override async Task BeforeDeath(Creature creature)
@@ -164,7 +165,7 @@ public sealed class BronzeAutomaton : CustomMonsterModel
             orb.BobIndex = index;
             orb.SpawnAnimPending = true;
             var summoned = await CreatureCmd.Add(orb, CombatState, CombatSide.Enemy, slot);
-            await PowerCmd.Apply<MinionPower>(summoned, 1, Creature, null);
+            await PowerCmd.Apply<MinionPower>(new ThrowingPlayerChoiceContext(), summoned, 1, Creature, null);
             spawnTasks.Add(BronzeOrbSpawnAnimation.Play(summoned));
 
             index++;
@@ -177,7 +178,7 @@ public sealed class BronzeAutomaton : CustomMonsterModel
     private async Task Boost(IReadOnlyList<Creature> targets)
     {
         await CreatureCmd.GainBlock(Creature, BlockAmount, ValueProp.Move, null);
-        await PowerCmd.Apply<StrengthPower>(Creature, StrAmount, Creature, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, StrAmount, Creature, null);
     }
 
     private async Task Flail(IReadOnlyList<Creature> targets)

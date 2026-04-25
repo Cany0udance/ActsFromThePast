@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Singleton;
@@ -39,8 +40,8 @@ public sealed class Transient : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<FadingPower>(Creature, AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 6, 5), Creature, null);
-        await PowerCmd.Apply<ShiftingPower>(Creature, 1, Creature, null);
+        await PowerCmd.Apply<FadingPower>(new ThrowingPlayerChoiceContext(), Creature, AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 6, 5), Creature, null);
+        await PowerCmd.Apply<ShiftingPower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
 
         var playerCount = Creature.CombatState.Players.Count;
         if (playerCount > 1)

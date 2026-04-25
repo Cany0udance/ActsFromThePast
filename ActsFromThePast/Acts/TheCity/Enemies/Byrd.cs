@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Logging;
@@ -72,7 +73,7 @@ public sealed class Byrd : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<FlightPower>(Creature, FlightAmount, Creature, null);
+        await PowerCmd.Apply<FlightPower>(new ThrowingPlayerChoiceContext(), Creature, FlightAmount, Creature, null);
     }
 
     public async Task OnFlightBroken()
@@ -262,7 +263,7 @@ public sealed class Byrd : CustomMonsterModel
     {
         ModAudio.Play("byrd", "byrd_death");
         TalkCmd.Play(_cawLine, Creature, VfxColor.Swamp, VfxDuration.Short);
-        await PowerCmd.Apply<StrengthPower>(Creature, CawStrength, Creature, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, CawStrength, Creature, null);
     }
 
     private async Task GoAirborne(IReadOnlyList<Creature> targets)
@@ -288,7 +289,7 @@ public sealed class Byrd : CustomMonsterModel
             await creatureNode.ToSignal(settleTween, Tween.SignalName.Finished);
         }
         ModAudio.Play("byrd", "flight");
-        await PowerCmd.Apply<FlightPower>(Creature, FlightAmount, Creature, null);
+        await PowerCmd.Apply<FlightPower>(new ThrowingPlayerChoiceContext(), Creature, FlightAmount, Creature, null);
     }
 
     private async Task Headbutt(IReadOnlyList<Creature> targets)

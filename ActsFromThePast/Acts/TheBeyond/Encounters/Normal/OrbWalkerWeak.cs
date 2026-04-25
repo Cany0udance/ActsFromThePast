@@ -28,4 +28,9 @@ public sealed class OrbWalkerWeak : CustomEncounterModel
             (ModelDb.Monster<OrbWalker>().ToMutable(), null) 
         };
     }
+    
+    public override IEnumerable<string> ExtraAssetPaths => new[]
+    {
+        "res://scenes/vfx/vfx_fire_burst.tscn"
+    };
 }

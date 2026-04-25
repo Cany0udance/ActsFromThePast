@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
@@ -38,8 +39,8 @@ public sealed class SphericGuardian : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<BarricadePower>(Creature, 1, Creature, null);
-        await PowerCmd.Apply<ArtifactPower>(Creature, ArtifactAmount, Creature, null);
+        await PowerCmd.Apply<BarricadePower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
+        await PowerCmd.Apply<ArtifactPower>(new ThrowingPlayerChoiceContext(), Creature, ArtifactAmount, Creature, null);
     
         var blockProp = typeof(Creature).GetProperty("Block");
         var setter = blockProp?.GetSetMethod(true);
@@ -127,7 +128,7 @@ public sealed class SphericGuardian : CustomMonsterModel
 
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<FrailPower>(target, FrailAmount, Creature, null);
+            await PowerCmd.Apply<FrailPower>(new ThrowingPlayerChoiceContext(), target, FrailAmount, Creature, null);
         }
     }
 

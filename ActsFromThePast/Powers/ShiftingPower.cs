@@ -37,7 +37,7 @@ public sealed class ShiftingPower : CustomPowerModel
             return;
 
         Flash();
-        await PowerCmd.Apply<StrengthPower>(Owner, -result.TotalDamage, Owner, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Owner, -result.TotalDamage, Owner, null);
         PendingStrengthRestore += result.TotalDamage;
     }
 
@@ -48,7 +48,7 @@ public sealed class ShiftingPower : CustomPowerModel
         if (PendingStrengthRestore <= 0)
             return;
 
-        await PowerCmd.Apply<StrengthPower>(Owner, PendingStrengthRestore, Owner, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Owner, PendingStrengthRestore, Owner, null);
         PendingStrengthRestore = 0;
     }
 }

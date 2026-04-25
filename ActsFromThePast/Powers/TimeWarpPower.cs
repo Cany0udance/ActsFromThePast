@@ -73,7 +73,7 @@ public sealed class TimeWarpPower : CustomPowerModel
             NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(effect);
             PlayerCmd.EndTurn(cardPlay.Card.Owner, false);
             foreach (var enemy in Owner.CombatState.Enemies.Where(e => e.IsAlive))
-                await PowerCmd.Apply<StrengthPower>(enemy, StrengthAmount, Owner, null);
+                await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), enemy, StrengthAmount, Owner, null);
         }
     }
 }

@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -159,7 +160,7 @@ public sealed class Mystic : CustomMonsterModel
             .WithHitFx("vfx/vfx_attack_slash", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
 
-        await PowerCmd.Apply<FrailPower>(targets, (decimal)FrailAmount, Creature, (CardModel)null);
+        await PowerCmd.Apply<FrailPower>(new ThrowingPlayerChoiceContext(), targets, (decimal)FrailAmount, Creature, (CardModel)null);
     }
 
     private async Task Heal(IReadOnlyList<Creature> targets)
@@ -189,7 +190,7 @@ public sealed class Mystic : CustomMonsterModel
         {
             if (teammate.IsAlive)
             {
-                await PowerCmd.Apply<StrengthPower>(teammate, (decimal)StrengthAmount, Creature, (CardModel)null);
+                await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), teammate, (decimal)StrengthAmount, Creature, (CardModel)null);
             }
         }
     }

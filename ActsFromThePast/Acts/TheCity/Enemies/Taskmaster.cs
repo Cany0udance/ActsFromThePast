@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
@@ -89,11 +91,11 @@ public sealed class Taskmaster : CustomMonsterModel
             .WithHitFx("vfx/vfx_attack_slash", tmpSfx: "slash_attack.mp3")
             .Execute(null);
         
-        await CardPileCmd.AddToCombatAndPreview<Wound>(targets, PileType.Discard, WoundCount, false);
+        await CardPileCmd.AddToCombatAndPreview<Wound>(targets, PileType.Discard, WoundCount, (Player)null);
         
         if (GainsStrength)
         {
-            await PowerCmd.Apply<StrengthPower>(Creature, 1, Creature, null);
+            await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
         }
     }
     

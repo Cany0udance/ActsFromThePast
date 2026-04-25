@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -145,7 +146,7 @@ public sealed class Chosen : CustomMonsterModel
 
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<HexOriginalPower>(target, HexAmount, Creature, null);
+            await PowerCmd.Apply<HexOriginalPower>(new ThrowingPlayerChoiceContext(), target, HexAmount, Creature, null);
         }
     }
 
@@ -164,9 +165,9 @@ public sealed class Chosen : CustomMonsterModel
     {
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<WeakPower>(target, DrainWeak, Creature, null);
+            await PowerCmd.Apply<WeakPower>(new ThrowingPlayerChoiceContext(), target, DrainWeak, Creature, null);
         }
-        await PowerCmd.Apply<StrengthPower>(Creature, DrainStrength, Creature, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, DrainStrength, Creature, null);
     }
 
     private async Task DebilitateMove(IReadOnlyList<Creature> targets)
@@ -180,7 +181,7 @@ public sealed class Chosen : CustomMonsterModel
 
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<VulnerablePower>(target, DebilitateVuln, Creature, null);
+            await PowerCmd.Apply<VulnerablePower>(new ThrowingPlayerChoiceContext(), target, DebilitateVuln, Creature, null);
         }
     }
 

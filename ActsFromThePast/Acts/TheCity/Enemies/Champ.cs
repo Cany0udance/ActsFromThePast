@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -284,7 +285,7 @@ public sealed class Champ : CustomMonsterModel
     private async Task DefensiveStance(IReadOnlyList<Creature> targets)
     {
         await CreatureCmd.GainBlock(Creature, BlockAmount, ValueProp.Move, null);
-        await PowerCmd.Apply<MetallicizePower>(Creature, ForgeAmount, Creature, null);
+        await PowerCmd.Apply<MetallicizePower>(new ThrowingPlayerChoiceContext(), Creature, ForgeAmount, Creature, null);
     }
 
     private async Task Execute(IReadOnlyList<Creature> targets)
@@ -314,14 +315,14 @@ public sealed class Champ : CustomMonsterModel
 
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<FrailPower>(target, DebuffAmount, Creature, null);
-            await PowerCmd.Apply<VulnerablePower>(target, DebuffAmount, Creature, null);
+            await PowerCmd.Apply<FrailPower>(new ThrowingPlayerChoiceContext(), target, DebuffAmount, Creature, null);
+            await PowerCmd.Apply<VulnerablePower>(new ThrowingPlayerChoiceContext(), target, DebuffAmount, Creature, null);
         }
     }
 
     private async Task Gloat(IReadOnlyList<Creature> targets)
     {
-        await PowerCmd.Apply<StrengthPower>(Creature, StrengthAmount, Creature, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, StrengthAmount, Creature, null);
     }
 
     private async Task Taunt(IReadOnlyList<Creature> targets)
@@ -333,8 +334,8 @@ public sealed class Champ : CustomMonsterModel
 
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<WeakPower>(target, DebuffAmount, Creature, null);
-            await PowerCmd.Apply<VulnerablePower>(target, DebuffAmount, Creature, null);
+            await PowerCmd.Apply<WeakPower>(new ThrowingPlayerChoiceContext(), target, DebuffAmount, Creature, null);
+            await PowerCmd.Apply<VulnerablePower>(new ThrowingPlayerChoiceContext(), target, DebuffAmount, Creature, null);
         }
     }
 
@@ -355,7 +356,7 @@ public sealed class Champ : CustomMonsterModel
             await PowerCmd.Remove(debuff);
         }
 
-        await PowerCmd.Apply<StrengthPower>(Creature, StrengthAmount * 3, Creature, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, StrengthAmount * 3, Creature, null);
     }
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)

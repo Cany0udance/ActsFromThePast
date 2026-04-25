@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -120,7 +121,7 @@ public sealed class Cultist : CustomMonsterModel
         }
 
         await Cmd.Wait(0.5f);
-        await PowerCmd.Apply<RitualPower>(Creature, RitualAmount, Creature, null);
+        await PowerCmd.Apply<RitualPower>(new ThrowingPlayerChoiceContext(), Creature, RitualAmount, Creature, null);
     }
     
     private void PlayIncantationSfx()

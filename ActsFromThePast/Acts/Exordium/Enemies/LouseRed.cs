@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
@@ -89,7 +90,7 @@ public sealed class LouseRed : CustomMonsterModel
             ? RunRng.MonsterAi.NextInt(9, 13)
             : RunRng.MonsterAi.NextInt(3, 8);
 
-        await PowerCmd.Apply<CurlUpPower>(Creature, curlUpAmount, Creature, null);
+        await PowerCmd.Apply<CurlUpPower>(new ThrowingPlayerChoiceContext(), Creature, curlUpAmount, Creature, null);
     }
 
     private async Task Bite(IReadOnlyList<Creature> targets)
@@ -125,7 +126,7 @@ public sealed class LouseRed : CustomMonsterModel
             await CreatureCmd.TriggerAnim(Creature, "rear", 0.0f);
             await Cmd.Wait(0.5f);
         }
-        await PowerCmd.Apply<StrengthPower>(Creature, StrengthAmount, Creature, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, StrengthAmount, Creature, null);
     }
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)

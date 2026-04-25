@@ -6,7 +6,9 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
@@ -48,7 +50,7 @@ public sealed class WrithingMass : CustomMonsterModel
         set { AssertMutable(); _firstMove = value; }
     }
 
-    private bool UsedMegaDebuff
+    public bool UsedMegaDebuff
     {
         get => _usedMegaDebuff;
         set { AssertMutable(); _usedMegaDebuff = value; }
@@ -57,8 +59,8 @@ public sealed class WrithingMass : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<ReactivePower>(Creature, 1, Creature, null);
-        await PowerCmd.Apply<MalleablePower>(Creature, 3, Creature, null);
+        await PowerCmd.Apply<ReactivePower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
+        await PowerCmd.Apply<MalleablePower>(new ThrowingPlayerChoiceContext(), Creature, 3, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -228,18 +230,22 @@ public sealed class WrithingMass : CustomMonsterModel
             .Execute(null);
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<WeakPower>(target, NormalDebuffAmount, Creature, null);
-            await PowerCmd.Apply<VulnerablePower>(target, NormalDebuffAmount, Creature, null);
+            await PowerCmd.Apply<WeakPower>(new ThrowingPlayerChoiceContext(), target, NormalDebuffAmount, Creature, null);
+            await PowerCmd.Apply<VulnerablePower>(new ThrowingPlayerChoiceContext(), target, NormalDebuffAmount, Creature, null);
         }
     }
 
     private async Task MegaDebuff(IReadOnlyList<Creature> targets)
     {
+        UsedMegaDebuff = true;
         NGame.Instance?.ScreenShake(ShakeStrength.Medium, ShakeDuration.Short);
         await Cmd.Wait(0.2f);
-        var player = Creature.CombatState?.Players.FirstOrDefault();
-        if (player != null)
-            await CardPileCmd.AddCurseToDeck<Parasite>(player);
+        var players = Creature.CombatState?.Players;
+        if (players != null)
+        {
+            foreach (var player in players)
+                await CardPileCmd.AddCurseToDeck<Parasite>(player);
+        }
     }
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)

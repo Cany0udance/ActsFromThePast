@@ -17,7 +17,7 @@ public sealed class ReptomancerElite : CustomEncounterModel
 
     public override IReadOnlyList<string> Slots => new[]
     {
-        "dagger1", "dagger2", "dagger3", "dagger4", "reptomancer"
+        "dagger3", "dagger1", "reptomancer", "dagger2", "dagger4"
     };
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters
@@ -33,8 +33,8 @@ public sealed class ReptomancerElite : CustomEncounterModel
     {
         var result = new List<(MonsterModel, string?)>
         {
-            (ModelDb.Monster<SnakeDagger>().ToMutable(), "dagger1"),
-            (ModelDb.Monster<SnakeDagger>().ToMutable(), "dagger2"),
+            (ModelDb.Monster<SnakeDagger>().ToMutable(), "dagger3"),
+            (ModelDb.Monster<SnakeDagger>().ToMutable(), "dagger4"),
             (ModelDb.Monster<Reptomancer>().ToMutable(), "reptomancer")
         };
 

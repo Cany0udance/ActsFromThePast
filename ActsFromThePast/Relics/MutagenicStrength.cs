@@ -3,6 +3,7 @@ using BaseLib.Abstracts;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
@@ -48,6 +49,7 @@ public sealed class MutagenicStrength : CustomRelicModel
         
         // Apply temporary strength loss (will remove the strength at end of turn)
         await PowerCmd.Apply<MutagenicStrengthPower>(
+            new ThrowingPlayerChoiceContext(), 
             Owner.Creature, 
             DynamicVars.Strength.BaseValue, 
             Owner.Creature, 

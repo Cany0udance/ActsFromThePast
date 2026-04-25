@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
@@ -86,7 +87,7 @@ public sealed class Repulsor : CustomMonsterModel
 
     private async Task Daze(IReadOnlyList<Creature> targets)
     {
-        await CardPileCmd.AddToCombatAndPreview<Dazed>(targets, PileType.Draw, DazeAmount, false);
+        await CardPileCmd.AddToCombatAndPreview<Dazed>(targets, PileType.Draw, DazeAmount, (Player)null);
     }
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)

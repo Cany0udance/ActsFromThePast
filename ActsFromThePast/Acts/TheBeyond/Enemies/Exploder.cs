@@ -5,11 +5,15 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Acts.TheBeyond.Enemies;
 
@@ -46,7 +50,7 @@ public sealed class Exploder : CustomMonsterModel
         await base.AfterAddedToRoom();
         _turnCount = 0;
         _hasExploded = false;
-        await PowerCmd.Apply<ExplosivePower>(Creature, ExplosiveCountdown, Creature, null);
+       // await PowerCmd.Apply<ExplosivePower>(new ThrowingPlayerChoiceContext(), Creature, ExplosiveCountdown, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
@@ -95,8 +99,22 @@ public sealed class Exploder : CustomMonsterModel
 
     private async Task Explode(IReadOnlyList<Creature> targets)
     {
-        // Explosion is handled by ExplosivePower at end of turn
-        await Task.CompletedTask;
+        if (Creature.IsDead)
+            return;
+
+        await CreatureCmd.TriggerAnim(Creature, "ExplodeTrigger", 0.3f);
+        NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(
+            NFireSmokePuffVfx.Create(Creature));
+        await Cmd.Wait(0.1f);
+
+        foreach (var target in targets.Where(t => t.IsAlive))
+        {
+            await CreatureCmd.Damage(
+                new ThrowingPlayerChoiceContext(), target, ExplodeDamage,
+                ValueProp.Move, Creature, null);
+        }
+
+        await CreatureCmd.Kill(Creature);
     }
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)

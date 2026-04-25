@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -36,22 +37,10 @@ public sealed class Reptomancer : CustomMonsterModel
 
         foreach (var teammate in CombatState.GetTeammatesOf(Creature).Where(t => t != Creature))
         {
-            await PowerCmd.Apply<MinionPower>(teammate, 1, Creature, null);
+            await PowerCmd.Apply<MinionPower>(new ThrowingPlayerChoiceContext(), teammate, 1, Creature, null);
         }
     }
-
-    public override async Task BeforeDeath(Creature creature)
-    {
-        await base.BeforeDeath(creature);
-
-        if (creature != Creature)
-            return;
-
-        foreach (var teammate in CombatState.GetTeammatesOf(Creature).Where(t => t != Creature && t.IsAlive))
-        {
-            await CreatureCmd.Kill(teammate);
-        }
-    }
+    
 
     private int NumAliveDaggers()
     {
@@ -185,7 +174,7 @@ public sealed class Reptomancer : CustomMonsterModel
             if (summoned != null)
             {
                 occupiedSlots.Add(slot);
-                await PowerCmd.Apply<MinionPower>(summoned, 1, Creature, null);
+                await PowerCmd.Apply<MinionPower>(new ThrowingPlayerChoiceContext(), summoned, 1, Creature, null);
                 daggersSpawned++;
             }
         }
@@ -219,7 +208,7 @@ public sealed class Reptomancer : CustomMonsterModel
 
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<WeakPower>(target, 1, Creature, null);
+            await PowerCmd.Apply<WeakPower>(new ThrowingPlayerChoiceContext(), target, 1, Creature, null);
         }
     }
 

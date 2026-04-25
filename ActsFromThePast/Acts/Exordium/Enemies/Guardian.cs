@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -13,6 +14,7 @@ using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Vfx;
+using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast;
@@ -21,7 +23,6 @@ public sealed class Guardian : CustomMonsterModel
 {
     public override int MinInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 250, 240);
     public override int MaxInitialHp => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 250, 240);
-
     private int FierceBashDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 36, 32);
     private int RollDamage => AscensionHelper.GetValueIfAscension(AscensionLevel.DeadlyEnemies, 10, 9);
     private const int WhirlwindDamage = 5;
@@ -35,22 +36,11 @@ public sealed class Guardian : CustomMonsterModel
     private int DmgThresholdBase => AscensionHelper.GetValueIfAscension(AscensionLevel.ToughEnemies, 40, 30);
     private const int DmgThresholdIncrease = 10;
 
-    private int _currentDmgThreshold;
-    public int CurrentDmgThreshold => _currentDmgThreshold;
-
-    private int _dmgTaken;
-    public int DmgTaken
-    {
-        get => _dmgTaken;
-        set
-        {
-            AssertMutable();
-            _dmgTaken = value;
-        }
-    }
+    private int _nextThreshold;
 
     private bool _isOpen = true;
     public bool IsOpen => _isOpen;
+    private MoveState _closeUpState;
 
     private bool _closeUpTriggered;
     public bool CloseUpTriggered
@@ -63,7 +53,17 @@ public sealed class Guardian : CustomMonsterModel
         }
     }
 
-    private MoveState _closeUpState;
+    private bool _pendingModeShift;
+    public bool PendingModeShift
+    {
+        get => _pendingModeShift;
+        set
+        {
+            AssertMutable();
+            _pendingModeShift = value;
+        }
+    }
+
     private static readonly LocString _destroyDialog = L10NMonsterLookup("ACTSFROMTHEPAST-GUARDIAN.moves.CHARGE_UP.dialog");
 
     protected override string VisualsPath => "res://ActsFromThePast/monsters/guardian/guardian.tscn";
@@ -79,69 +79,60 @@ public sealed class Guardian : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        _currentDmgThreshold = DmgThresholdBase;
-        _dmgTaken = 0;
-        await PowerCmd.Apply<ModeShiftPower>(Creature, _currentDmgThreshold, Creature, null);
+        _nextThreshold = DmgThresholdBase;
+        await PowerCmd.Apply<ModeShiftPower>(new ThrowingPlayerChoiceContext(), Creature, _nextThreshold, Creature, null);
     }
 
     protected override MonsterMoveStateMachine GenerateMoveStateMachine()
     {
         var states = new List<MonsterState>();
 
-        // Offensive mode states
         var chargeUpState = new MoveState(
             CHARGE_UP,
             ChargeUp,
             new AbstractIntent[] { new DefendIntent() }
         );
-
         var fierceBashState = new MoveState(
             FIERCE_BASH,
             FierceBash,
             new AbstractIntent[] { new SingleAttackIntent(FierceBashDamage) }
         );
-
         var ventSteamState = new MoveState(
             VENT_STEAM,
             VentSteam,
             new AbstractIntent[] { new DebuffIntent() }
         );
-
         var whirlwindState = new MoveState(
             WHIRLWIND,
             Whirlwind,
             new AbstractIntent[] { new MultiAttackIntent(WhirlwindDamage, WhirlwindCount) }
         );
-
-        // Defensive mode states
         _closeUpState = new MoveState(
             CLOSE_UP,
             CloseUp,
             new AbstractIntent[] { new BuffIntent() }
         );
-
         var rollAttackState = new MoveState(
             ROLL_ATTACK,
             RollAttack,
             new AbstractIntent[] { new SingleAttackIntent(RollDamage) }
         );
-
         var twinSlamState = new MoveState(
             TWIN_SLAM,
             TwinSlam,
             new AbstractIntent[] { new MultiAttackIntent(TwinSlamDamage, TwinSlamHits), new BuffIntent() }
         );
 
-        // Offensive mode cycle: ChargeUp -> FierceBash -> VentSteam -> Whirlwind -> (repeat)
-        chargeUpState.FollowUpState = fierceBashState;
-        fierceBashState.FollowUpState = ventSteamState;
-        ventSteamState.FollowUpState = whirlwindState;
-        whirlwindState.FollowUpState = chargeUpState;
+        var offensiveBranch = new ConditionalBranchState("OFFENSIVE_BRANCH", SelectNextOffensiveMove);
 
-        // Defensive mode cycle: CloseUp -> RollAttack -> TwinSlam -> (back to Whirlwind in offensive)
+        chargeUpState.FollowUpState = offensiveBranch;
+        fierceBashState.FollowUpState = offensiveBranch;
+        ventSteamState.FollowUpState = offensiveBranch;
+        whirlwindState.FollowUpState = offensiveBranch;
+        twinSlamState.FollowUpState = offensiveBranch;
+
         _closeUpState.FollowUpState = rollAttackState;
         rollAttackState.FollowUpState = twinSlamState;
-        twinSlamState.FollowUpState = whirlwindState;
 
         states.Add(chargeUpState);
         states.Add(fierceBashState);
@@ -150,8 +141,35 @@ public sealed class Guardian : CustomMonsterModel
         states.Add(_closeUpState);
         states.Add(rollAttackState);
         states.Add(twinSlamState);
+        states.Add(offensiveBranch);
 
         return new MonsterMoveStateMachine(states, chargeUpState);
+    }
+
+    private string SelectNextOffensiveMove(Creature owner, Rng rng, MonsterMoveStateMachine sm)
+    {
+        if (!_isOpen)
+            return CLOSE_UP;
+
+        var last = sm.StateLog.LastOrDefault(s => s is MoveState)?.Id;
+        return last switch
+        {
+            CHARGE_UP => FIERCE_BASH,
+            FIERCE_BASH => VENT_STEAM,
+            VENT_STEAM => WHIRLWIND,
+            TWIN_SLAM => WHIRLWIND,
+            WHIRLWIND => CHARGE_UP,
+            _ => CHARGE_UP
+        };
+    }
+
+    private async Task CheckPendingModeShift()
+    {
+        if (!_pendingModeShift)
+            return;
+        _pendingModeShift = false;
+        CloseUpTriggered = true;
+        await TransitionToDefensiveMode(setMove: false);
     }
 
     private async Task ChargeUp(IReadOnlyList<Creature> targets)
@@ -159,6 +177,7 @@ public sealed class Guardian : CustomMonsterModel
         await CreatureCmd.GainBlock(Creature, ChargeUpBlock, ValueProp.Move, null);
         ModAudio.Play("guardian", "guardian_destroy");
         TalkCmd.Play(_destroyDialog, Creature, VfxColor.Gold, VfxDuration.VeryLong);
+        await CheckPendingModeShift();
     }
 
     private async Task FierceBash(IReadOnlyList<Creature> targets)
@@ -168,26 +187,28 @@ public sealed class Guardian : CustomMonsterModel
             .FromMonster(this)
             .WithHitFx("vfx/vfx_attack_blunt", tmpSfx: "blunt_attack.mp3")
             .Execute(null);
+        await CheckPendingModeShift();
     }
 
     private async Task VentSteam(IReadOnlyList<Creature> targets)
     {
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<WeakPower>(target, VentDebuffAmount, Creature, null);
-            await PowerCmd.Apply<VulnerablePower>(target, VentDebuffAmount, Creature, null);
+            await PowerCmd.Apply<WeakPower>(new ThrowingPlayerChoiceContext(), target, VentDebuffAmount, Creature, null);
+            await PowerCmd.Apply<VulnerablePower>(new ThrowingPlayerChoiceContext(), target, VentDebuffAmount, Creature, null);
         }
+        await CheckPendingModeShift();
     }
 
     private async Task Whirlwind(IReadOnlyList<Creature> targets)
     {
         await FastAttackAnimation.Play(Creature);
         ModAudio.Play("general", "whirlwind");
-    
+
         for (int i = 0; i < WhirlwindCount; i++)
         {
             ModAudio.Play("general", "attack_heavy");
-        
+
             var target = targets.FirstOrDefault(t => t.IsAlive);
             if (target != null)
             {
@@ -198,18 +219,19 @@ public sealed class Guardian : CustomMonsterModel
                     NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(cleaveVfx);
                 }
             }
-        
+
             await Cmd.Wait(0.15f);
-        
+
             await DamageCmd.Attack(WhirlwindDamage)
                 .FromMonster(this)
                 .Execute(null);
         }
+        await CheckPendingModeShift();
     }
 
     private async Task CloseUp(IReadOnlyList<Creature> targets)
     {
-        await PowerCmd.Apply<SharpHidePower>(Creature, SharpHideThorns, Creature, null);
+        await PowerCmd.Apply<SharpHidePower>(new ThrowingPlayerChoiceContext(), Creature, SharpHideThorns, Creature, null);
     }
 
     private async Task RollAttack(IReadOnlyList<Creature> targets)
@@ -225,30 +247,28 @@ public sealed class Guardian : CustomMonsterModel
     private async Task TwinSlam(IReadOnlyList<Creature> targets)
     {
         await TransitionToOffensiveMode();
-
         await DamageCmd.Attack(TwinSlamDamage)
             .WithHitCount(TwinSlamHits)
             .FromMonster(this)
             .WithAttackerFx(sfx: "event:/sfx/enemy/enemy_attacks/punch_construct/punch_construct_attack_double")
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(null);
-
         await PowerCmd.Remove<SharpHidePower>(Creature);
+        await CheckPendingModeShift();
     }
 
-    public async Task TransitionToDefensiveMode()
+    public async Task TransitionToDefensiveMode(bool setMove = true)
     {
         await PowerCmd.Remove<ModeShiftPower>(Creature);
+        _nextThreshold += DmgThresholdIncrease;
         ModAudio.Play("guardian", "guardian_boss_transform");
         await CreatureCmd.GainBlock(Creature, DefensiveBlock, ValueProp.Move, null);
-    
-        // Trigger animator to update bounds
+
         await CreatureCmd.TriggerAnim(Creature, "transition", 0.0f);
-    
-        // Now take over with speed modification
+
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Creature);
         var spineBody = creatureNode?.Visuals.SpineBody;
-    
+
         if (spineBody != null)
         {
             var animState = spineBody.GetAnimationState();
@@ -259,38 +279,35 @@ public sealed class Guardian : CustomMonsterModel
                 var duration = trackEntry.GetAnimationEnd() / 2.0f;
                 await Cmd.Wait(duration);
             }
-        
+
             animState.SetAnimation("defensive", true, 0);
         }
-    
-        _currentDmgThreshold += DmgThresholdIncrease;
+
         _isOpen = false;
-        SetMoveImmediate(_closeUpState, true);
+        if (setMove)
+            SetMoveImmediate(_closeUpState, true);
     }
 
     private async Task TransitionToOffensiveMode()
     {
-        _dmgTaken = 0;
-        await PowerCmd.Apply<ModeShiftPower>(Creature, _currentDmgThreshold, Creature, null);
+        await PowerCmd.Apply<ModeShiftPower>(new ThrowingPlayerChoiceContext(), Creature, _nextThreshold, Creature, null);
         if (Creature.Block > 0)
         {
             await CreatureCmd.LoseBlock(Creature, Creature.Block);
         }
-    
-        // Trigger animator to update bounds
+
         await CreatureCmd.TriggerAnim(Creature, "idle", 0.0f);
-    
-        // Apply speed modification if needed
+
         var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Creature);
         var spineBody = creatureNode?.Visuals.SpineBody;
-    
+
         if (spineBody != null)
         {
             var animState = spineBody.GetAnimationState();
             var trackEntry = animState.GetCurrent(0);
             trackEntry.SetMixDuration(0.2f);
         }
-    
+
         _isOpen = true;
         _closeUpTriggered = false;
     }
@@ -301,19 +318,19 @@ public sealed class Guardian : CustomMonsterModel
         {
             BoundsContainer = "IdleBounds"
         };
-    
+
         var defensive = new AnimState("defensive", true)
         {
             BoundsContainer = "DefensiveBounds"
         };
-    
+
         var transition = new AnimState("transition");
-    
+
         transition.NextState = defensive;
         idle.AddBranch("transition", transition);
         idle.AddBranch("defensive", defensive);
         defensive.AddBranch("idle", idle);
-    
+
         return new CreatureAnimator(idle, controller);
     }
 }

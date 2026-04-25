@@ -4,9 +4,11 @@ using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
@@ -29,9 +31,9 @@ public sealed class GremlinMad : CustomMonsterModel
     public override async Task AfterAddedToRoom()
     {
         await base.AfterAddedToRoom();
-        await PowerCmd.Apply<AngryPower>(Creature, AngryAmount, Creature, null);
+        await PowerCmd.Apply<AngryPower>(new ThrowingPlayerChoiceContext(), Creature, AngryAmount, Creature, null);
         Creature.Died += OnDeath;
-        GremlinLeaderHelper.SubscribeToLeaderDeath(Creature, CombatState);
+        GremlinLeaderHelper.SubscribeToLeaderDeath(Creature, (CombatState)CombatState);
     }
 
     private void OnDeath(Creature _)

@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Logging;
@@ -16,6 +17,8 @@ using MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
+using MegaCrit.Sts2.Core.Rewards;
+using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast;
@@ -49,7 +52,7 @@ public sealed class Looter : CustomMonsterModel
         {
             var thievery = (ThieveryPower)ModelDb.Power<ThieveryPower>().ToMutable();
             thievery.Target = player.Creature;
-            await PowerCmd.Apply(thievery, Creature, GoldAmount, Creature, null);
+            await PowerCmd.Apply(new ThrowingPlayerChoiceContext(), thievery, Creature, GoldAmount, Creature, null);
         }
 
         Creature.Died += OnDeath;
@@ -58,12 +61,20 @@ public sealed class Looter : CustomMonsterModel
     private void OnDeath(Creature _)
     {
         Creature.Died -= OnDeath;
-        
+
+        if (Creature.CombatState.RunState.CurrentRoom is CombatRoom currentRoom)
+        {
+            foreach (var thievery in Creature.GetPowerInstances<ThieveryPower>())
+            {
+                currentRoom.AddExtraReward(thievery.Target.Player, (Reward)new GoldReward(thievery.Amount, thievery.Target.Player, true));
+            }
+        }
+
         if (Rng.Chaotic.NextFloat() < 0.3f)
         {
             TalkCmd.Play(L10NMonsterLookup("ACTSFROMTHEPAST-LOOTER.deathLine"), Creature, VfxColor.Blue, VfxDuration.Long);
         }
-        
+
         PlayRandomDeathSfx();
     }
 

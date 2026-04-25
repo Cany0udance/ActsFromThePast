@@ -31,4 +31,9 @@ public class TwoOrbWalkersEvent : CustomEncounterModel
             (ModelDb.Monster<OrbWalker>().ToMutable(), "right"),
         };
     }
+    
+    public override IEnumerable<string> ExtraAssetPaths => new[]
+    {
+        "res://scenes/vfx/vfx_fire_burst.tscn"
+    };
 }

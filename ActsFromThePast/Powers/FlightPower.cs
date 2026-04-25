@@ -39,14 +39,17 @@ public sealed class FlightPower : CustomPowerModel
     public override async Task BeforeSideTurnStart(
         PlayerChoiceContext choiceContext,
         CombatSide side,
-        CombatState combatState)
+        ICombatState combatState)
     {
         if (side != Owner.Side)
             return;
 
         int stored = (int)DynamicVars[_storedAmountKey].BaseValue;
         if (Amount != stored)
-            await PowerCmd.SetAmount<FlightPower>(Owner, stored, null, null);
+        {
+            int offset = stored - Amount;
+            await PowerCmd.ModifyAmount(choiceContext, this, offset, null, null);
+        }
     }
 
     public override decimal ModifyDamageMultiplicative(

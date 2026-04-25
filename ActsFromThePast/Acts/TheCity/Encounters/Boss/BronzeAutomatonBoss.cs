@@ -17,7 +17,7 @@ public sealed class BronzeAutomatonBoss : CustomEncounterModel
     public override bool HasScene => true;
     public override IReadOnlyList<string> Slots => new[]
     {
-        "orb1", "orb2", "automaton"
+        "orb1", "automaton", "orb2"
     };
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {

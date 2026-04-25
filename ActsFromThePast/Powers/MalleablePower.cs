@@ -56,7 +56,7 @@ public sealed class MalleablePower : CustomPowerModel
 
         Flash();
         await CreatureCmd.GainBlock(Owner, (decimal)Amount, ValueProp.Unpowered, null);
-        await PowerCmd.ModifyAmount(this, 1, null, null);
+        await PowerCmd.ModifyAmount(choiceContext, this, 1, null, null);
     }
 
     public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
@@ -65,6 +65,9 @@ public sealed class MalleablePower : CustomPowerModel
             return;
         int baseAmount = (int)DynamicVars[_baseAmountKey].BaseValue;
         if (Amount != baseAmount)
-            await PowerCmd.SetAmount<MalleablePower>(Owner, baseAmount, null, null);
+        {
+            int offset = baseAmount - Amount;
+            await PowerCmd.ModifyAmount(choiceContext, this, offset, null, null);
+        }
     }
 }

@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -105,12 +106,12 @@ public sealed class Lagavulin : CustomMonsterModel
         if (StartsAwake)
         {
             IsAwake = true;
-            // Animator already starts in idleLoop, no need to trigger
+            ApplyAwakeBounds();
         }
         else
         {
-            await PowerCmd.Apply<MetallicizePower>(Creature, MetalAmount, Creature, null);
-            await PowerCmd.Apply<AsleepLagavulinPower>(Creature, AsleepTurns, Creature, null);
+            await PowerCmd.Apply<MetallicizePower>(new ThrowingPlayerChoiceContext(), Creature, MetalAmount, Creature, null);
+            await PowerCmd.Apply<AsleepLagavulinPower>(new ThrowingPlayerChoiceContext(), Creature, AsleepTurns, Creature, null);
         
             var specialNode = NCombatRoom.Instance?.GetCreatureNode(Creature)?.GetSpecialNode<Marker2D>("%SleepVfxPos");
             if (specialNode != null)
@@ -142,7 +143,7 @@ public sealed class Lagavulin : CustomMonsterModel
         await CreatureCmd.TriggerAnim(Creature, "Wake", 0.6f);
         StopSleepingVfx();
         IsAwake = true;
-    
+        ApplyAwakeBounds();
         await CreatureCmd.Stun(Creature, StunnedMove, ATTACK);
         NRunMusicController.Instance?.UpdateTrack();
     }
@@ -153,8 +154,49 @@ public sealed class Lagavulin : CustomMonsterModel
         await CreatureCmd.TriggerAnim(Creature, "Wake", 0.6f);
         StopSleepingVfx();
         IsAwake = true;
-    
+    ApplyAwakeBounds();
         NRunMusicController.Instance?.UpdateTrack();
+    }
+    
+    private void ApplyAwakeBounds()
+    {
+        var creatureNode = NCombatRoom.Instance?.GetCreatureNode(Creature);
+        if (creatureNode == null) return;
+
+        var visuals = creatureNode.GetNode<Node>("Lagavulin");
+    
+        // Update root bounds on visuals
+        var rootBounds = visuals.GetNodeOrNull<Control>("Bounds");
+        var awakeBounds = visuals.GetNodeOrNull<Control>("AwakeBounds/Bounds");
+        if (rootBounds != null && awakeBounds != null)
+        {
+            rootBounds.Position = awakeBounds.Position;
+            rootBounds.Size = awakeBounds.Size;
+        }
+
+        // Update center position
+        var rootCenter = visuals.GetNodeOrNull<Marker2D>("CenterPos");
+        var awakeCenter = visuals.GetNodeOrNull<Marker2D>("AwakeBounds/CenterPos");
+        if (rootCenter != null && awakeCenter != null)
+        {
+            rootCenter.Position = awakeCenter.Position;
+        }
+
+        // Update intent position
+        var rootIntent = visuals.GetNodeOrNull<Marker2D>("IntentPos");
+        var awakeIntent = visuals.GetNodeOrNull<Marker2D>("AwakeBounds/IntentPos");
+        if (rootIntent != null && awakeIntent != null)
+        {
+            rootIntent.Position = awakeIntent.Position;
+        }
+
+        // Update hitbox on NCreature
+        var hitbox = creatureNode.GetNodeOrNull<Control>("Hitbox");
+        if (hitbox != null && awakeBounds != null)
+        {
+            hitbox.Position = awakeBounds.Position;
+            hitbox.Size = awakeBounds.Size;
+        }
     }
 
     public async Task StunnedMove(IReadOnlyList<Creature> targets)
@@ -266,8 +308,8 @@ public sealed class Lagavulin : CustomMonsterModel
 
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<DexterityPower>(target, DebuffAmount, Creature, null);
-            await PowerCmd.Apply<StrengthPower>(target, DebuffAmount, Creature, null);
+            await PowerCmd.Apply<DexterityPower>(new ThrowingPlayerChoiceContext(), target, DebuffAmount, Creature, null);
+            await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), target, DebuffAmount, Creature, null);
         }
     }
 

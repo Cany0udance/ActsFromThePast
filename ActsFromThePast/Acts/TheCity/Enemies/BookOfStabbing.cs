@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -53,7 +54,7 @@ public sealed class BookOfStabbing : CustomMonsterModel
     {
         await base.AfterAddedToRoom();
         _stabCount = 1;
-        await PowerCmd.Apply<PainfulStabsPower>(Creature, 1, Creature, null);
+        await PowerCmd.Apply<PainfulStabsPower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
         Creature.Died += OnDeath;
     }
     

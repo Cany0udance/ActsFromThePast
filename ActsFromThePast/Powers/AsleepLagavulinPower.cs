@@ -45,7 +45,7 @@ public sealed class AsleepLagavulinPower : CustomPowerModel
     public override Task BeforeSideTurnStart(
         PlayerChoiceContext choiceContext,
         CombatSide side,
-        CombatState combatState)
+        ICombatState combatState)
     {
         if (side != CombatSide.Player || combatState.RoundNumber != 1)
             return Task.CompletedTask;

@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Afflictions;
@@ -168,7 +169,7 @@ public sealed class SlaverRed : CustomMonsterModel
             }
             
             await Cmd.Wait(0.2f);
-            await PowerCmd.Apply<EntangledPower>(target, 1m, Creature, null);
+            await PowerCmd.Apply<EntangledPower>(new ThrowingPlayerChoiceContext(), target, 1m, Creature, null);
         }
 
         _usedEntangle = true;
@@ -185,7 +186,7 @@ public sealed class SlaverRed : CustomMonsterModel
 
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<VulnerablePower>(target, VulnerableAmount, Creature, null);
+            await PowerCmd.Apply<VulnerablePower>(new ThrowingPlayerChoiceContext(), target, VulnerableAmount, Creature, null);
         }
     }
 

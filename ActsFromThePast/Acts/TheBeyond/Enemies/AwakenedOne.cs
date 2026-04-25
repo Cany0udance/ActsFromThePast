@@ -8,7 +8,9 @@ using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Logging;
@@ -91,13 +93,13 @@ public sealed class AwakenedOne : CustomMonsterModel
         
         var curiosity = Creature.CombatState.Players.Count >= 2 ? 1 : CuriosityAmount;
         
-        await PowerCmd.Apply<RegenEnemyPower>(Creature, RegenAmount, Creature, null);
-        await PowerCmd.Apply<CuriosityPower>(Creature, curiosity, Creature, null);
-        await PowerCmd.Apply<UnawakenedPower>(Creature, 1, Creature, null);
+        await PowerCmd.Apply<RegenEnemyPower>(new ThrowingPlayerChoiceContext(), Creature, RegenAmount, Creature, null);
+        await PowerCmd.Apply<CuriosityPower>(new ThrowingPlayerChoiceContext(), Creature, curiosity, Creature, null);
+        await PowerCmd.Apply<UnawakenedPower>(new ThrowingPlayerChoiceContext(), Creature, 1, Creature, null);
 
         if (StartingStrength > 0)
         {
-            await PowerCmd.Apply<StrengthPower>(Creature, StartingStrength, Creature, null);
+            await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, StartingStrength, Creature, null);
         }
 
         Creature.Died += OnParticleDeath;
@@ -306,7 +308,7 @@ public sealed class AwakenedOne : CustomMonsterModel
             var player = target.Player ?? target.PetOwner;
             var statusCards = new CardPileAddResult[1];
             var voidCard = CombatState.CreateCard<Void>(player);
-            statusCards[0] = await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Draw, false, CardPilePosition.Random);
+            statusCards[0] = await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Draw, (Player)null, CardPilePosition.Random);
             if (LocalContext.IsMe(player))
             {
                 CardCmd.PreviewCardPileAdd((IReadOnlyList<CardPileAddResult>)statusCards);

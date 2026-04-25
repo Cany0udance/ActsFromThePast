@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -128,8 +129,8 @@ public sealed class Maw : CustomMonsterModel
         await Cmd.Wait(0.05f);
         foreach (var target in targets.Where(t => t.IsAlive))
         {
-            await PowerCmd.Apply<WeakPower>(target, TerrifyDuration, Creature, null);
-            await PowerCmd.Apply<FrailPower>(target, TerrifyDuration, Creature, null);
+            await PowerCmd.Apply<WeakPower>(new ThrowingPlayerChoiceContext(), target, TerrifyDuration, Creature, null);
+            await PowerCmd.Apply<FrailPower>(new ThrowingPlayerChoiceContext(), target, TerrifyDuration, Creature, null);
         }
         Roared = true;
     }
@@ -145,7 +146,7 @@ public sealed class Maw : CustomMonsterModel
 
     private async Task Drool(IReadOnlyList<Creature> targets)
     {
-        await PowerCmd.Apply<StrengthPower>(Creature, StrUp, Creature, null);
+        await PowerCmd.Apply<StrengthPower>(new ThrowingPlayerChoiceContext(), Creature, StrUp, Creature, null);
     }
 
     private async Task NomNomNom(IReadOnlyList<Creature> targets)
