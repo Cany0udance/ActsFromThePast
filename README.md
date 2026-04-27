@@ -6,6 +6,7 @@
 - If you want to ONLY play with Exordium/The City/The Beyond, there is an option for that in the mod config. By default, the legacy acts are mixed in with the base game acts.
 - I have to imagine this mod breaks if played on widescreen or resolutions other than 16:9.
 - Acts From The Past is an English-only mod for now. If anyone is willing to translate, let me know and I can send the .json files!
+- Acts From The Past is NOT multiplayer stable at the moment!! If you play this with multiplayer, don't be surprised if you run into something like a softlock.
 
 # Acts From The Past
 
