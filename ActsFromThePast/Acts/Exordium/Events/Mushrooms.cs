@@ -25,7 +25,7 @@ public sealed class Mushrooms : CustomEventModel
     public override EncounterModel CanonicalEncounter =>
         ModelDb.Encounter<ThreeFungiBeastsEvent>();
     public override bool IsAllowed(IRunState runState) =>
-        runState.TotalFloor >= 6;
+        runState.TotalFloor >= 7;
 
     public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };
 
@@ -42,10 +42,14 @@ public sealed class Mushrooms : CustomEventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
+        var eatHoverTips = ActsFromThePastConfig.RebalancedMode
+            ? HoverTipFactory.FromCardWithCardHoverTips<SporeMind>().ToArray()
+            : HoverTipFactory.FromCardWithCardHoverTips<Parasite>().ToArray();
+
         return new[]
         {
             Option(Fight),
-            Option(Eat, "INITIAL", HoverTipFactory.FromCardWithCardHoverTips<Parasite>().ToArray())
+            Option(Eat, ActsFromThePastConfig.RebalancedMode ? "INITIAL_REBALANCED" : "INITIAL", eatHoverTips)
         };
     }
 
@@ -74,7 +78,12 @@ public sealed class Mushrooms : CustomEventModel
         await CreatureCmd.Heal(
             Owner.Creature,
             DynamicVars["HealAmount"].BaseValue);
-        await CardPileCmd.AddCurseToDeck<Parasite>(Owner);
+
+        if (ActsFromThePastConfig.RebalancedMode)
+            await CardPileCmd.AddCurseToDeck<SporeMind>(Owner);
+        else
+            await CardPileCmd.AddCurseToDeck<Parasite>(Owner);
+
         SetEventFinished(PageDescription("EAT"));
     }
 }

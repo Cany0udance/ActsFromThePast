@@ -208,40 +208,70 @@ public sealed class AcidSlimeLarge : CustomMonsterModel
         }
     }
 
-    private async Task Split(IReadOnlyList<Creature> targets)
+private async Task Split(IReadOnlyList<Creature> targets)
+{
+    var currentHp = Creature.CurrentHp;
+    var combatState = Creature.CombatState;
+    var originalPosition = NCombatRoom.Instance?.GetCreatureNode(Creature)?.Position ?? Vector2.Zero;
+
+    _ = ShakeAnimation.Play(Creature, 1.0f, 3.0f);
+    await Cmd.Wait(1.0f);
+    ModAudio.Play("general", "slime_split");
+    await CreatureCmd.Kill(Creature);
+
+    var occupiedSlots = combatState.GetTeammatesOf(Creature)
+        .Where(t => t.IsAlive)
+        .Select(t => t.SlotName)
+        .ToHashSet();
+
+    var slot1 = combatState.Encounter.Slots?
+        .FirstOrDefault(s => s.StartsWith("acid_med") && !occupiedSlots.Contains(s));
+
+    string? slot2 = null;
+    if (slot1 != null)
     {
-        var currentHp = Creature.CurrentHp;
-        var combatState = Creature.CombatState;
-        var originalPosition = NCombatRoom.Instance?.GetCreatureNode(Creature)?.Position ?? Vector2.Zero;
+        occupiedSlots.Add(slot1);
+        slot2 = combatState.Encounter.Slots?
+            .FirstOrDefault(s => s.StartsWith("acid_med") && !occupiedSlots.Contains(s));
+    }
 
-        _ = ShakeAnimation.Play(Creature, 1.0f, 3.0f);
-        await Cmd.Wait(1.0f);
-        ModAudio.Play("general", "slime_split");
-        await CreatureCmd.Kill(Creature);
+    var useSlots = slot1 != null && slot2 != null;
 
-        var positionQueue = new Queue<Vector2>();
-        var enemyContainer = NCombatRoom.Instance?.GetNode<Godot.Control>("%EnemyContainer");
+    Queue<Vector2>? positionQueue = null;
+    var enemyContainer = NCombatRoom.Instance?.GetNode<Godot.Control>("%EnemyContainer");
+    Callable? callable = null;
+
+    if (!useSlots)
+    {
+        positionQueue = new Queue<Vector2>();
+
         void OnChildEntered(Node child)
         {
             if (child is NCreature nc && positionQueue.Count > 0)
                 nc.Position = positionQueue.Dequeue();
         }
-        enemyContainer?.Connect(Node.SignalName.ChildEnteredTree, Callable.From<Node>(OnChildEntered));
 
+        callable = Callable.From<Node>(OnChildEntered);
+        enemyContainer?.Connect(Node.SignalName.ChildEnteredTree, callable.Value);
         positionQueue.Enqueue(originalPosition + new Vector2(-134f, Rng.Chaotic.NextFloat() * 8f - 4f));
-        var slime1 = (AcidSlimeMedium)ModelDb.Monster<AcidSlimeMedium>().ToMutable();
-        var creature1 = await CreatureCmd.Add(slime1, combatState, CombatSide.Enemy, null);
-        await CreatureCmd.SetMaxHp(creature1, currentHp);
-        await CreatureCmd.Heal(creature1, currentHp);
-
-        positionQueue.Enqueue(originalPosition + new Vector2(134f, Rng.Chaotic.NextFloat() * 8f - 4f));
-        var slime2 = (AcidSlimeMedium)ModelDb.Monster<AcidSlimeMedium>().ToMutable();
-        var creature2 = await CreatureCmd.Add(slime2, combatState, CombatSide.Enemy, null);
-        await CreatureCmd.SetMaxHp(creature2, currentHp);
-        await CreatureCmd.Heal(creature2, currentHp);
-
-        enemyContainer?.Disconnect(Node.SignalName.ChildEnteredTree, Callable.From<Node>(OnChildEntered));
     }
+
+    var slime1 = (AcidSlimeMedium)ModelDb.Monster<AcidSlimeMedium>().ToMutable();
+    var creature1 = await CreatureCmd.Add(slime1, combatState, CombatSide.Enemy, slot1);
+    await CreatureCmd.SetMaxHp(creature1, currentHp);
+    await CreatureCmd.Heal(creature1, currentHp);
+
+    if (!useSlots)
+        positionQueue!.Enqueue(originalPosition + new Vector2(134f, Rng.Chaotic.NextFloat() * 8f - 4f));
+
+    var slime2 = (AcidSlimeMedium)ModelDb.Monster<AcidSlimeMedium>().ToMutable();
+    var creature2 = await CreatureCmd.Add(slime2, combatState, CombatSide.Enemy, slot2);
+    await CreatureCmd.SetMaxHp(creature2, currentHp);
+    await CreatureCmd.Heal(creature2, currentHp);
+
+    if (!useSlots && callable.HasValue)
+        enemyContainer?.Disconnect(Node.SignalName.ChildEnteredTree, callable.Value);
+}
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)
     {

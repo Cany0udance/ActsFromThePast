@@ -49,8 +49,12 @@ public sealed class AsleepLagavulinPower : CustomPowerModel
     {
         if (side != CombatSide.Player || combatState.RoundNumber != 1)
             return Task.CompletedTask;
-    
-        return CreatureCmd.GainBlock(Owner, 8, ValueProp.Unpowered, null);
+
+        var metalPower = Owner.GetPower<MetallicizePower>();
+        if (metalPower == null)
+            return Task.CompletedTask;
+
+        return CreatureCmd.GainBlock(Owner, metalPower.Amount, ValueProp.Unpowered, null);
     }
 
     public override async Task BeforeTurnEndVeryEarly(

@@ -1,12 +1,18 @@
-﻿using BaseLib.Abstracts;
+﻿using ActsFromThePast.Enchantments;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
+using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.Acts.Exordium.Events;
@@ -39,6 +45,12 @@ public sealed class ShiningLight : CustomEventModel
         return PileType.Deck.GetPile(Owner).Cards.Any(c => c != null && c.IsUpgradable);
     }
 
+    private bool HasEnchantableAttack()
+    {
+        var burnBright = ModelDb.Enchantment<BurnBright>();
+        return PileType.Deck.GetPile(Owner).Cards.Any(c => burnBright.CanEnchant(c));
+    }
+
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
         var options = new List<EventOption>();
@@ -50,7 +62,21 @@ public sealed class ShiningLight : CustomEventModel
                 $"{Id.Entry}.pages.INITIAL.options.ENTER_LOCKED",
                 Array.Empty<IHoverTip>()));
 
-        options.Add(Option(Leave));
+        if (ActsFromThePastConfig.RebalancedMode)
+        {
+            if (HasEnchantableAttack())
+                options.Add(Option(Bask, "INITIAL",
+                    HoverTipFactory.FromEnchantment<BurnBright>().ToArray()));
+            else
+                options.Add(new EventOption(this, null,
+                    $"{Id.Entry}.pages.INITIAL.options.BASK_LOCKED",
+                    Array.Empty<IHoverTip>()));
+        }
+        else
+        {
+            options.Add(Option(Leave));
+        }
+
         return options;
     }
 
@@ -78,8 +104,38 @@ public sealed class ShiningLight : CustomEventModel
         SetEventFinished(PageDescription("ENTER"));
     }
 
+    private async Task Bask()
+    {
+        var burnBright = ModelDb.Enchantment<BurnBright>();
+        var eligible = PileType.Deck.GetPile(Owner).Cards
+            .Where(c => burnBright.CanEnchant(c))
+            .ToList()
+            .UnstableShuffle(Owner.RunState.Rng.Niche);
+
+        var card = eligible.FirstOrDefault();
+        if (card != null)
+        {
+            CardCmd.Enchant<BurnBright>(card, 1M);
+            var child = NCardEnchantVfx.Create(card);
+            if (child != null)
+                NRun.Instance?.GlobalUi.CardPreviewContainer.AddChildSafely(child);
+        }
+
+        SetEventFinished(PageDescription("BASK"));
+    }
+
     private async Task Leave()
     {
         SetEventFinished(PageDescription("LEAVE"));
+    }
+
+    public override bool IsAllowed(IRunState runState)
+    {
+        if (!ActsFromThePastConfig.RebalancedMode)
+            return true;
+
+        var burnBright = ModelDb.Enchantment<BurnBright>();
+        return runState.Players.All<Player>(p =>
+            PileType.Deck.GetPile(p).Cards.Any(c => burnBright.CanEnchant(c)));
     }
 }

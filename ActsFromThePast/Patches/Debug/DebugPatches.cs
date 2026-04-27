@@ -18,6 +18,18 @@ public class DebugPatches
             return false;
         }
     }
+    
+    
+        [HarmonyPatch(typeof(CreatureCmd), nameof(CreatureCmd.Add), new[] { typeof(Creature) })]
+    public static class CreatureAddPositionLogger
+    {
+        public static void Postfix(Creature creature)
+        {
+            var node = NCombatRoom.Instance?.GetCreatureNode(creature);
+            if (node == null) return;
+            Log.Info($"[CreatureAdd] {creature.Monster?.GetType().Name} at {node.GlobalPosition}");
+        }
+    }
 }
 
 */

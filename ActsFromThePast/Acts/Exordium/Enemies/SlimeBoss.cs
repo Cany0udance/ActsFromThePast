@@ -169,18 +169,36 @@ public sealed class SlimeBoss : CustomMonsterModel
     }
     
     private async Task Split(IReadOnlyList<Creature> targets)
+{
+    var currentHp = Creature.CurrentHp;
+    var combatState = Creature.CombatState;
+    var originalPosition = NCombatRoom.Instance?.GetCreatureNode(Creature)?.Position ?? Vector2.Zero;
+
+    _ = ShakeAnimation.Play(Creature, 1.0f, 3.0f);
+    await Cmd.Wait(1.0f);
+    ModAudio.Play("general", "slime_split");
+    await CreatureCmd.Kill(Creature);
+
+    var occupiedSlots = combatState.GetTeammatesOf(Creature)
+        .Where(t => t.IsAlive)
+        .Select(t => t.SlotName)
+        .ToHashSet();
+
+    var spikeSlot = combatState.Encounter.Slots?
+        .FirstOrDefault(s => s.StartsWith("spike_large") && !occupiedSlots.Contains(s));
+
+    var acidSlot = combatState.Encounter.Slots?
+        .FirstOrDefault(s => s.StartsWith("acid_large") && !occupiedSlots.Contains(s));
+
+    var useSlots = spikeSlot != null && acidSlot != null;
+
+    Queue<Vector2>? positionQueue = null;
+    var enemyContainer = NCombatRoom.Instance?.GetNode<Godot.Control>("%EnemyContainer");
+    Callable? callable = null;
+
+    if (!useSlots)
     {
-        var currentHp = Creature.CurrentHp;
-        var combatState = Creature.CombatState;
-        var originalPosition = NCombatRoom.Instance?.GetCreatureNode(Creature)?.Position ?? Vector2.Zero;
-
-        _ = ShakeAnimation.Play(Creature, 1.0f, 3.0f);
-        await Cmd.Wait(1.0f);
-        ModAudio.Play("general", "slime_split");
-        await CreatureCmd.Kill(Creature);
-
-        var positionQueue = new Queue<Vector2>();
-        var enemyContainer = NCombatRoom.Instance?.GetNode<Godot.Control>("%EnemyContainer");
+        positionQueue = new Queue<Vector2>();
 
         void OnChildEntered(Node child)
         {
@@ -188,24 +206,29 @@ public sealed class SlimeBoss : CustomMonsterModel
                 nc.Position = positionQueue.Dequeue();
         }
 
-        enemyContainer?.Connect(Node.SignalName.ChildEnteredTree, Callable.From<Node>(OnChildEntered));
-
+        callable = Callable.From<Node>(OnChildEntered);
+        enemyContainer?.Connect(Node.SignalName.ChildEnteredTree, callable.Value);
         positionQueue.Enqueue(originalPosition + new Vector2(-385f, 20f));
-        var spikeSlime = (SpikeSlimeLarge)ModelDb.Monster<SpikeSlimeLarge>().ToMutable();
-        spikeSlime.OverrideHp = currentHp;
-        var spikeCreature = await CreatureCmd.Add(spikeSlime, combatState, CombatSide.Enemy, null);
-        await CreatureCmd.SetMaxHp(spikeCreature, currentHp);
-        await CreatureCmd.Heal(spikeCreature, currentHp);
-
-        positionQueue.Enqueue(originalPosition + new Vector2(120f, 20f));
-        var acidSlime = (AcidSlimeLarge)ModelDb.Monster<AcidSlimeLarge>().ToMutable();
-        acidSlime.OverrideHp = currentHp;
-        var acidCreature = await CreatureCmd.Add(acidSlime, combatState, CombatSide.Enemy, null);
-        await CreatureCmd.SetMaxHp(acidCreature, currentHp);
-        await CreatureCmd.Heal(acidCreature, currentHp);
-
-        enemyContainer?.Disconnect(Node.SignalName.ChildEnteredTree, Callable.From<Node>(OnChildEntered));
     }
+
+    var spikeSlime = (SpikeSlimeLarge)ModelDb.Monster<SpikeSlimeLarge>().ToMutable();
+    spikeSlime.OverrideHp = currentHp;
+    var spikeCreature = await CreatureCmd.Add(spikeSlime, combatState, CombatSide.Enemy, spikeSlot);
+    await CreatureCmd.SetMaxHp(spikeCreature, currentHp);
+    await CreatureCmd.Heal(spikeCreature, currentHp);
+
+    if (!useSlots)
+        positionQueue!.Enqueue(originalPosition + new Vector2(120f, 20f));
+
+    var acidSlime = (AcidSlimeLarge)ModelDb.Monster<AcidSlimeLarge>().ToMutable();
+    acidSlime.OverrideHp = currentHp;
+    var acidCreature = await CreatureCmd.Add(acidSlime, combatState, CombatSide.Enemy, acidSlot);
+    await CreatureCmd.SetMaxHp(acidCreature, currentHp);
+    await CreatureCmd.Heal(acidCreature, currentHp);
+
+    if (!useSlots && callable.HasValue)
+        enemyContainer?.Disconnect(Node.SignalName.ChildEnteredTree, callable.Value);
+}
     
     private void PlayPrepSfx()
     {
