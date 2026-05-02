@@ -1,51 +1,21 @@
-﻿using ActsFromThePast.Acts.Exordium.Events;
+﻿using BaseLib.Abstracts;
 using Godot;
-using MegaCrit.Sts2.Core.Entities.Ascension;
-using MegaCrit.Sts2.Core.Helpers;
-using MegaCrit.Sts2.Core.Map;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Events;
-using MegaCrit.Sts2.Core.Random;
-using MegaCrit.Sts2.Core.Unlocks;
 
 namespace ActsFromThePast.Acts;
 
-public sealed class ExordiumAct : ActModel
+public sealed class ExordiumAct : CustomActModel
 {
+    public ExordiumAct() : base(actNumber: 1) { }
+
     public override IEnumerable<EncounterModel> GenerateAllEncounters()
     {
         return new EncounterModel[]
         {
-
         };
     }
 
-    public override IEnumerable<EncounterModel> BossDiscoveryOrder
-    {
-        get
-        {
-            return new EncounterModel[]
-            {
-            };
-        }
-    }
-
-    public override IEnumerable<AncientEventModel> AllAncients
-    {
-        get
-        {
-            return new AncientEventModel[]
-            {
-                ModelDb.AncientEvent<Neow>()
-            };
-        }
-    }
-
-    public override IEnumerable<AncientEventModel> GetUnlockedAncients(UnlockState unlockState)
-    {
-        return AllAncients;
-    }
-    
     public override bool Equals(object? obj) => obj is ExordiumAct;
     public override int GetHashCode() => typeof(ExordiumAct).GetHashCode();
 
@@ -60,32 +30,25 @@ public sealed class ExordiumAct : ActModel
         }
     }
 
-    protected override void ApplyActDiscoveryOrderModifications(UnlockState unlockState)
-    {
-        // No modifications needed
-    }
+    // Colors differ from CustomActModel defaults (which are act 3 themed)
+    public override Color MapTraveledColor => new Color("28231D");
+    public override Color MapUntraveledColor => new Color("877256");
+    public override Color MapBgColor => new Color("A78A67");
 
-    protected override int NumberOfWeakEncounters => 3;
-    protected override int BaseNumberOfRooms => 15;
-
+    // Original had these empty; CustomActModel defaults to act 3 music
     public override string[] BgMusicOptions => Array.Empty<string>();
     public override string[] MusicBankPaths => Array.Empty<string>();
     public override string AmbientSfx => "";
 
-    // Reuse Underdocks chest assets
+    // Act 1 chest assets (CustomActModel defaults to act 3)
     public override string ChestSpineResourcePath => "res://animations/backgrounds/treasure_room/chest_room_act_1_skel_data.tres";
     public override string ChestSpineSkinNameNormal => "act1";
     public override string ChestSpineSkinNameStroke => "act1_stroke";
     public override string ChestOpenSfx => "event:/sfx/ui/treasure/treasure_act1";
-    
-    public override Color MapTraveledColor => new Color("28231D");
 
-    public override Color MapUntraveledColor => new Color("877256");
-
-    public override Color MapBgColor => new Color("A78A67");
-    public override MapPointTypeCounts GetMapPointTypes(Rng mapRng)
-    {
-        int restCount = mapRng.NextGaussianInt(7, 1, 6, 7);
-        return new MapPointTypeCounts(MapPointTypeCounts.StandardRandomUnknownCount(mapRng), restCount);
-    }
+    // Required abstract properties — fill in with your actual paths
+    protected override string CustomMapTopBgPath => "res://images/packed/map/map_bgs/exordium_act/map_top_exordium_act.png";
+    protected override string CustomMapMidBgPath => "res://images/packed/map/map_bgs/exordium_act/map_middle_exordium_act.png";
+    protected override string CustomMapBotBgPath => "res://images/packed/map/map_bgs/exordium_act/map_middle_exordium_act.png";
+    protected override string CustomRestSiteBackgroundPath => "res://scenes/rest_site/exordium_act_rest_site.tscn";
 }

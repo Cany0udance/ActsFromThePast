@@ -69,8 +69,12 @@ public sealed class ForgottenAltar : CustomEventModel
         var netDamage = DynamicVars["HpLoss"].BaseValue - MaxHpGain;
         options.Add(Option(Sacrifice).ThatDoesDamage(netDamage));
 
-        options.Add(Option(Desecrate, "INITIAL",
-            HoverTipFactory.FromCard(ModelDb.Card<Decay>())));
+        if (ActsFromThePastConfig.RebalancedMode)
+            options.Add(Option(Desecrate, "INITIAL_REBALANCED",
+                HoverTipFactory.FromCardWithCardHoverTips<Decay>().ToArray()));
+        else
+            options.Add(Option(Desecrate, "INITIAL",
+                HoverTipFactory.FromCard(ModelDb.Card<Decay>())));
 
         return options;
     }
@@ -104,7 +108,8 @@ public sealed class ForgottenAltar : CustomEventModel
     private async Task Desecrate()
     {
         SfxCmd.Play("event:/sfx/blunt_heavy");
-
+        if (ActsFromThePastConfig.RebalancedMode)
+            await CreatureCmd.GainMaxHp(Owner.Creature, MaxHpGain);
         var decay = Owner.RunState.CreateCard(ModelDb.Card<Decay>(), Owner);
         var addResult = await CardPileCmd.Add(decay, PileType.Deck);
         CardCmd.PreviewCardPileAdd(new[] { addResult }, 2f);

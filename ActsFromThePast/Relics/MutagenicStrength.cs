@@ -47,7 +47,6 @@ public sealed class MutagenicStrength : CustomRelicModel
 
         Flash();
         
-        // Apply temporary strength loss (will remove the strength at end of turn)
         await PowerCmd.Apply<MutagenicStrengthPower>(
             new ThrowingPlayerChoiceContext(), 
             Owner.Creature, 

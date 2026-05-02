@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿
+/*
+
+using System.Reflection;
 using ActsFromThePast.Acts.TheBeyond;
 using ActsFromThePast.Acts.TheCity;
 using HarmonyLib;
@@ -106,3 +109,5 @@ public class DarvUniqueOffersPatch
         return (EventOption)RelicOptionMethod.Invoke(instance, new object[] { relic, "INITIAL", null });
     }
 }
+
+*/

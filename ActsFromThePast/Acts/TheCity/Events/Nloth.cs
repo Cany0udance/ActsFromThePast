@@ -1,13 +1,18 @@
-﻿using ActsFromThePast.Relics;
+﻿using System.Reflection;
+using ActsFromThePast.Relics;
 using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.Factories;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Runs;
 
 namespace ActsFromThePast.Acts.TheCity.Events;
@@ -63,9 +68,23 @@ public sealed class Nloth : CustomEventModel
     {
         ModAudio.Play("events", "ssserpent");
     }
-
+    
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
+        if (ActsFromThePastConfig.RebalancedMode)
+        {
+            return new[]
+            {
+                new EventOption(this, TradeChoice1,
+                    $"{Id.Entry}.pages.INITIAL.options.TRADE_1",
+                    GetTradeHoverTips(0).ToArray()),
+                new EventOption(this, TradeChoice2,
+                    $"{Id.Entry}.pages.INITIAL.options.TRADE_2",
+                    GetTradeHoverTips(1).ToArray()),
+                Option(SearchWithNloth, "INITIAL_REBALANCED")
+            };
+        }
+
         return new[]
         {
             new EventOption(this, TradeChoice1,
@@ -98,5 +117,45 @@ public sealed class Nloth : CustomEventModel
     private async Task Leave()
     {
         SetEventFinished(PageDescription("LEAVE"));
+    }
+    
+    private async Task SearchWithNloth()
+    {
+        var trashHeapCards = typeof(TrashHeap)
+            .GetProperty("Cards", BindingFlags.NonPublic | BindingFlags.Static)?
+            .GetValue(null) as CardModel[];
+
+        var options = CardCreationOptions
+            .ForNonCombatWithUniformOdds(
+                new[] { Owner.Character.CardPool },
+                c => c.Rarity == CardRarity.Common)
+            .WithFlags(CardCreationFlags.NoRarityModification);
+
+        var results = CardFactory.CreateForReward(Owner, 5, options).ToList();
+
+        if (trashHeapCards != null)
+        {
+            var shuffled = trashHeapCards.ToList().StableShuffle(Rng);
+            int trashIndex = 0;
+            for (int i = 0; i < results.Count; i++)
+            {
+                if (Rng.NextInt(100) < 15 && trashIndex < shuffled.Count)
+                {
+                    var created = Owner.RunState.CreateCard(shuffled[trashIndex], Owner);
+                    results[i] = new CardCreationResult(created);
+                    trashIndex++;
+                }
+            }
+        }
+
+        var prefs = new CardSelectorPrefs(
+            L10NLookup($"{Id.Entry}.pages.SEARCH_WITH_NLOTH.selectionScreenPrompt"), 1);
+        foreach (var card in await CardSelectCmd.FromSimpleGridForRewards(
+                     new BlockingPlayerChoiceContext(), results, Owner, prefs))
+        {
+            CardCmd.PreviewCardPileAdd(await CardPileCmd.Add(card, PileType.Deck));
+        }
+
+        SetEventFinished(PageDescription("SEARCH_WITH_NLOTH"));
     }
 }

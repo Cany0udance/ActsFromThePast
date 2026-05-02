@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Alchyr.Sts2.BaseLib" Version="3.0.9" />
+      <PackageReference Include="Alchyr.Sts2.BaseLib" Version="3.1.0" />
       <PackageReference Include="GodotSharp" Version="4.6.0-dev.5" />
       <PackageReference Include="Lib.Harmony" Version="2.4.2" />
       <AdditionalFiles Include="ActsFromThePast/localization/**/*.json"/>

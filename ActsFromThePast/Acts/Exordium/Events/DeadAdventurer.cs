@@ -1,17 +1,11 @@
 ﻿using ActsFromThePast.Patches.RoomEvents;
 using BaseLib.Abstracts;
-using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
-using MegaCrit.Sts2.Core.Helpers;
-using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Nodes.Audio;
-using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.Rewards;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
@@ -86,6 +80,15 @@ public sealed class DeadAdventurer : CustomEventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
+        if (ActsFromThePastConfig.RebalancedMode)
+        {
+            return new[]
+            {
+                Option(Search),
+                Option(WalkAway, "INITIAL_REBALANCED")
+            };
+        }
+
         return new[]
         {
             Option(Search),
@@ -203,6 +206,16 @@ public sealed class DeadAdventurer : CustomEventModel
     private Task Leave()
     {
         SetEventFinished(PageDescription("LEAVE"));
+        return Task.CompletedTask;
+    }
+    
+    private Task WalkAway()
+    {
+        var upgradable = Owner.Deck.Cards.Where(c => c.IsUpgradable);
+        if (upgradable.Any())
+            CardCmd.Upgrade(Rng.NextItem(upgradable));
+
+        SetEventFinished(PageDescription("WALK_AWAY"));
         return Task.CompletedTask;
     }
 

@@ -1,4 +1,5 @@
 ﻿using ActsFromThePast.Cards;
+using ActsFromThePast.Relics;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -43,11 +44,14 @@ public sealed class Vampires : CustomEventModel
         {
             Option(Accept, "INITIAL", HoverTipFactory.FromCard(ModelDb.Card<Bite>()))
         };
-
         if (HasBloodVial())
             options.Add(Option(Vial, "INITIAL", HoverTipFactory.FromCard(ModelDb.Card<Bite>())));
 
-        options.Add(Option(Leave));
+        if (ActsFromThePastConfig.RebalancedMode)
+            options.Add(Option(Hesitate, "INITIAL_REBALANCED", HoverTipFactory.FromRelic<BloodBank>().ToArray()));
+        else
+            options.Add(Option(Leave));
+
         return options;
     }
 
@@ -96,5 +100,11 @@ public sealed class Vampires : CustomEventModel
     private async Task Leave()
     {
         SetEventFinished(PageDescription("LEAVE"));
+    }
+    
+    private async Task Hesitate()
+    {
+        await RelicCmd.Obtain<BloodBank>(Owner);
+        SetEventFinished(PageDescription("HESITATE"));
     }
 }

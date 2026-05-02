@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.Rewards;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
@@ -51,13 +52,26 @@ public sealed class Colosseum : CustomEventModel
 
     public override Task Resume(AbstractRoom room)
     {
-        SetEventState(
-            PageDescription("POST_SLAVERS"),
-            new[]
-            {
-                Option(FightAgain, "POST_SLAVERS"),
-                Option(Flee, "POST_SLAVERS")
-            });
+        if (ActsFromThePastConfig.RebalancedMode)
+        {
+            SetEventState(
+                PageDescription("POST_SLAVERS"),
+                new[]
+                {
+                    Option(FightAgain, "POST_SLAVERS"),
+                    Option(FleeRebalanced, "POST_SLAVERS_REBALANCED")
+                });
+        }
+        else
+        {
+            SetEventState(
+                PageDescription("POST_SLAVERS"),
+                new[]
+                {
+                    Option(FightAgain, "POST_SLAVERS"),
+                    Option(Flee, "POST_SLAVERS")
+                });
+        }
         return Task.CompletedTask;
     }
 
@@ -83,5 +97,19 @@ public sealed class Colosseum : CustomEventModel
     {
         SetEventFinished(PageDescription("FLEE"));
         return Task.CompletedTask;
+    }
+    
+    private async Task FleeRebalanced()
+    {
+        var upgradedCards = Owner.Deck.Cards.Where(c => c.IsUpgraded).ToList();
+        if (upgradedCards.Count > 0)
+        {
+            var card = Rng.NextItem(upgradedCards);
+            CardCmd.Downgrade(card);
+            CardCmd.Preview(card, style: CardPreviewStyle.MessyLayout);
+            await Cmd.CustomScaledWait(0.3f, 0.5f);
+        }
+        await CreatureCmd.GainMaxHp(Owner.Creature, 5);
+        SetEventFinished(PageDescription("FLEE_REBALANCED"));
     }
 }

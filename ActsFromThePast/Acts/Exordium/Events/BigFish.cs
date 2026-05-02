@@ -1,5 +1,7 @@
-﻿using BaseLib.Abstracts;
+﻿using ActsFromThePast.Cards;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -34,6 +36,17 @@ public sealed class BigFish : CustomEventModel
 
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
+        if (ActsFromThePastConfig.RebalancedMode)
+        {
+            return new EventOption[]
+            {
+                Option(Banana),
+                Option(Donut),
+                Option(BoxRebalanced, "INITIAL_REBALANCED",
+                    HoverTipFactory.FromCardWithCardHoverTips<TheBox>().ToArray())
+            };
+        }
+
         return new EventOption[]
         {
             Option(Banana),
@@ -60,5 +73,11 @@ public sealed class BigFish : CustomEventModel
         var relic = RelicFactory.PullNextRelicFromFront(Owner).ToMutable();
         await RelicCmd.Obtain(relic, Owner);
         SetEventFinished(PageDescription("BOX"));
+    }
+    
+    private async Task BoxRebalanced()
+    {
+        CardCmd.PreviewCardPileAdd(await CardPileCmd.Add(Owner.RunState.CreateCard<TheBox>(Owner), PileType.Deck), 2f);
+        SetEventFinished(PageDescription("BOX_REBALANCED"));
     }
 }
