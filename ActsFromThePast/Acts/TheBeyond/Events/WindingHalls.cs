@@ -14,8 +14,8 @@ namespace ActsFromThePast.Acts.TheBeyond.Events;
 
 public sealed class WindingHalls : CustomEventModel
 {
-    private const decimal HpLossPercent = 0.125M;
-    private const decimal HealPercent = 0.25M;
+    private const decimal HpLossPercent = 0.18M;
+    private const decimal HealPercent = 0.20M;
     private const decimal MaxHpLossPercent = 0.05M;
 
     public override ActModel[] Acts => new[] { ModelDb.Act<TheBeyondAct>() };
@@ -49,27 +49,51 @@ public sealed class WindingHalls : CustomEventModel
 
     private Task Continue()
     {
-        SetEventState(PageDescription("CHOICE"), new[]
+        if (ActsFromThePastConfig.RebalancedMode)
         {
-            Option(Madness, "CHOICE", HoverTipFactory.FromCardWithCardHoverTips<Madness>().ToArray())
-                .ThatDoesDamage(DynamicVars["HpLoss"].BaseValue),
-            Option(Writhe, "CHOICE", HoverTipFactory.FromCardWithCardHoverTips<Writhe>().ToArray()),
-            Option(Retreat, "CHOICE")
-        });
+            SetEventState(PageDescription("CHOICE"), new[]
+            {
+                Option(Madness, "CHOICE_REBALANCED",
+                    HoverTipFactory.FromCardWithCardHoverTips<Madness>().ToArray()),
+                Option(Retreat, "CHOICE")
+            });
+        }
+        else
+        {
+            SetEventState(PageDescription("CHOICE"), new[]
+            {
+                Option(Madness, "CHOICE",
+                        HoverTipFactory.FromCardWithCardHoverTips<Madness>().ToArray())
+                    .ThatDoesDamage(DynamicVars["HpLoss"].BaseValue),
+                Option(Writhe, "CHOICE",
+                    HoverTipFactory.FromCardWithCardHoverTips<Writhe>().ToArray()),
+                Option(Retreat, "CHOICE")
+            });
+        }
         return Task.CompletedTask;
     }
 
     private async Task Madness()
     {
-        await CreatureCmd.Damage(
-            new ThrowingPlayerChoiceContext(),
-            Owner.Creature,
-            DynamicVars["HpLoss"].BaseValue,
-            ValueProp.Unblockable | ValueProp.Unpowered,
-            null, null);
+        int count;
+
+        if (ActsFromThePastConfig.RebalancedMode)
+        {
+            count = 1;
+        }
+        else
+        {
+            count = 2;
+            await CreatureCmd.Damage(
+                new ThrowingPlayerChoiceContext(),
+                Owner.Creature,
+                DynamicVars["HpLoss"].BaseValue,
+                ValueProp.Unblockable | ValueProp.Unpowered,
+                null, null);
+        }
 
         ModAudio.Play("general", "attack_magic_slow_1");
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < count; i++)
         {
             var card = Owner.RunState.CreateCard(ModelDb.Card<Madness>(), Owner);
             var result = await CardPileCmd.Add(card, PileType.Deck);

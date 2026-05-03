@@ -39,16 +39,14 @@ public sealed class ExordiumAct : CustomActModel
     public override string[] BgMusicOptions => Array.Empty<string>();
     public override string[] MusicBankPaths => Array.Empty<string>();
     public override string AmbientSfx => "";
-
-    // Act 1 chest assets (CustomActModel defaults to act 3)
+    
     public override string ChestSpineResourcePath => "res://animations/backgrounds/treasure_room/chest_room_act_1_skel_data.tres";
     public override string ChestSpineSkinNameNormal => "act1";
     public override string ChestSpineSkinNameStroke => "act1_stroke";
     public override string ChestOpenSfx => "event:/sfx/ui/treasure/treasure_act1";
-
-    // Required abstract properties — fill in with your actual paths
+    
     protected override string CustomMapTopBgPath => "res://images/packed/map/map_bgs/exordium_act/map_top_exordium_act.png";
     protected override string CustomMapMidBgPath => "res://images/packed/map/map_bgs/exordium_act/map_middle_exordium_act.png";
     protected override string CustomMapBotBgPath => "res://images/packed/map/map_bgs/exordium_act/map_middle_exordium_act.png";
-    protected override string CustomRestSiteBackgroundPath => "res://scenes/rest_site/exordium_act_rest_site.tscn";
+    protected override string CustomRestSiteBackgroundPath => "res://scenes/rest_site/overgrowth_rest_site.tscn";
 }

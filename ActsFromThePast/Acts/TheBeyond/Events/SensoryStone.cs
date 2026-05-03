@@ -17,13 +17,15 @@ public sealed class SensoryStone : CustomEventModel
 {
     private const int Dmg2 = 5;
     private const int Dmg3 = 10;
+    private const int Dmg2Rebalanced = 10;
+    private const int Dmg3Rebalanced = 20;
 
     public override ActModel[] Acts => new[] { ModelDb.Act<TheBeyondAct>() };
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        new IntVar("Dmg2", Dmg2),
-        new IntVar("Dmg3", Dmg3)
+        new IntVar("Dmg2", ActsFromThePastConfig.RebalancedMode ? Dmg2Rebalanced : Dmg2),
+        new IntVar("Dmg3", ActsFromThePastConfig.RebalancedMode ? Dmg3Rebalanced : Dmg3)
     };
 
     public override void OnRoomEnter()
@@ -38,6 +40,9 @@ public sealed class SensoryStone : CustomEventModel
 
     private Task Continue()
     {
+        int dmg2 = ActsFromThePastConfig.RebalancedMode ? Dmg2Rebalanced : Dmg2;
+        int dmg3 = ActsFromThePastConfig.RebalancedMode ? Dmg3Rebalanced : Dmg3;
+
         SetEventState(PageDescription("INTRO_2"), new[]
         {
             new EventOption(this, () => Memory(1),
@@ -45,10 +50,10 @@ public sealed class SensoryStone : CustomEventModel
                 Array.Empty<IHoverTip>()),
             new EventOption(this, () => Memory(2),
                 $"{Id.Entry}.pages.INTRO_2.options.MEMORY_2",
-                Array.Empty<IHoverTip>()).ThatDoesDamage(Dmg2),
+                Array.Empty<IHoverTip>()).ThatDoesDamage(dmg2),
             new EventOption(this, () => Memory(3),
                 $"{Id.Entry}.pages.INTRO_2.options.MEMORY_3",
-                Array.Empty<IHoverTip>()).ThatDoesDamage(Dmg3)
+                Array.Empty<IHoverTip>()).ThatDoesDamage(dmg3)
         });
         return Task.CompletedTask;
     }
@@ -56,13 +61,15 @@ public sealed class SensoryStone : CustomEventModel
     private async Task Memory(int choice)
     {
         // TODO add 50/50 chance for rare colorless
+        int dmg2 = ActsFromThePastConfig.RebalancedMode ? Dmg2Rebalanced : Dmg2;
+        int dmg3 = ActsFromThePastConfig.RebalancedMode ? Dmg3Rebalanced : Dmg3;
 
         if (choice == 2)
         {
             await CreatureCmd.Damage(
                 new ThrowingPlayerChoiceContext(),
                 Owner.Creature,
-                Dmg2,
+                dmg2,
                 ValueProp.Unblockable | ValueProp.Unpowered,
                 null, null);
         }
@@ -71,7 +78,7 @@ public sealed class SensoryStone : CustomEventModel
             await CreatureCmd.Damage(
                 new ThrowingPlayerChoiceContext(),
                 Owner.Creature,
-                Dmg3,
+                dmg3,
                 ValueProp.Unblockable | ValueProp.Unpowered,
                 null, null);
         }
@@ -85,6 +92,7 @@ public sealed class SensoryStone : CustomEventModel
                     new[] { (CardPoolModel)ModelDb.CardPool<ColorlessCardPool>() }),
                 3, Owner));
         }
+
         await RewardsCmd.OfferCustom(Owner, rewards);
         SetEventFinished(memoryText);
     }

@@ -15,6 +15,9 @@ namespace ActsFromThePast.Acts.Exordium.Events;
 
 public sealed class GoldenIdol : CustomEventModel
 {
+    
+    // TODO add sfx and shakes and stuff from sts1
+    
     public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };
     private const decimal HpLossPercent = 0.35M;
     private const decimal MaxHpLossPercent = 0.10M;

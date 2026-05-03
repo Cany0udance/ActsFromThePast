@@ -10,7 +10,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 
 namespace ActsFromThePast.Acts.Exordium.Events;
-// 600 from left, 332 from bottom. 800x800, 30 stroke 50% opacity, big image complete gaussian blur 2750x2750
+// 800x800, 30 stroke 50% opacity, 600 from left, 332 from bottom. big image complete gaussian blur 2750x2750
 public sealed class BigFish : CustomEventModel
 {
     public override ActModel[] Acts => new[] { ModelDb.Act<ExordiumAct>() };

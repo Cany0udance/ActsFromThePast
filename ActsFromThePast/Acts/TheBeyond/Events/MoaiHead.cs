@@ -6,13 +6,15 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Potions;
+using MegaCrit.Sts2.Core.Rewards;
 using MegaCrit.Sts2.Core.Runs;
 
 namespace ActsFromThePast.Acts.TheBeyond.Events;
 
 public sealed class MoaiHead : CustomEventModel
 {
-    private const decimal HpLossPercent = 0.125M;
+    private const decimal HpLossPercent = 0.18M;
     private const int GoldAmount = 333;
 
     public override ActModel[] Acts => new[] { ModelDb.Act<TheBeyondAct>() };
@@ -61,7 +63,16 @@ public sealed class MoaiHead : CustomEventModel
                 $"{Id.Entry}.pages.INITIAL.options.OFFER_IDOL_LOCKED",
                 Array.Empty<IHoverTip>()));
 
-        options.Add(Option(Leave));
+        if (ActsFromThePastConfig.RebalancedMode)
+        {
+            options.Add(Option(Harvest, "INITIAL_REBALANCED",
+                new[] { HoverTipFactory.FromPotion(ModelDb.Potion<BloodPotion>()) }));
+        }
+        else
+        {
+            options.Add(Option(Leave));
+        }
+
         return options;
     }
 
@@ -88,5 +99,14 @@ public sealed class MoaiHead : CustomEventModel
     {
         SetEventFinished(PageDescription("LEAVE"));
         return Task.CompletedTask;
+    }
+    
+    private async Task Harvest()
+    {
+        await RewardsCmd.OfferCustom(Owner, new List<Reward>
+        {
+            new PotionReward(ModelDb.Potion<BloodPotion>().ToMutable(), Owner)
+        });
+        SetEventFinished(PageDescription("HARVEST"));
     }
 }
