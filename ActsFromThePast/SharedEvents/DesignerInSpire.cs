@@ -1,4 +1,5 @@
-﻿using BaseLib.Abstracts;
+﻿using ActsFromThePast.Interfaces;
+using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Audio.Debug;
@@ -18,12 +19,14 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace ActsFromThePast.SharedEvents;
 
-public sealed class DesignerInSpire : CustomEventModel
+public sealed class DesignerInSpire : CustomEventModel, IActRestricted
 {
     private const int AdjustCost = 50;
     private const int CleanUpCost = 75;
     private const int FullServiceCost = 110;
     private const int HpLoss = 5;
+    
+    public int[] AllowedActIndices => new[] { 2, 3 };
 
     private bool _adjustmentUpgradesOne;
     private bool _cleanUpRemovesCards;

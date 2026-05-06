@@ -6,6 +6,7 @@ using ActsFromThePast.Acts.TheBeyond.Encounters;
 using ActsFromThePast.Acts.TheBeyond.Events;
 using ActsFromThePast.Acts.TheCity;
 using ActsFromThePast.Acts.TheCity.Events;
+using ActsFromThePast.SharedEvents;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
@@ -36,7 +37,8 @@ public class MusicPatches
             None,
             Exploration,
             Elite,
-            Boss
+            Boss,
+            Shrine
         }
 
         private enum LegacyAct
@@ -284,6 +286,14 @@ public class MusicPatches
             var runState = StateProperty?.GetValue(RunManager.Instance) as RunState;
             return runState?.CurrentRoom is EventRoom eventRoom && eventRoom.CanonicalEvent is TheArchitect;
         }
+        
+        private static bool IsShrineEvent()
+        {
+            var runState = StateProperty?.GetValue(RunManager.Instance) as RunState;
+            return runState?.CurrentRoom is EventRoom eventRoom &&
+                   eventRoom.CanonicalEvent is TheDivineFountain or Duplicator or GoldenShrine
+                       or Purifier or Transmogrifier or UpgradeShrine;
+        }
 
 [HarmonyPatch(nameof(NRunMusicController.UpdateMusic))]
 [HarmonyPrefix]
@@ -504,6 +514,19 @@ public static bool UpdateTrack_Prefix(NRunMusicController __instance)
             ModAudio.FadeIn(GetEliteTracks(), 1f);
             _isPlayingLegacyMusic = true;
             _currentTrackType = TrackType.Elite;
+        }
+        return false;
+    }
+    
+    // Handle Shrine events
+    if (IsShrineEvent())
+    {
+        if (!_isPlayingLegacyMusic || _currentTrackType != TrackType.Shrine)
+        {
+            StopBaseGameMusic(__instance);
+            ModAudio.FadeIn(new[] { "shrine" }, 1f);
+            _isPlayingLegacyMusic = true;
+            _currentTrackType = TrackType.Shrine;
         }
         return false;
     }

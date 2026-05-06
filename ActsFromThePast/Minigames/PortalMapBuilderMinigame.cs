@@ -77,7 +77,6 @@ public class PortalMapBuilderMinigame
             if (_selectedIndex == value) return;
             int old = _selectedIndex;
             _selectedIndex = value;
-            Log.Info($"[MapBuilder] SelectionChanged: {old} -> {_selectedIndex}");
             SelectionChanged?.Invoke();
         }
     }
@@ -111,8 +110,7 @@ public class PortalMapBuilderMinigame
         // Fill available slots with Monster, locked slots with Unassigned (X)
         for (int i = 0; i < NodeCount; i++)
             Nodes[i] = i < AvailableNodeCount ? MapPointType.Monster : MapPointType.Unassigned;
-
-        Log.Info($"[MapBuilder] Created. Available: {AvailableNodeCount}/{NodeCount}, Budget: {Budget}, Starting cost: {TotalCost}");
+        
     }
 
     /// <summary>
@@ -130,13 +128,11 @@ public class PortalMapBuilderMinigame
     {
         if (_selectedIndex < 0 || _selectedIndex >= NodeCount)
         {
-            Log.Info($"[MapBuilder] CycleSelectedNode ignored: selectedIndex={_selectedIndex}");
             return;
         }
 
         if (IsLocked(_selectedIndex))
         {
-            Log.Info($"[MapBuilder] CycleSelectedNode ignored: slot {_selectedIndex} is locked");
             return;
         }
 
@@ -144,8 +140,7 @@ public class PortalMapBuilderMinigame
         int idx = Array.IndexOf(AvailableTypes, oldType);
         idx = (idx + direction + AvailableTypes.Length) % AvailableTypes.Length;
         Nodes[_selectedIndex] = AvailableTypes[idx];
-
-        Log.Info($"[MapBuilder] CycleSelectedNode: slot {_selectedIndex}, {oldType}({GetCost(oldType)}) -> {Nodes[_selectedIndex]}({GetCost(Nodes[_selectedIndex])}), total cost: {TotalCost}/{Budget}");
+        
         NodesChanged?.Invoke();
     }
 
@@ -153,11 +148,9 @@ public class PortalMapBuilderMinigame
     {
         if (IsLocked(index))
         {
-            Log.Info($"[MapBuilder] SelectNode ignored: slot {index} is locked");
             return;
         }
-
-        Log.Info($"[MapBuilder] SelectNode: index={index}, current={_selectedIndex}");
+        
         SelectedIndex = (index == _selectedIndex) ? -1 : index;
     }
 
@@ -177,7 +170,6 @@ public class PortalMapBuilderMinigame
 
         IsRandomized = true;
         _selectedIndex = -1;
-        Log.Info($"[MapBuilder] Randomized! Final cost: {TotalCost} (budget ignored)");
         Randomized?.Invoke();
         NodesChanged?.Invoke();
     }
@@ -186,15 +178,12 @@ public class PortalMapBuilderMinigame
     {
         if (!IsValid)
         {
-            Log.Info("[MapBuilder] Confirm rejected: over budget");
             return;
         }
         if (_completionSource.Task.IsCompleted)
         {
-            Log.Info("[MapBuilder] Confirm rejected: already completed");
             return;
         }
-        Log.Info($"[MapBuilder] Confirmed! Final cost: {TotalCost}/{Budget}");
         _completionSource.SetResult();
         Finished?.Invoke();
     }
@@ -202,17 +191,14 @@ public class PortalMapBuilderMinigame
     public void ForceEnd()
     {
         if (_completionSource.Task.IsCompleted) return;
-        Log.Info("[MapBuilder] ForceEnd");
         _completionSource.SetCanceled();
     }
 
     public async Task PlayMinigame()
     {
         if (!LocalContext.IsMe(_owner)) return;
-        Log.Info("[MapBuilder] PlayMinigame: showing screen");
         NPortalMapBuilderScreen.ShowScreen(this);
         await _completionSource.Task;
-        Log.Info("[MapBuilder] PlayMinigame: completed");
     }
 
     public MapPointType GetNodeType(int index) => Nodes[index];

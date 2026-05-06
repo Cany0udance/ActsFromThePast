@@ -66,7 +66,7 @@ public sealed class MoaiHead : CustomEventModel
         if (ActsFromThePastConfig.RebalancedMode)
         {
             options.Add(Option(Harvest, "INITIAL_REBALANCED",
-                new[] { HoverTipFactory.FromPotion(ModelDb.Potion<BloodPotion>()) }));
+                new[] { HoverTipFactory.FromPotion(ModelDb.Potion<RegenPotion>()) }));
         }
         else
         {
@@ -105,7 +105,7 @@ public sealed class MoaiHead : CustomEventModel
     {
         await RewardsCmd.OfferCustom(Owner, new List<Reward>
         {
-            new PotionReward(ModelDb.Potion<BloodPotion>().ToMutable(), Owner)
+            new PotionReward(ModelDb.Potion<RegenPotion>().ToMutable(), Owner)
         });
         SetEventFinished(PageDescription("HARVEST"));
     }

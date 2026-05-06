@@ -9,10 +9,11 @@ public sealed class ColosseumFirstEncounter : CustomEncounterModel
     public ColosseumFirstEncounter() : base(RoomType.Monster)
     {
     }
-
     public override bool IsValidForAct(ActModel act) => false;
     public override bool ShouldGiveRewards => false;
-
+    public override bool HasScene => true;
+    public override IReadOnlyList<string> Slots => new[] { "blue", "red" };
+    
     public override IEnumerable<MonsterModel> AllPossibleMonsters
     {
         get
@@ -21,13 +22,12 @@ public sealed class ColosseumFirstEncounter : CustomEncounterModel
             yield return ModelDb.Monster<SlaverRed>();
         }
     }
-
     protected override IReadOnlyList<(MonsterModel, string?)> GenerateMonsters()
     {
         return new List<(MonsterModel, string?)>
         {
-            (ModelDb.Monster<SlaverBlue>().ToMutable(), null),
-            (ModelDb.Monster<SlaverRed>().ToMutable(), null),
+            (ModelDb.Monster<SlaverBlue>().ToMutable(), "blue"),
+            (ModelDb.Monster<SlaverRed>().ToMutable(), "red"),
         };
     }
 }

@@ -50,8 +50,6 @@ public sealed class PortalBuilderActMap : ActMap
         int visitedCount = visitedTypes.Count;
         int activeCount = activeNodes.Count;
  
-        Log.Info($"[PortalBuilderActMap] Building: {visitedCount} visited + {activeCount} new = {totalNodes} total, grid {Width}x{height}");
- 
         // ─── Build map ───
  
         Grid = new MapPoint?[Width, height];
@@ -105,7 +103,5 @@ public sealed class PortalBuilderActMap : ActMap
         previous.AddChildPoint(BossMapPoint);
  
         NewVisitedCoords = newVisited;
- 
-        Log.Info($"[PortalBuilderActMap] Built: start -> {visitedCount} visited -> {activeCount} new -> boss. {newVisited.Count} visited coords to restore.");
     }
 }

@@ -1,4 +1,5 @@
-﻿using ActsFromThePast.Relics;
+﻿using ActsFromThePast.Interfaces;
+using ActsFromThePast.Relics;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
@@ -12,10 +13,11 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace ActsFromThePast.SharedEvents;
 
 
-// Should be unavailable in multiplayer due to hungry face
-public sealed class FaceTrader : CustomEventModel
+public sealed class FaceTrader : CustomEventModel, IActRestricted
 {
     private const int GoldReward = 50;
+    
+    public int[] AllowedActIndices => new[] { 2, 3 };
 
     public override ActModel[] Acts => Array.Empty<ActModel>();
 

@@ -1,5 +1,6 @@
 ﻿using Godot;
 using MegaCrit.Sts2.addons.mega_text;
+using MegaCrit.Sts2.Core.ControllerInput;
 using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
@@ -66,7 +67,6 @@ public partial class NPortalMapBuilderScreen : Control, IOverlayScreen, IScreenC
  
     public static NPortalMapBuilderScreen ShowScreen(PortalMapBuilderMinigame minigame)
     {
-        Log.Info("[MapBuilderScreen] ShowScreen called");
         if (_instance != null && IsInstanceValid(_instance))
             _instance.QueueFree();
         var screen = new NPortalMapBuilderScreen();
@@ -77,7 +77,6 @@ public partial class NPortalMapBuilderScreen : Control, IOverlayScreen, IScreenC
         screen.RefreshAll();
         _instance = screen;
         NOverlayStack.Instance.Push((IOverlayScreen)screen);
-        Log.Info("[MapBuilderScreen] ShowScreen complete");
         return screen;
     }
  
@@ -172,12 +171,11 @@ public partial class NPortalMapBuilderScreen : Control, IOverlayScreen, IScreenC
  
     public override void _Ready()
     {
-        Log.Info("[MapBuilderScreen] _Ready");
+
     }
  
     public override void _ExitTree()
     {
-        Log.Info("[MapBuilderScreen] _ExitTree");
         UnbindMinigameEvents();
         _fadeTween?.Kill();
         _minigame.ForceEnd();
@@ -186,29 +184,37 @@ public partial class NPortalMapBuilderScreen : Control, IOverlayScreen, IScreenC
  
     private void OnSelectionChanged()
     {
-        Log.Info("[MapBuilderScreen] OnSelectionChanged -> RefreshAll");
         RefreshAll();
     }
  
     private void OnNodesChanged()
     {
-        Log.Info("[MapBuilderScreen] OnNodesChanged -> RefreshAll");
         RefreshAll();
     }
  
     private void OnRandomized()
     {
-        Log.Info("[MapBuilderScreen] OnRandomized -> RefreshAll");
         if (_randomizeButton != null)
             _randomizeButton.Disabled = true;
         RefreshAll();
+        // All nodes are now locked, move focus to proceed button
+        _proceedButton?.GrabFocus();
     }
  
     // ─── IOverlayScreen / IScreenContext ───
  
     public NetScreenType ScreenType => NetScreenType.None;
     public bool UseSharedBackstop => false;
-    public Control DefaultFocusedControl => (Control?)_proceedButton ?? this;
+ 
+    public Control DefaultFocusedControl
+    {
+        get
+        {
+            foreach (var slot in _slots)
+                if (!slot.IsLocked) return slot.Icon;
+            return (Control?)_proceedButton ?? this;
+        }
+    }
  
     public void AfterOverlayOpened()
     {
@@ -231,89 +237,79 @@ public partial class NPortalMapBuilderScreen : Control, IOverlayScreen, IScreenC
  
     // ─── UI Construction ───
  
-private void BuildUI()
-{
-    SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
-
-    // Background
-    var bg = new ColorRect { Color = new Color(0.14f, 0.06f, 0.32f, 1f) };
-    bg.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
-    AddChild(bg);
-
-    var bgAccent = new ColorRect { Color = new Color(0.18f, 0.09f, 0.40f, 0.5f) };
-    bgAccent.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
-    AddChild(bgAccent);
-
-    var nodesLayer = new Control();
-    nodesLayer.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
-    nodesLayer.MouseFilter = MouseFilterEnum.Ignore;
-    AddChild(nodesLayer);
-
-    float totalHeight = (_minigame.NodeCountTotal - 1) * NodeSpacing;
-    float startY = -totalHeight / 2f;
-    float cx = 0f;
-    float anchorX = 0.5f;
-    float anchorY = 0.5f;
-
-    // Center panel behind node column
-    var centerPanel = new NinePatchRect { Modulate = new Color(1f, 0.85f, 0.5f, 0.12f) };
-    var centerNinePatchTex = GD.Load<Texture2D>("res://images/ui/tiny_nine_patch.png");
-    if (centerNinePatchTex != null)
+    private void BuildUI()
     {
-        centerPanel.Texture = centerNinePatchTex;
-        centerPanel.RegionRect = new Rect2(0, 0, 48, 48);
-        centerPanel.PatchMarginLeft = 14; centerPanel.PatchMarginTop = 14;
-        centerPanel.PatchMarginRight = 13; centerPanel.PatchMarginBottom = 14;
+        SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+        // Background
+        var bg = new ColorRect { Color = new Color(0.14f, 0.06f, 0.32f, 1f) };
+        bg.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+        AddChild(bg);
+        var bgAccent = new ColorRect { Color = new Color(0.18f, 0.09f, 0.40f, 0.5f) };
+        bgAccent.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+        AddChild(bgAccent);
+        var nodesLayer = new Control();
+        nodesLayer.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+        nodesLayer.MouseFilter = MouseFilterEnum.Ignore;
+        AddChild(nodesLayer);
+        float totalHeight = (_minigame.NodeCountTotal - 1) * NodeSpacing;
+        float startY = -totalHeight / 2f;
+        float cx = 0f;
+        float anchorX = 0.5f;
+        float anchorY = 0.5f;
+        // Center panel behind node column
+        var centerPanel = new NinePatchRect { Modulate = new Color(1f, 0.85f, 0.5f, 0.12f) };
+        var centerNinePatchTex = GD.Load<Texture2D>("res://images/ui/tiny_nine_patch.png");
+        if (centerNinePatchTex != null)
+        {
+            centerPanel.Texture = centerNinePatchTex;
+            centerPanel.RegionRect = new Rect2(0, 0, 48, 48);
+            centerPanel.PatchMarginLeft = 14; centerPanel.PatchMarginTop = 14;
+            centerPanel.PatchMarginRight = 13; centerPanel.PatchMarginBottom = 14;
+        }
+        centerPanel.AnchorLeft = anchorX; centerPanel.AnchorTop = anchorY;
+        centerPanel.AnchorRight = anchorX; centerPanel.AnchorBottom = anchorY;
+        centerPanel.OffsetLeft = -160; centerPanel.OffsetTop = startY - 80;
+        centerPanel.OffsetRight = 160; centerPanel.OffsetBottom = startY + totalHeight + 50;
+        centerPanel.GrowHorizontal = GrowDirection.Both;
+        centerPanel.GrowVertical = GrowDirection.Both;
+        centerPanel.MouseFilter = MouseFilterEnum.Ignore;
+        nodesLayer.AddChild(centerPanel);
+        // Node column
+        for (int i = 0; i < _minigame.NodeCountTotal; i++)
+        {
+            float nodeY = startY + i * NodeSpacing;
+            _slots.Add(CreateNodeSlot(i, nodesLayer, anchorX, anchorY, cx, nodeY));
+            if (i < _minigame.NodeCountTotal - 1)
+                CreatePathDots(nodesLayer, anchorX, anchorY, cx, nodeY, cx, nodeY + NodeSpacing);
+        }
+        // Title
+        var titleLoc = new LocString("events", $"{LocPrefix}.title");
+        var title = CreateStyledText($"[center]{titleLoc.GetFormattedText()}[/center]", _fontBold, 32, GoldColor);
+        title.AnchorLeft = anchorX; title.AnchorTop = anchorY;
+        title.AnchorRight = anchorX; title.AnchorBottom = anchorY;
+        title.OffsetLeft = -150; title.OffsetTop = startY - 70;
+        title.OffsetRight = 150; title.OffsetBottom = startY - 20;
+        title.GrowHorizontal = GrowDirection.Both;
+        title.GrowVertical = GrowDirection.Both;
+        nodesLayer.AddChild(title);
+        BuildLegendPanel(nodesLayer);
+        BuildInstructionsPanel(nodesLayer);
+        // Budget label
+        _budgetLabel = CreateStyledText("", _fontBold, 32, CreamColor);
+        _budgetLabel.AnchorTop = 1f; _budgetLabel.AnchorBottom = 1f;
+        _budgetLabel.OffsetLeft = 64; _budgetLabel.OffsetTop = -89;
+        _budgetLabel.OffsetRight = 770; _budgetLabel.OffsetBottom = -48;
+        _budgetLabel.GrowVertical = GrowDirection.Begin;
+        _budgetLabel.AddThemeConstantOverride("outline_size", 12);
+        _budgetLabel.AddThemeColorOverride("font_outline_color", new Color(0.15f, 0.1f, 0.23f, 1f));
+        _budgetLabel.AddThemeColorOverride("font_shadow_color", new Color(0, 0, 0, 0.5f));
+        _budgetLabel.AddThemeConstantOverride("shadow_offset_x", 5);
+        _budgetLabel.AddThemeConstantOverride("shadow_offset_y", 4);
+        AddChild(_budgetLabel);
+        BuildProceedButton();
+        BuildRandomizeButton();
+        SetupNodeFocusNeighbors();
     }
-    centerPanel.AnchorLeft = anchorX; centerPanel.AnchorTop = anchorY;
-    centerPanel.AnchorRight = anchorX; centerPanel.AnchorBottom = anchorY;
-    centerPanel.OffsetLeft = -160; centerPanel.OffsetTop = startY - 80;
-    centerPanel.OffsetRight = 160; centerPanel.OffsetBottom = startY + totalHeight + 50;
-    centerPanel.GrowHorizontal = GrowDirection.Both;
-    centerPanel.GrowVertical = GrowDirection.Both;
-    centerPanel.MouseFilter = MouseFilterEnum.Ignore;
-    nodesLayer.AddChild(centerPanel);
-
-    // Node column
-    for (int i = 0; i < _minigame.NodeCountTotal; i++)
-    {
-        float nodeY = startY + i * NodeSpacing;
-        _slots.Add(CreateNodeSlot(i, nodesLayer, anchorX, anchorY, cx, nodeY));
-
-        if (i < _minigame.NodeCountTotal - 1)
-            CreatePathDots(nodesLayer, anchorX, anchorY, cx, nodeY, cx, nodeY + NodeSpacing);
-    }
-
-    // Title
-    var titleLoc = new LocString("events", $"{LocPrefix}.title");
-    var title = CreateStyledText($"[center]{titleLoc.GetFormattedText()}[/center]", _fontBold, 32, GoldColor);
-    title.AnchorLeft = anchorX; title.AnchorTop = anchorY;
-    title.AnchorRight = anchorX; title.AnchorBottom = anchorY;
-    title.OffsetLeft = -150; title.OffsetTop = startY - 70;
-    title.OffsetRight = 150; title.OffsetBottom = startY - 20;
-    title.GrowHorizontal = GrowDirection.Both;
-    title.GrowVertical = GrowDirection.Both;
-    nodesLayer.AddChild(title);
-
-    BuildLegendPanel(nodesLayer);
-    BuildInstructionsPanel(nodesLayer);
-
-    // Budget label
-    _budgetLabel = CreateStyledText("", _fontBold, 32, CreamColor);
-    _budgetLabel.AnchorTop = 1f; _budgetLabel.AnchorBottom = 1f;
-    _budgetLabel.OffsetLeft = 64; _budgetLabel.OffsetTop = -89;
-    _budgetLabel.OffsetRight = 770; _budgetLabel.OffsetBottom = -48;
-    _budgetLabel.GrowVertical = GrowDirection.Begin;
-    _budgetLabel.AddThemeConstantOverride("outline_size", 12);
-    _budgetLabel.AddThemeColorOverride("font_outline_color", new Color(0.15f, 0.1f, 0.23f, 1f));
-    _budgetLabel.AddThemeColorOverride("font_shadow_color", new Color(0, 0, 0, 0.5f));
-    _budgetLabel.AddThemeConstantOverride("shadow_offset_x", 5);
-    _budgetLabel.AddThemeConstantOverride("shadow_offset_y", 4);
-    AddChild(_budgetLabel);
-
-    BuildProceedButton();
-    BuildRandomizeButton();
-}
  
     // ─── Node Slots ───
  
@@ -343,19 +339,41 @@ private void BuildUI()
  
         if (!locked)
         {
+            icon.FocusMode = FocusModeEnum.All;
+ 
             icon.Connect(Control.SignalName.GuiInput,
                 Callable.From<InputEvent>(ev =>
                 {
                     if (ev is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
                     {
-                        Log.Info($"[MapBuilderScreen] Icon {idx} clicked");
                         _minigame.SelectNode(idx);
+                        icon.AcceptEvent();
+                    }
+                    else if (ev.IsActionPressed(MegaInput.select))
+                    {
+                        _minigame.SelectNode(idx);
+                        icon.AcceptEvent();
+                    }
+                    else if (ev.IsActionPressed(MegaInput.left))
+                    {
+                        if (_minigame.SelectedIndex != idx)
+                            _minigame.SelectNode(idx);
+                        _minigame.CycleSelectedNode(-1);
+                        icon.AcceptEvent();
+                    }
+                    else if (ev.IsActionPressed(MegaInput.right))
+                    {
+                        if (_minigame.SelectedIndex != idx)
+                            _minigame.SelectNode(idx);
+                        _minigame.CycleSelectedNode(1);
                         icon.AcceptEvent();
                     }
                 }));
  
             icon.Connect(Control.SignalName.MouseEntered, Callable.From(() => SetHovered(idx)));
             icon.Connect(Control.SignalName.MouseExited, Callable.From(() => ClearHovered(idx)));
+            icon.Connect(Control.SignalName.FocusEntered, Callable.From(() => SetHovered(idx)));
+            icon.Connect(Control.SignalName.FocusExited, Callable.From(() => ClearHovered(idx)));
         }
         else
         {
@@ -376,7 +394,6 @@ private void BuildUI()
                 {
                     if (ev is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
                     {
-                        Log.Info($"[MapBuilderScreen] Left arrow slot {idx}");
                         _minigame.CycleSelectedNode(-1);
                         leftArrow.AcceptEvent();
                     }
@@ -390,7 +407,6 @@ private void BuildUI()
                 {
                     if (ev is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
                     {
-                        Log.Info($"[MapBuilderScreen] Right arrow slot {idx}");
                         _minigame.CycleSelectedNode(1);
                         rightArrow.AcceptEvent();
                     }
@@ -438,7 +454,6 @@ private void BuildUI()
         float margin = IconSize / 4f;
         float my1 = y1 + margin;
         float my2 = y2 - margin;
-
         for (int i = 1; i <= PathDotCount; i++)
         {
             float t = (float)i / (PathDotCount + 1);
@@ -454,6 +469,43 @@ private void BuildUI()
                 GrowHorizontal = GrowDirection.Both, GrowVertical = GrowDirection.Both,
                 MouseFilter = MouseFilterEnum.Ignore
             });
+        }
+    }
+ 
+    // ─── Controller Focus ───
+ 
+    private void SetupNodeFocusNeighbors()
+    {
+        // Collect unlocked slot indices in order
+        var unlocked = new List<int>();
+        for (int i = 0; i < _slots.Count; i++)
+            if (!_slots[i].IsLocked) unlocked.Add(i);
+ 
+        for (int u = 0; u < unlocked.Count; u++)
+        {
+            var icon = _slots[unlocked[u]].Icon;
+ 
+            // Up/down between unlocked nodes
+            var above = u > 0 ? _slots[unlocked[u - 1]].Icon : icon;
+            var below = u < unlocked.Count - 1 ? _slots[unlocked[u + 1]].Icon : icon;
+ 
+            icon.FocusNeighborTop = above.GetPath();
+            icon.FocusNeighborBottom = below.GetPath();
+ 
+            // Left/right stay on self (intercepted by GuiInput for cycling)
+            icon.FocusNeighborLeft = icon.GetPath();
+            icon.FocusNeighborRight = icon.GetPath();
+        }
+ 
+        // Connect last unlocked node to randomize button
+        if (unlocked.Count > 0 && _randomizeButton != null && !_randomizeButton.Disabled)
+        {
+            var lastIcon = _slots[unlocked[^1]].Icon;
+            lastIcon.FocusNeighborBottom = _randomizeButton.GetPath();
+            _randomizeButton.FocusNeighborTop = lastIcon.GetPath();
+            _randomizeButton.FocusNeighborBottom = _randomizeButton.GetPath();
+            _randomizeButton.FocusNeighborLeft = _randomizeButton.GetPath();
+            _randomizeButton.FocusNeighborRight = _randomizeButton.GetPath();
         }
     }
  
@@ -630,7 +682,6 @@ private void BuildUI()
             _proceedButton.UpdateText(NProceedButton.ProceedLoc);
             _proceedButton.Disable();
             _proceedButtonReady = true;
-            Log.Info("[MapBuilderScreen] ProceedButton ready");
             UpdateProceedButton();
         }).CallDeferred();
  
@@ -638,7 +689,6 @@ private void BuildUI()
             NClickableControl.SignalName.Released,
             Callable.From<NButton>(new Action<NButton>(_ =>
             {
-                Log.Info("[MapBuilderScreen] Proceed clicked");
                 _minigame.Confirm();
             }))
         );
@@ -657,7 +707,8 @@ private void BuildUI()
             OffsetRight = 90, OffsetBottom = -48,
             GrowVertical = GrowDirection.Begin,
             GrowHorizontal = GrowDirection.Both,
-            Disabled = _minigame.IsRandomized
+            Disabled = _minigame.IsRandomized,
+            FocusMode = FocusModeEnum.All
         };
  
         if (_fontBold != null)
@@ -666,9 +717,18 @@ private void BuildUI()
  
         _randomizeButton.Pressed += () =>
         {
-            Log.Info("[MapBuilderScreen] Randomize clicked");
             _minigame.Randomize();
         };
+ 
+        _randomizeButton.Connect(Control.SignalName.GuiInput,
+            Callable.From<InputEvent>(ev =>
+            {
+                if (ev.IsActionPressed(MegaInput.select) && !_randomizeButton.Disabled)
+                {
+                    _randomizeButton.AcceptEvent();
+                    _minigame.Randomize();
+                }
+            }));
  
         AddChild(_randomizeButton);
     }
@@ -717,7 +777,6 @@ private void BuildUI()
  
     private void OnMinigameFinished()
     {
-        Log.Info("[MapBuilderScreen] OnMinigameFinished");
         NOverlayStack.Instance.Remove((IOverlayScreen)this);
     }
  
@@ -818,3 +877,4 @@ private void BuildUI()
         public bool IsLocked { get; init; }
     }
 }
+ 

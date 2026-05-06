@@ -455,8 +455,6 @@ public partial class TheCityBackground : NCombatBackground
         TreeEntered -= OnTreeEntered;
         GetTree().ProcessFrame += OnProcessFrame;
         Initialize();
-        
-        Log.Info($"[CityBackground] Path in tree: {GetPath()}");
     
         // Find the combat room by walking up the tree
         Node parent = GetParent();
@@ -467,17 +465,33 @@ public partial class TheCityBackground : NCombatBackground
     
         if (parent is NCombatRoom combatRoom)
         {
+            var insertPoint = combatRoom.GetNodeOrNull<Control>("CombatVfxContainer");
+            if (insertPoint != null)
+            {
+                ReparentToForeground(_fg, combatRoom, insertPoint);
+                ReparentToForeground(_fgGlow, combatRoom, insertPoint);
+                ReparentToForeground(_fg2, combatRoom, insertPoint);
+            }
+
             var allyContainer = combatRoom.GetNodeOrNull<Control>("%AllyContainer");
             var enemyContainer = combatRoom.GetNodeOrNull<Control>("%EnemyContainer");
-
             if (allyContainer != null)
                 allyContainer.Position += Vector2.Down * 30f;
             if (enemyContainer != null)
                 enemyContainer.Position += Vector2.Down * 30f;
-
             if (LegacyActTracker.IsCollectorEncounter)
                 SetBossMode(true);
         }
+    }
+    
+    private void ReparentToForeground(TextureRect layer, NCombatRoom combatRoom, Node insertBefore)
+    {
+        var globalPos = layer.GlobalPosition;
+        layer.GetParent().RemoveChild(layer);
+        combatRoom.AddChild(layer);
+        combatRoom.MoveChild(layer, insertBefore.GetIndex());
+        layer.GlobalPosition = globalPos;
+        layer.ZIndex = 0;
     }
     
     public void SetBossMode(bool isCollector)
