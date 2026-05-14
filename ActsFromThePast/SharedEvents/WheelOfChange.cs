@@ -51,6 +51,9 @@ public sealed class WheelOfChange : CustomEventModel, IShrineEvent
 
     private async Task Play()
     {
+        for (int i = 0; i < Owner.RunState.CurrentActIndex; i++)
+            Rng.NextInt(1);
+    
         var result = Rng.NextInt(6);
         var minigame = new WheelSpinMinigame(Owner, result, Owner.RunState.CurrentActIndex);
         await minigame.PlayMinigame();

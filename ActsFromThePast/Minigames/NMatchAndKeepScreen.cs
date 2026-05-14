@@ -1,4 +1,5 @@
 ﻿using Godot;
+using HarmonyLib;
 using MegaCrit.Sts2.addons.mega_text;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -425,7 +426,20 @@ public partial class NMatchAndKeepScreen : Control, IOverlayScreen, IScreenConte
         slot.CardNode.Visible = true;
         if (slot.Overlay != null)
             slot.Overlay.Visible = false;
-        SetSlotScale(index, SelectedScale);
+
+        var scaleTween = slot.Wrapper.CreateTween();
+        scaleTween.TweenProperty(
+                (GodotObject)slot.Wrapper, (NodePath)"scale",
+                (Variant)new Vector2(SelectedScale, SelectedScale), ScaleTweenTime
+            ).SetTrans(Tween.TransitionType.Cubic)
+            .SetEase(Tween.EaseType.Out);
+
+        scaleTween.TweenCallback(Callable.From(() =>
+        {
+            var traverse = Traverse.Create(slot.Holder);
+            traverse.Field("_isFocused").SetValue(false);
+            traverse.Method("RefreshFocusState").GetValue();
+        }));
  
         if (_firstSelection < 0)
         {

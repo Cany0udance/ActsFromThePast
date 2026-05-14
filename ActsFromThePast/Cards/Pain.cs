@@ -36,6 +36,9 @@ public sealed class Pain : CustomCardModel
     {
         if (cardPlay.Card == this)
             return;
+        
+        if (cardPlay.Card.Owner != Owner)
+            return;
 
         var hand = PileType.Hand.GetPile(Owner);
         if (!hand.Cards.Contains(this))

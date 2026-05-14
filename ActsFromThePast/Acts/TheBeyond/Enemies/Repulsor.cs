@@ -87,9 +87,9 @@ public sealed class Repulsor : CustomMonsterModel
 
     private async Task Daze(IReadOnlyList<Creature> targets)
     {
-        await CardPileCmd.AddToCombatAndPreview<Dazed>(targets, PileType.Draw, DazeAmount, (Player)null);
+        await CardPileCmd.AddToCombatAndPreview<Dazed>(targets, PileType.Draw, DazeAmount, (Player)null, CardPilePosition.Random);
     }
-
+    
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)
     {
         var idle = new AnimState("idle", true);

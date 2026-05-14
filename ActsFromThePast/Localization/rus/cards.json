@@ -1,0 +1,18 @@
+{
+  "ACTSFROMTHEPAST-BITE.description": "Наносит {Damage:diff()} урона.\nВосполняет {Heal:diff()} ОЗ.",
+  "ACTSFROMTHEPAST-BITE.title": "Укус",
+  "ACTSFROMTHEPAST-JAX.description": "Вы теряете {HpLoss:diff()} ОЗ.\nДает {StrengthPower:diff()} [gold]силы[/gold].",
+  "ACTSFROMTHEPAST-JAX.title": "К.А.Ч.",
+  "ACTSFROMTHEPAST-MADNESS.description": "Случайная карта в [gold]руке[/gold] становится [gold]бесплатной[/gold] до конца боя.",
+  "ACTSFROMTHEPAST-MADNESS.title": "Безумие",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.description": "От этого [red]Проклятия[/red] не сбежать.",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.title": "Некрономипорча",
+  "ACTSFROMTHEPAST-PAIN.description": "Вы теряете {HpLoss:diff()} ОЗ, если эта карта находится в [gold]руке[/gold], когда вы разыгрываете карты.",
+  "ACTSFROMTHEPAST-PAIN.title": "Боль",
+  "ACTSFROMTHEPAST-PARASITE.description": "Вы потеряете 3 [gold]макс. ОЗ[/gold], если [gold]преобразуете[/gold] или удалите эту карту из [gold]колоды[/gold].",
+  "ACTSFROMTHEPAST-PARASITE.title": "Паразит",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.description": "Наносит {Damage:diff()} урона.\nЕсли [gold]казнит[/gold] врага, повышает свой урон на {Increase:diff()} до конца вылазки.",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.title": "Ритуальный кинжал",
+  "ACTSFROMTHEPAST-THE_BOX.description": "Если вы удалите эту карту из [gold]колоды[/gold], находясь в Магазине, ваша следующая покупка будет бесплатна.",
+  "ACTSFROMTHEPAST-THE_BOX.title": "Коробка"
+}

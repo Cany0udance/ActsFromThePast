@@ -1,0 +1,11 @@
+{
+	"ACTSFROMTHEPAST-BURN_BRIGHT.title": "Возгорание",
+	"ACTSFROMTHEPAST-BURN_BRIGHT.description": "Урон этой карты удвоен и она удаляется из [gold]колоды[/gold] после [blue]5[/blue] боев.",
+	"ACTSFROMTHEPAST-BURN_BRIGHT.extraCardText": "Удаляется из колоды после {Combats} {Combats:plural:боя|боев}.",
+	"ACTSFROMTHEPAST-FEARFUL.title": "Боязнь",
+	"ACTSFROMTHEPAST-FEARFUL.description": "[gold]Защита[/gold], даваемая этой картой, утроена. Вы получаете [blue]1[/blue] [gold]уязвимости[/gold], когда разыгрываете эту карту.",
+	"ACTSFROMTHEPAST-FEARFUL.extraCardText": "Вы получаете 1 уязвимости.",
+	"ACTSFROMTHEPAST-HAUNTED.title": "Паранойя",
+	"ACTSFROMTHEPAST-HAUNTED.description": "Вы получаете [purple]Звон в ушах[/purple], когда добираете эту карту.\nДает [blue]1[/blue] [gold]неосязаемости[/gold], когда вы разыгрываете эту карту.",
+	"ACTSFROMTHEPAST-HAUNTED.extraCardText": "Вы получаете Звон в ушах, когда добираете эту карту.\nДает 1 неосязаемости."
+}

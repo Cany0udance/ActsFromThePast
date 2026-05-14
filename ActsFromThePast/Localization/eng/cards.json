@@ -1,0 +1,18 @@
+{
+  "ACTSFROMTHEPAST-BITE.description": "Deal {Damage:diff()} damage.\nHeal {Heal:diff()} HP.",
+  "ACTSFROMTHEPAST-BITE.title": "Bite",
+  "ACTSFROMTHEPAST-JAX.description": "Lose {HpLoss:diff()} HP.\nGain {StrengthPower:diff()} [gold]Strength[/gold].",
+  "ACTSFROMTHEPAST-JAX.title": "J.A.X.",
+  "ACTSFROMTHEPAST-MADNESS.description": "Make a random card in your [gold]Hand[/gold] free to play this combat.",
+  "ACTSFROMTHEPAST-MADNESS.title": "Madness",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.description": "There is no escape from this [red]Curse[/red].",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.title": "Necronomicurse",
+  "ACTSFROMTHEPAST-PAIN.description": "If this is in your [gold]Hand[/gold], whenever you play a card, lose {HpLoss:diff()} HP.",
+  "ACTSFROMTHEPAST-PAIN.title": "Pain",
+  "ACTSFROMTHEPAST-PARASITE.description": "If [gold]Transformed[/gold] or removed from your [gold]Deck[/gold], lose 3 Max HP.",
+  "ACTSFROMTHEPAST-PARASITE.title": "Parasite",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.description": "Deal {Damage:diff()} damage.\nIf [gold]Fatal[/gold], permanently increase this card's damage by {Increase:diff()}.",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.title": "Ritual Dagger",
+  "ACTSFROMTHEPAST-THE_BOX.title": "The Box",
+  "ACTSFROMTHEPAST-THE_BOX.description": "If removed from your [gold]Deck[/gold] in a shop room, the next purchase you make at the shop is free."
+}

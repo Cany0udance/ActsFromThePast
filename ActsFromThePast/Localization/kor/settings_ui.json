@@ -1,0 +1,13 @@
+{
+	  "ACTSFROMTHEPAST.mod_title": "과거의 막",
+		"ACTSFROMTHEPAST-REBALANCED_MODE.title": "리밸런스 모드",
+	"ACTSFROMTHEPAST-REBALANCED_MODE.hover.desc": "과거의 컨텐츠를 슬레이 더 스파이어 2의 환경에 맞게 다시 밸런싱합니다. 현재 오직 이벤트만을 대상으로 합니다.\n\n기본적으로 비활성화입니다 (하지만 한번 해보시는 걸 추천드려요!).",
+	"ACTSFROMTHEPAST-ALLOW_NON_LEGACY_SHARED_EVENTS_IN_LEGACY_ACTS.title": "과거의 막에 과거에서 오지 않은 공통 이벤트가 등장하게 하기",
+"ACTSFROMTHEPAST-ALLOW_NON_LEGACY_SHARED_EVENTS_IN_LEGACY_ACTS.hover.desc": "활성화하면, 슬레이 더 스파이어 2 또는 다른 모드의 공통 이벤트가 과거의 막에도 등장할 수 있습니다.\n\n기본적으로 활성화입니다.",
+"ACTSFROMTHEPAST-ALLOW_LEGACY_SHARED_EVENTS_IN_NON_LEGACY_ACTS.title": "과거에서 오지 않은 막에 과거의 공통 이벤트가 등장하게 하기",
+"ACTSFROMTHEPAST-ALLOW_LEGACY_SHARED_EVENTS_IN_NON_LEGACY_ACTS.hover.desc": "활성화하면, 과거의 막 모드에서 추가하는 공통 이벤트가 과거에서 오지 않은 막(바닐라 막 또는 다른 모드 막)에서도 등장할 수 있습니다.\n\n기본적으로 비활성화입니다.",
+   "ACTSFROMTHEPAST-DARV_ONLY_IN_LEGACY_ACTS.title": "과거의 막에서만 다브 등장",
+   "ACTSFROMTHEPAST-DARV_ONLY_IN_LEGACY_ACTS.hover.desc": "(현재 지원 종료) 슬레이 더 스파이어 1의 보스 유물 시스템을 구현하기 위해서, 다브가 2막과 3막에 항상 등장하게 만듭니다.",
+"ACTSFROMTHEPAST-LEGACY_ENEMIES_GIVE_CLASSIC_SLIMED.title": "과거의 적이 구식 점액투성이를 섞어넣기",
+"ACTSFROMTHEPAST-LEGACY_ENEMIES_GIVE_CLASSIC_SLIMED.hover.desc": "슬레이 더 스파이어 1에서 [green]점액투성이[/green]가 작동하는 방식을 구현하기 위해, 과거의 막 적이 만드는 [green]점액투성이[/green] 카드가 \"카드를 1장 뽑습니다\" 효과를 잃습니다.\n\n기본적으로 비활성화입니다."
+}

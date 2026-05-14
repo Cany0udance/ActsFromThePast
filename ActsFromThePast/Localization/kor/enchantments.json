@@ -1,0 +1,11 @@
+{
+	"ACTSFROMTHEPAST-BURN_BRIGHT.title": "밝은 빛",
+	"ACTSFROMTHEPAST-BURN_BRIGHT.description": "이 카드의 공격 피해량이 2배가 되고 [blue]5[/blue]번의 전투 후에 [gold]덱[/gold]에서 제거됩니다.",
+	"ACTSFROMTHEPAST-BURN_BRIGHT.extraCardText": "{Combats}번의 전투 후에 덱에서 제거됩니다.",
+	"ACTSFROMTHEPAST-FEARFUL.title": "공포심",
+	"ACTSFROMTHEPAST-FEARFUL.description": "이 카드로 얻는 [gold]방어도[/gold]가 3배가 됩니다. 이 카드가 사용되면, [gold]취약[/gold]을 [blue]1[/blue] 얻습니다.",
+	"ACTSFROMTHEPAST-FEARFUL.extraCardText": "취약을 1 얻습니다.",
+	"ACTSFROMTHEPAST-HAUNTED.title": "귀신들린",
+	"ACTSFROMTHEPAST-HAUNTED.description": "이 카드를 뽑을 때마다, [purple]공명[/purple]을 얻습니다. 이 카드가 사용되면, [gold]불가침[/gold]을 [blue]1[/blue] 얻습니다.",
+	"ACTSFROMTHEPAST-HAUNTED.extraCardText": "이 카드를 뽑을 때마다, 공명을 얻습니다.\n불가침을 1 얻습니다."
+}

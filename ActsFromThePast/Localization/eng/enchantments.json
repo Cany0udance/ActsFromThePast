@@ -1,0 +1,11 @@
+{
+	"ACTSFROMTHEPAST-BURN_BRIGHT.title": "Burn Bright",
+	"ACTSFROMTHEPAST-BURN_BRIGHT.description": "This card's attack damage is doubled and removed from your [gold]Deck[/gold] after [blue]5[/blue] combats.",
+	"ACTSFROMTHEPAST-BURN_BRIGHT.extraCardText": "Removed from your Deck after {Combats} {Combats:plural:combat|combats}.",
+	"ACTSFROMTHEPAST-FEARFUL.title": "Fearful",
+	"ACTSFROMTHEPAST-FEARFUL.description": "Triples [gold]Block[/gold] gained from this card. When this card is played, gain [blue]1[/blue] [gold]Vulnerable[/gold].",
+	"ACTSFROMTHEPAST-FEARFUL.extraCardText": "Gain 1 Vulnerable.",
+	"ACTSFROMTHEPAST-HAUNTED.title": "Haunted",
+	"ACTSFROMTHEPAST-HAUNTED.description": "Whenever you draw this card, gain [purple]Ringing[/purple]. When this card is played, gain [blue]1[/blue] [gold]Intangible[/gold].",
+	"ACTSFROMTHEPAST-HAUNTED.extraCardText": "Whenever you draw this card, gain Ringing.\nGain 1 Intangible."
+}

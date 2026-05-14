@@ -1,0 +1,18 @@
+{
+  "ACTSFROMTHEPAST-BITE.description": "피해를 {Damage:diff()} 줍니다.\n체력을 {Heal:diff()} 회복합니다.",
+  "ACTSFROMTHEPAST-BITE.title": "흡혈",
+  "ACTSFROMTHEPAST-JAX.description": "체력을 {HpLoss:diff()} 잃습니다.\n[gold]힘[/gold]을 {StrengthPower:diff()} 얻습니다.",
+  "ACTSFROMTHEPAST-JAX.title": "J.A.X.",
+  "ACTSFROMTHEPAST-MADNESS.description": "[gold]손[/gold]에 있는 무작위 카드를 이번 전투 동안 비용 없이 사용할 수 있게 만듭니다.",
+  "ACTSFROMTHEPAST-MADNESS.title": "광기",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.description": "이 [red]저주[/red]에서 벗어날 수 없습니다.",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.title": "네크로노미콘의 저주",
+  "ACTSFROMTHEPAST-PAIN.description": "이 카드가 [gold]손[/gold]에 있을 때, 카드를 사용할 때마다 체력을 {HpLoss:diff()} 잃습니다.",
+  "ACTSFROMTHEPAST-PAIN.title": "고통",
+  "ACTSFROMTHEPAST-PARASITE.description": "[gold]덱[/gold]에서 제거되거나 [gold]변화[/gold]된다면, 최대 체력을 3 잃습니다.",
+  "ACTSFROMTHEPAST-PARASITE.title": "기생충",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.description": "피해를 {Damage:diff()} 줍니다.\n[gold]치명타[/gold]라면, 이 카드의 피해량을 영구적으로 {Increase:diff()} 증가시킵니다.",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.title": "의식용 단검",
+  "ACTSFROMTHEPAST-THE_BOX.title": "상자",
+  "ACTSFROMTHEPAST-THE_BOX.description": "상점 안에서 [gold]덱[/gold]에서 제거된다면, 상점에서 구매하는 다음 상품이 무료가 됩니다."
+}

@@ -468,9 +468,9 @@ public partial class TheCityBackground : NCombatBackground
             var sceneContainer = combatRoom.GetNodeOrNull<Control>("%CombatSceneContainer");
             if (sceneContainer != null)
             {
-                ReparentToContainer(_fg, sceneContainer, 8);
-                ReparentToContainer(_fgGlow, sceneContainer, 8);
-                ReparentToContainer(_fg2, sceneContainer, 8);
+                ReparentToContainer(_fg, sceneContainer, -3);
+                ReparentToContainer(_fgGlow, sceneContainer, -3);
+                ReparentToContainer(_fg2, sceneContainer, -3);
             }
 
             var allyContainer = combatRoom.GetNodeOrNull<Control>("%AllyContainer");
@@ -481,6 +481,17 @@ public partial class TheCityBackground : NCombatBackground
                 enemyContainer.Position += Vector2.Down * 30f;
             if (LegacyActTracker.IsCollectorEncounter)
                 SetBossMode(true);
+        }
+    }
+    
+    private void LogSceneTree(Node node, int depth = 0)
+    {
+        string indent = new string(' ', depth * 2);
+        string zInfo = node is CanvasItem ci ? $" [Z:{ci.ZIndex}, ZRelative:{ci.ZAsRelative}]" : "";
+        Log.Info($"{indent}{node.Name} ({node.GetType().Name}){zInfo}");
+        foreach (var child in node.GetChildren())
+        {
+            LogSceneTree(child, depth + 1);
         }
     }
     

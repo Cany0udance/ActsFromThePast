@@ -43,6 +43,10 @@ public class MatchAndKeepMinigame
 
     private void GenerateCards(Rng rng)
     {
+        
+        for (int i = 0; i < ActIndex; i++)
+            rng.NextInt(1);
+        
         var characterPool = Owner.Character.CardPool
             .GetUnlockedCards(Owner.UnlockState, Owner.RunState.CardMultiplayerConstraint)
             .ToList();
