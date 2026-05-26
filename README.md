@@ -3,7 +3,7 @@
 - Acts From The Past isn't yet finished! It still has things like placeholder audio & visual effects, missing logic in places, and more.
 - You must be on the beta branch of Slay the Spire 2 if you wish to play with Acts from the Past (as of release 0.3.0). Additionally, [BaseLib](https://github.com/Alchyr/BaseLib-StS2/releases/latest) is now a required dependency for this mod.
 - If you play with Acts From The Past and then play on the same modded profile with the mod disabled afterwards, trying to enter the Run History screen will crash the game! Either make a new modded profile just for testing this mod OR back up your modded profile. If you make a new profile, I'd recommend running `unlock all` in the console.
-- If you want to ONLY play with Exordium/The City/The Beyond, please also install [Act Toggler](github.com/Cany0udance/ActToggler/releases/latest).
+- If you want to ONLY play with Exordium/The City/The Beyond, please also install [Act Toggler](https://github.com/Cany0udance/ActToggler/releases/latest).
 - I have to imagine this mod breaks if played on widescreen or resolutions other than 16:9.
 - Acts From The Past supports English, Russian, and Korean. If you wish to fix or contribute a translation, [please reference the localization files](https://github.com/Cany0udance/ActsFromThePast/tree/main/ActsFromThePast/Localization).
 - Acts From The Past is NOT multiplayer stable at the moment!! If you play this with multiplayer, don't be surprised if you run into something like a softlock. ALL players in a lobby must have the same configs in order to play multiplayer.
