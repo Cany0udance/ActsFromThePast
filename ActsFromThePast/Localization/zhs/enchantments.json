@@ -1,0 +1,11 @@
+{
+  "ACTSFROMTHEPAST-BURN_BRIGHT.title": "炽燃",
+  "ACTSFROMTHEPAST-BURN_BRIGHT.description": "这张牌的攻击伤害翻倍，并在打出后从你的 [gold]牌组[/gold] 中移除。",
+  "ACTSFROMTHEPAST-BURN_BRIGHT.extraCardText": "在 {Combats} {Combats:plural:场战斗|场战斗} 后从你的牌组中移除。",
+  "ACTSFROMTHEPAST-FEARFUL.title": "畏惧",
+  "ACTSFROMTHEPAST-FEARFUL.description": "使这张牌获得的 [gold]格挡[/gold] 变为三倍。打出这张牌时，获得 1 层易伤。",
+  "ACTSFROMTHEPAST-FEARFUL.extraCardText": "获得 1 层易伤。",
+  "ACTSFROMTHEPAST-HAUNTED.title": "闹鬼",
+  "ACTSFROMTHEPAST-HAUNTED.description": "每当你抽到这张牌时，获得 [purple]鸣响[/purple]。打出这张牌时，获得 1 层无实体。",
+  "ACTSFROMTHEPAST-HAUNTED.extraCardText": "每当你抽到这张牌时，获得鸣响。\n获得 1 层无实体。"
+}

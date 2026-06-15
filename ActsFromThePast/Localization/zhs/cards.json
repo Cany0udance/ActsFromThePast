@@ -1,0 +1,18 @@
+{
+  "ACTSFROMTHEPAST-BITE.description": "造成 {Damage:diff()} 点伤害。\n回复 {Heal:diff()} 点生命。",
+  "ACTSFROMTHEPAST-BITE.title": "噬咬",
+  "ACTSFROMTHEPAST-JAX.description": "失去 {HpLoss:diff()} 点生命。\n获得 {StrengthPower:diff()} [gold]力量[/gold]。",
+  "ACTSFROMTHEPAST-JAX.title": "J.A.X.",
+  "ACTSFROMTHEPAST-MADNESS.description": "使 [gold]手牌[/gold] 中的一张随机牌在本场战斗中可免费打出。",
+  "ACTSFROMTHEPAST-MADNESS.title": "疯狂",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.description": "你无法逃脱这个 [red]诅咒[/red]。",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.title": "死灵诅咒",
+  "ACTSFROMTHEPAST-PAIN.description": "若这张牌在你的 [gold]手牌[/gold] 中，每当你打出一张牌时，失去 {HpLoss:diff()} 点生命。",
+  "ACTSFROMTHEPAST-PAIN.title": "疼痛",
+  "ACTSFROMTHEPAST-PARASITE.description": "若被 [gold]变化[/gold] 或从你的 [gold]牌组[/gold] 中移除，失去 3 点最大生命。",
+  "ACTSFROMTHEPAST-PARASITE.title": "寄生",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.description": "造成 {Damage:diff()} 点伤害。\n若 [gold]致命[/gold]，永久使这张牌的伤害增加 {Increase:diff()}。",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.title": "仪式匕首",
+  "ACTSFROMTHEPAST-THE_BOX.title": "盒子",
+  "ACTSFROMTHEPAST-THE_BOX.description": "若在商店房间中从你的 [gold]牌组[/gold] 移除，你在商店中的下一次购买免费。"
+}

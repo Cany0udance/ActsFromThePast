@@ -1,0 +1,17 @@
+{
+  "ACTSFROMTHEPAST.mod_title": "往昔之章",
+  "ACTSFROMTHEPAST-REBALANCED_MODE.title": "重平衡模式",
+  "ACTSFROMTHEPAST-REBALANCED_MODE.hover.desc": "重平衡经典内容，使其更符合《杀戮尖塔2》的环境。目前仅针对事件。\n\n默认关闭（但建议尝试一下！）。",
+  "ACTSFROMTHEPAST-ALLOW_NON_LEGACY_SHARED_EVENTS_IN_LEGACY_ACTS.title": "允许非经典共享事件出现在经典幕中",
+  "ACTSFROMTHEPAST-ALLOW_NON_LEGACY_SHARED_EVENTS_IN_LEGACY_ACTS.hover.desc": "启用后，来自《杀戮尖塔2》或其他模组的共享事件仍可出现在经典幕中。\n\n默认启用。",
+  "ACTSFROMTHEPAST-ALLOW_LEGACY_SHARED_EVENTS_IN_NON_LEGACY_ACTS.title": "允许经典共享事件出现在非经典幕中",
+  "ACTSFROMTHEPAST-ALLOW_LEGACY_SHARED_EVENTS_IN_NON_LEGACY_ACTS.hover.desc": "启用后，往昔之章添加的共享事件可出现在非经典幕中，例如原版幕或其他模组添加的幕。\n\n默认关闭。",
+  "ACTSFROMTHEPAST-DARV_ONLY_IN_LEGACY_ACTS.title": "仅在经典幕中使用达夫",
+  "ACTSFROMTHEPAST-DARV_ONLY_IN_LEGACY_ACTS.hover.desc": "使达夫始终是城市与彼世中的古民，更接近《杀戮尖塔1》的Boss遗物系统。\n\n建议与 [gold]Act Toggler[/gold] 模组一起使用。\n\n默认关闭。",
+  "ACTSFROMTHEPAST-LEGACY_ENEMIES_GIVE_CLASSIC_SLIMED.title": "经典敌人给予经典黏液",
+  "ACTSFROMTHEPAST-LEGACY_ENEMIES_GIVE_CLASSIC_SLIMED.hover.desc": "使往昔之章敌人生成的 [green]黏液[/green] 牌失去“抽一张牌”效果，与《杀戮尖塔1》中 [green]黏液[/green] 的机制一致。\n\n默认关闭。",
+  "ACTSFROMTHEPAST-ONLY_LEGACY_ACTS.title": "仅出现往昔之章内容",
+  "ACTSFROMTHEPAST-ONLY_LEGACY_ACTS.hover.desc": "开启后，整局游戏的三个章节均为往昔之章的经典幕（序章、城市、彼世），不会出现原版或其他模组的章节。\n\n默认关闭。",
+  "ACTSFROMTHEPAST-ONLY_CLASSIC_EVENTS.title": "仅触发经典事件",
+  "ACTSFROMTHEPAST-ONLY_CLASSIC_EVENTS.hover.desc": "开启后，地图上只会出现往昔之章添加的事件，不会触发《杀戮尖塔2》原版或其他模组的事件。\n\n建议与「仅出现往昔之章内容」一同使用。\n\n默认关闭。"
+}
