@@ -18,6 +18,12 @@ public sealed class TheCityAct : CustomActModel
         {
         };
     }
+    
+    public override int Index => 1;
+
+    public override bool IsDefault => false;
+
+    public override bool IsUnlocked(UnlockState unlockState) => true;
 
     public override bool Equals(object? obj) => obj is TheCityAct;
     public override int GetHashCode() => typeof(TheCityAct).GetHashCode();
@@ -30,6 +36,14 @@ public sealed class TheCityAct : CustomActModel
             {
                 ModelDb.Event<TrashHeap>(),
             };
+        }
+    }
+    
+    public override IEnumerable<AncientEventModel> AllAncients
+    {
+        get
+        {
+            return Act2Ancients;
         }
     }
 

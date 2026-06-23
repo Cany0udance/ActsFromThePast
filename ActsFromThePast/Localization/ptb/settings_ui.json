@@ -1,0 +1,13 @@
+{
+  "ACTSFROMTHEPAST.mod_title": "Atos do Passado",
+  "ACTSFROMTHEPAST-REBALANCED_MODE.title": "Modo Rebalanceado",
+  "ACTSFROMTHEPAST-REBALANCED_MODE.hover.desc": "Rebalanceia o conteúdo legado para se adequar melhor ao ambiente de Slay the Spire 2. Atualmente afeta apenas eventos.\n\nDesativado por padrão (mas é recomendado experimentar!).",
+  "ACTSFROMTHEPAST-ALLOW_NON_LEGACY_SHARED_EVENTS_IN_LEGACY_ACTS.title": "Permitir Eventos Compartilhados Não Legados em Atos Legados",
+  "ACTSFROMTHEPAST-ALLOW_NON_LEGACY_SHARED_EVENTS_IN_LEGACY_ACTS.hover.desc": "Quando ativado, eventos compartilhados de Slay the Spire 2 ou de outros mods ainda podem aparecer em atos legados.\n\nAtivado por padrão.",
+  "ACTSFROMTHEPAST-ALLOW_LEGACY_SHARED_EVENTS_IN_NON_LEGACY_ACTS.title": "Permitir Eventos Compartilhados Legados em Atos Não Legados",
+  "ACTSFROMTHEPAST-ALLOW_LEGACY_SHARED_EVENTS_IN_NON_LEGACY_ACTS.hover.desc": "Quando ativado, eventos compartilhados adicionados por Atos do Passado podem aparecer em atos não legados, como atos do jogo base ou atos adicionados por outros mods.\n\nDesativado por padrão.",
+  "ACTSFROMTHEPAST-DARV_ONLY_IN_LEGACY_ACTS.title": "Apenas Darv para Atos Legados",
+  "ACTSFROMTHEPAST-DARV_ONLY_IN_LEGACY_ACTS.hover.desc": "Faz com que Darv seja sempre o Ancião em A Cidade e O Além, espelhando mais de perto o sistema de relíquias de chefe do Slay the Spire 1.\n\nRecomenda-se usar isso com o mod [gold]Act Toggler[/gold].\n\nDesativado por padrão.",
+  "ACTSFROMTHEPAST-LEGACY_ENEMIES_GIVE_CLASSIC_SLIMED.title": "Inimigos Legados Dão Engosmado Clássico",
+  "ACTSFROMTHEPAST-LEGACY_ENEMIES_GIVE_CLASSIC_SLIMED.hover.desc": "Faz com que as cartas [green]Engosmado[/green] geradas por inimigos de Atos do Passado percam o efeito \"compre uma carta\", combinando com o funcionamento de [green]Engosmado[/green] no Slay the Spire 1.\n\nDesativado por padrão."
+}

@@ -1,0 +1,67 @@
+﻿[h1]IMPORTANT![/h1]
+[list]
+[*]Acts from the Past isn't yet finished! It still has things like placeholder audio & visual effects, missing logic in places, and more.
+[*]You must be on the [b]beta branch[/b] of Slay the Spire 2 if you wish to play with Acts from the Past.
+[*]Acts from the Past supports English, Simplified Chinese, Russian, and Korean. If you wish to fix or contribute a translation, please reference the [url=https://github.com/Cany0udance/ActsFromThePast/tree/main/ActsFromThePast/Localization]localization files[/url]. Feel free to make a pull request to the Git repository or otherwise send the files to me.
+[*]If you want to ONLY play with Exordium/The City/The Beyond, please also install [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3737158447]Act Toggler[/url].
+[*]In order to play with Acts from the Past in multiplayer, ALL players must have the same configs.
+[/list]
+
+[h1]Acts From The Past[/h1]
+Acts from the Past is a work-in-progress port of the Acts from Slay the Spire 1, including Exordium, The City, and The Beyond. These acts are added in to the base game act pool via BaseLib's CustomActModel. It also includes every event from the first game, with the exception of A Note For Yourself. You can also expect visual touchups to several enemies!
+
+While the goal of this mod is to faithfully port over content from Slay the Spire 1, I did go ahead and make some changes at my own discretion. Some of these include:
+[list]
+[*]Darklings are now [b]only[/b] in the easy pool of The Beyond rather than the easy pool AND the hard pool
+[*]Trash Heap can be encountered in any StS1 act
+[*]Encounters no longer have "weights", meaning you're equally likely to encounter any...encounter
+[*]Exploder no longer has an Explosive power. Instead, it has a "Death Blow" intent, similar to the Gas Bomb and Waterfall Giant enemies from the base game. This technically makes Exploder easier since its explosion move can be mitigated by Weak, but eh.
+[/list]
+There are some other small changes, but those are the biggest gameplay-affecting ones I can think of.
+
+(oh yeah, and this mod also has [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3745864998]Googly Eyes[/url] support)
+
+[h1]Rebalanced Mode[/h1]
+Included among the configs is an ambitious Rebalanced Mode. The intent of Rebalanced Mode is to rework Slay the Spire 1 events to better match the design philosophies that I observe were set by Slay the Spire 2 events, which are roughly as follows:
+[list]
+[*]If you enter an event, SOMETHING will change. This means no more "Leave" buttons or anything of the sort that just let you proceed to the next room.
+[*]Events in Slay the Spire 2 are generally more powerful than events in Slay the Spire 1.
+[*]Events in Slay the Spire 2 are generally more "exciting", which means there are opportunities for things like Enchantments.
+[/list]
+While Rebalanced Mode is disabled by default, I would encourage you to enable it and tell me what you think of it! :)
+
+Additionally, while I also would encourage you to go in blind, if you want to just see the changes that Rebalanced Mode makes, they are listed in [url=https://docs.google.com/document/d/1QYCLq_Cke5DHNGgrV3XWfMO-njLcGtvKvUCJwf6jvf4/edit?usp=sharing]this document[/url].
+
+[h1]Frequently Asked Questions[/h1]
+[h2]How does Ascension affect enemy behavior?[/h2]
+By default, enemies have their A17+ movesets from Slay the Spire 1. This means Gremlin Nob, for example, will always apply Vulnerable to the player on turn 2, followed by 2 big hits. Enemies also have their lowest health/damage values from Slay the Spire 1, but if the Tough Enemies/Deadly Enemies Ascensions are enabled, then they have their highest health/damage values from Slay the Spire 1. I hope that makes sense! Basically, enemies are harder by default, and on the highest Ascension, they match how they were on A19+ in the original game.
+
+[h2]Does this mod add Slay the Spire 1's Act 4, and if not, will it eventually be included?[/h2]
+No and no. I wouldn't want to add Act 4 until Slay the Spire 2's own Act 4 gets added, and besides, [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3747537811]another modder has already added it.[/url]
+
+[h2]Where can I engage in more active discussion of this mod?[/h2]
+Feel free to join the Slay the Spire Discord server. Specifically, Acts from the Past has its own thread in the #modding-forum section.
+
+[h2]Why doesn't this mod support the main branch of Slay the Spire 2?[/h2]
+If I had unlimited time and energy, I would maintain two versions of Acts from the Past, but...I don't. With my schedule, it is much more feasible to maintain one version, and I opt to maintain the version I am more excited about, which is the branch that gets frequent, experimental, and interesting changes.
+
+[h2]Was AI used in the creation of this mod?[/h2]
+Yes. This mod has code and shaders that were written by AI. Additionally, while the majority of the non-English translation was done by humans, for small changes to the mod I may use AI for that rather than reaching out to & bothering the individual translators.
+
+[h2]What are the future plans for Acts from the Past?[/h2]
+General maintenance and Rebalanced Mode balance are my main concerns. Additionally, there is a lot of placeholder art that I would like to replace, but that would require artists to express interest in doing that. Please note that AI imagery will not be accepted for this mod.
+
+[h2]Can I use this mod's code for my own projects?[/h2]
+Absolutely! Feel free to reference what's on [url=https://github.com/Cany0udance/ActsFromThePast]GitHub[/url] and/or decompile the .pck and reference its assets as long as your mod isn't, like, a reupload or remake of this mod. You don't even need to credit me (though it would be nice), my largest desire is to make it as easy as possible for modders to create cool stuff!
+
+[h1]Additional Credits[/h1]
+[list]
+[*][b]Nitablade[/b] - Russian translation
+[*][b]snumodder[/b] - Korean translation
+[*][b]Sashimi_knife[/b] - Japanese translation
+[*][b]floca[/b] - Brazilian Portuguese translation
+[*][b]jjkkllike & ImLingCheng[/b] - Simplified Chinese translation
+[*][b]flounder[/b] - Providing the art for the Blood Bank relic
+[*][b]Book & Ajama[/b] - General support
+[*][b]Aurora[/b] - Critical post-launch support
+[/list]

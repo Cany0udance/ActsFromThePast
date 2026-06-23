@@ -1,0 +1,67 @@
+﻿[h1]重要！[/h1]
+[list]
+[*]Acts from the Pastはまだ完成していません！仮のオーディオやビジュアルエフェクト、一部のロジックの未実装などがあります。
+[*]Acts from the Pastをプレイするには、Slay the Spire 2の[b]ベータブランチ[/b]である必要があります。
+[*]Acts from the Pastは英語、簡体字中国語、ロシア語、韓国語に対応しています。翻訳の修正や貢献をご希望の方は、[url=https://github.com/Cany0udance/ActsFromThePast/tree/main/ActsFromThePast/Localization]ローカライズファイル[/url]をご参照ください。GitリポジトリへのPull Requestや、ファイルを直接お送りいただいても構いません。
+[*]Exordium／The City／The Beyondのみでプレイしたい場合は、[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3737158447]Act Toggler[/url]も併せてインストールしてください。
+[*]マルチプレイでActs from the Pastをプレイするには、全プレイヤーが同じ設定にしている必要があります。
+[/list]
+
+[h1]Acts From The Past[/h1]
+Acts from the Pastは、Slay the Spire 1のアクト（Exordium、The City、The Beyond）を移植する開発中のModです。これらのアクトはBaseLibのCustomActModelを通じてベースゲームのアクトプールに追加されます。また、初代のほぼ全てのイベントも含まれています（A Note For Yourselfを除く）。さらに、一部の敵のビジュアルも改善されています！
+
+このModの目標はSlay the Spire 1のコンテンツを忠実に移植することですが、独自の判断でいくつかの変更を加えています。主な変更点は以下の通りです：
+[list]
+[*]Darklingsは、The Beyondの簡単プールと難しいプールの両方ではなく、簡単プール[b]のみ[/b]に出現するようになりました
+[*]Trash HeapはStS1のどのアクトでも出現するようになりました
+[*]エンカウントの「重み」が廃止され、すべてのエンカウントが等確率で出現します
+[*]ExploderのExplosiveパワーが廃止されました。代わりに、ベースゲームのGas BombやWaterfall Giantと同様の「Death Blow」インテントを持つようになりました。技術的にはWeakで爆発を軽減できるため、Exploderが弱体化していますが、まあいいでしょう。
+[/list]
+他にも細かい変更はありますが、ゲームプレイに最も影響する大きな変更は以上です。
+
+（ああそうだ、このModは[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3745864998]Googly Eyes[/url]にも対応しています）
+
+[h1]リバランスモード[/h1]
+設定項目の中に、意欲的なリバランスモードがあります。リバランスモードの目的は、Slay the Spire 1のイベントをSlay the Spire 2のイベントに見られるデザイン哲学に合わせて再構築することです。そのデザイン哲学とはおおよそ以下の通りです：
+[list]
+[*]イベントに入ったら、必ず何かが変化する。つまり、何もせず次の部屋に進める「立ち去る」ボタンのようなものはなくなります。
+[*]Slay the Spire 2のイベントは、Slay the Spire 1のイベントよりも全体的に強力です。
+[*]Slay the Spire 2のイベントは、全体的にもっと「エキサイティング」です。エンチャントなどの要素が登場する機会があります。
+[/list]
+リバランスモードはデフォルトでは無効ですが、ぜひ有効にして感想を聞かせてください！ :)
+
+また、事前情報なしでプレイすることをお勧めしますが、リバランスモードの変更内容を確認したい場合は、[url=https://docs.google.com/document/d/1QYCLq_Cke5DHNGgrV3XWfMO-njLcGtvKvUCJwf6jvf4/edit?usp=sharing]こちらのドキュメント[/url]に記載されています。
+
+[h1]よくある質問[/h1]
+[h2]アセンションは敵の行動にどう影響しますか？[/h2]
+デフォルトでは、敵はSlay the Spire 1のA17+のムーブセットを持っています。例えばGremlin Nobは、ターン2で必ずプレイヤーにVulnerableを付与し、その後2回の大ダメージ攻撃を行います。また、敵の体力やダメージはSlay the Spire 1の最低値ですが、Tough Enemies／Deadly Enemiesのアセンションが有効な場合は、Slay the Spire 1の最高値になります。つまり、デフォルトでも敵は強めに設定されており、最高アセンションでは初代のA19+と同等になるということです。
+
+[h2]このModはSlay the Spire 1のAct 4を追加しますか？また、将来追加される予定はありますか？[/h2]
+いいえ、どちらもありません。Slay the Spire 2自体のAct 4が追加されるまでAct 4を実装するつもりはありませんし、そもそも[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3747537811]別のModderがすでに追加しています。[/url]
+
+[h2]このModについてもっと活発に議論できる場所はありますか？[/h2]
+Slay the SpireのDiscordサーバーにぜひご参加ください。Acts from the Pastは#modding-forumセクションに専用スレッドがあります。
+
+[h2]なぜこのModはSlay the Spire 2のメインブランチに対応していないのですか？[/h2]
+もし時間とエネルギーが無限にあれば、Acts from the Pastの2つのバージョンを維持しますが…残念ながらそうではありません。私のスケジュールでは、1つのバージョンを維持する方がはるかに現実的であり、より興味を持っているバージョン、つまり頻繁で実験的かつ面白い変更が行われるブランチを選んでいます。
+
+[h2]このModの制作にAIは使用されていますか？[/h2]
+はい。このModにはAIが書いたコードやシェーダーが含まれています。また、英語以外の翻訳の大部分は人間が行っていますが、小規模な変更については、各翻訳者に連絡して手を煩わせる代わりにAIを使用する場合があります。
+
+[h2]Acts from the Pastの今後の予定は？[/h2]
+全般的なメンテナンスとリバランスモードの調整が主な課題です。さらに、置き換えたい仮のアートが多数ありますが、それにはアーティストの方々が興味を示してくださる必要があります。なお、AI生成の画像はこのModでは使用しません。
+
+[h2]このModのコードを自分のプロジェクトに使ってもいいですか？[/h2]
+もちろんです！[url=https://github.com/Cany0udance/ActsFromThePast]GitHub[/url]のコードを参考にしたり、.pckをデコンパイルしてアセットを参照したりして構いません。ただし、このModの再アップロードやリメイクでなければ、という条件付きです。クレジット表記も必須ではありません（いただけると嬉しいですが）。Modderの皆さんがクールなものをできるだけ簡単に作れるようにすることが、私の一番の願いです！
+
+[h1]追加クレジット[/h1]
+[list]
+[*][b]Nitablade[/b] - ロシア語翻訳
+[*][b]snumodder[/b] - 韓国語翻訳
+[*][b]Sashimi_knife[/b] - 日本語翻訳
+[*][b]floca[/b] - ブラジルポルトガル語翻訳
+[*][b]jjkkllike & ImLingCheng[/b] - 簡体字中国語翻訳
+[*][b]flounder[/b] - Blood Bankレリックのアート提供
+[*][b]Book & Ajama[/b] - 全般的なサポート
+[*][b]Aurora[/b] - リリース後の重要なサポート
+[/list]

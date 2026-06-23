@@ -2,6 +2,7 @@
 using Godot;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Events;
+using MegaCrit.Sts2.Core.Unlocks;
 
 namespace ActsFromThePast.Acts.TheBeyond;
 
@@ -15,6 +16,12 @@ public sealed class TheBeyondAct : CustomActModel
         {
         };
     }
+    
+    public override int Index => 2;
+
+    public override bool IsDefault => false;
+
+    public override bool IsUnlocked(UnlockState unlockState) => true;
 
     public override bool Equals(object? obj) => obj is TheBeyondAct;
     public override int GetHashCode() => typeof(TheBeyondAct).GetHashCode();
@@ -27,6 +34,14 @@ public sealed class TheBeyondAct : CustomActModel
             {
                 ModelDb.Event<TrashHeap>(),
             };
+        }
+    }
+    
+    public override IEnumerable<AncientEventModel> AllAncients
+    {
+        get
+        {
+            return Act3Ancients;
         }
     }
 

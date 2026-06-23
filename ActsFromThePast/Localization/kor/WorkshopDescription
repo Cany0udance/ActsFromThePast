@@ -1,0 +1,66 @@
+﻿[i]이 설명은 AI를 통해 번역되었습니다.[/i]
+
+[h1]중요![/h1]
+[list]
+[*]Acts from the Past는 아직 완성되지 않았습니다! 임시 오디오 및 시각 효과, 일부 미구현 로직 등이 남아 있습니다.
+[*]Acts from the Past를 플레이하려면 Slay the Spire 2의 [b]베타 브랜치[/b]를 사용해야 합니다.
+[*]Acts from the Past는 영어, 중국어 간체, 러시아어, 한국어를 지원합니다. 번역을 수정하거나 기여하고 싶으시다면 [url=https://github.com/Cany0udance/ActsFromThePast/tree/main/ActsFromThePast/Localization]로컬라이제이션 파일[/url]을 참고해 주세요. GitHub 저장소에 pull request를 보내거나 파일을 직접 전달해 주셔도 됩니다.
+[*]Exordium/The City/The Beyond만 플레이하고 싶다면 [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3737158447]Act Toggler[/url] 모드도 함께 설치해 주세요.
+[*]멀티플레이어에서 Acts from the Past를 플레이하려면 모든 플레이어가 동일한 설정을 사용해야 합니다.
+[/list]
+
+[h1]Acts From The Past[/h1]
+Acts from the Past는 Exordium, The City, The Beyond를 포함한 Slay the Spire 1의 액트를 포팅하는 작업 중인 모드입니다. 이 액트들은 BaseLib의 CustomActModel을 통해 기본 게임의 액트 풀에 추가됩니다. 또한 A Note For Yourself를 제외한 첫 번째 게임의 모든 이벤트가 포함되어 있습니다. 일부 적에게는 비주얼 업데이트도 적용되었습니다!
+
+이 모드의 목표는 Slay the Spire 1의 콘텐츠를 충실히 포팅하는 것이지만, 제 판단에 따라 일부 변경을 가했습니다. 주요 변경 사항은 다음과 같습니다:
+[list]
+[*]Darklings는 이제 The Beyond의 쉬운 풀에[b]만[/b] 등장하며, 쉬운 풀과 어려운 풀 양쪽에 등장하지 않습니다
+[*]Trash Heap는 모든 StS1 액트에서 등장할 수 있습니다
+[*]Exploder는 더 이상 Explosive 능력을 갖고 있지 않습니다. 대신 기본 게임의 Gas Bomb, Waterfall Giant와 유사한 "Death Blow" 의도를 갖고 있습니다. 기술적으로 폭발 공격이 Weak로 약화될 수 있기 때문에 Exploder가 더 쉬워졌지만, 뭐 그런 거죠.
+[/list]
+다른 소소한 변경 사항도 있지만, 위의 내용이 게임플레이에 가장 큰 영향을 미치는 것들입니다.
+
+(참고로 이 모드는 [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3745864998]Googly Eyes[/url]도 지원합니다)
+
+[h1]리밸런스 모드[/h1]
+설정 중에는 야심찬 리밸런스 모드가 포함되어 있습니다. 리밸런스 모드의 목표는 Slay the Spire 1의 이벤트를 Slay the Spire 2 이벤트의 디자인 철학에 맞게 재작업하는 것입니다. 제가 관찰한 그 철학은 대략 다음과 같습니다:
+[list]
+[*]이벤트에 들어가면 무언가가 반드시 변해야 합니다. 다음 방으로 그냥 넘어가는 "떠나기" 버튼 같은 것은 없습니다.
+[*]Slay the Spire 2의 이벤트는 전반적으로 Slay the Spire 1의 이벤트보다 강력합니다.
+[*]Slay the Spire 2의 이벤트는 전반적으로 더 "흥미진진"하며, 인챈트먼트 같은 요소가 등장할 기회가 있습니다.
+[/list]
+리밸런스 모드는 기본적으로 비활성화되어 있지만, 활성화해 보시고 어떻게 생각하시는지 알려주시면 좋겠습니다! :)
+
+또한, 직접 경험해 보시는 것을 추천드리지만, 리밸런스 모드의 변경 사항을 미리 확인하고 싶으시다면 [url=https://docs.google.com/document/d/1QYCLq_Cke5DHNGgrV3XWfMO-njLcGtvKvUCJwf6jvf4/edit?usp=sharing]이 문서[/url]에 정리되어 있습니다.
+
+[h1]자주 묻는 질문[/h1]
+
+[h2]어센션은 적의 행동에 어떤 영향을 미치나요?[/h2]
+기본적으로 적들은 Slay the Spire 1의 A17+ 행동 패턴을 사용합니다. 예를 들어, Gremlin Nob는 항상 2턴에 플레이어에게 Vulnerable을 부여한 뒤 강력한 공격 2회를 날립니다. 적들의 체력/공격력은 Slay the Spire 1의 최솟값을 사용하지만, 강인한 적/치명적인 적 어센션이 활성화되면 Slay the Spire 1의 최댓값을 사용합니다. 이해가 되셨으면 좋겠습니다! 기본적으로 적이 더 강하고, 최고 어센션에서는 원작의 A19+와 동일합니다.
+
+[h2]이 모드에 Slay the Spire 1의 Act 4가 추가되나요? 아니라면 추후 추가될 예정인가요?[/h2]
+아니요, 둘 다 아닙니다. Slay the Spire 2 자체의 Act 4가 추가되기 전까지는 추가하고 싶지 않고, 게다가 [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3747537811]다른 모더가 이미 추가했습니다.[/url]
+
+[h2]이 모드는 왜 Slay the Spire 2의 메인 브랜치를 지원하지 않나요?[/h2]
+시간과 에너지가 무한하다면 Acts from the Past의 두 가지 버전을 유지하겠지만... 그렇지 않습니다. 제 일정상 하나의 버전을 유지하는 것이 훨씬 현실적이고, 격주로 흥미로운 변경 사항이 추가되는 브랜치가 더 재미있기 때문에 그쪽을 선택했습니다.
+
+[h2]이 모드 제작에 AI가 사용되었나요?[/h2]
+네. 이 모드에는 AI가 작성한 코드와 셰이더가 포함되어 있습니다. 또한, 비영어 번역의 대부분은 사람이 했지만, 소소한 변경 사항의 경우 번역가분들을 일일이 찾아 번거롭게 하는 대신 AI를 사용할 수 있습니다.
+
+[h2]Acts from the Past의 향후 계획은 무엇인가요?[/h2]
+일반적인 유지보수와 리밸런스 모드의 밸런스 조정이 주요 관심사입니다. 또한 교체하고 싶은 임시 아트가 많지만, 이를 위해서는 관심 있는 아티스트가 필요합니다. AI로 생성된 이미지는 이 모드에 사용되지 않을 것임을 참고해 주세요.
+
+[h2]이 모드의 코드를 제 프로젝트에 사용해도 되나요?[/h2]
+물론이죠! [url=https://github.com/Cany0udance/ActsFromThePast]GitHub[/url]에 있는 코드를 자유롭게 참고하거나 .pck를 디컴파일해서 에셋을 활용하셔도 됩니다. 단, 이 모드를 그대로 재업로드하거나 리메이크하는 것은 안 됩니다. 크레딧 표기도 필수는 아닙니다(해주시면 감사하겠지만). 제 가장 큰 바람은 모더들이 멋진 것들을 최대한 쉽게 만들 수 있도록 하는 것입니다!
+
+[h1]추가 크레딧[/h1]
+[list]
+[*][b]Nitablade[/b] — 러시아어 번역
+[*][b]snumodder[/b] — 한국어 번역
+[*][b]Sashimi_knife[/b] — 일본어 번역
+[*][b]floca[/b] — 브라질 포르투갈어 번역
+[*][b]jjkkllike & ImLingCheng[/b] — 중국어 간체 번역
+[*][b]flounder[/b] — Blood Bank 유물 아트 제공
+[*][b]Book & Ajama[/b] — 전반적인 지원
+[*][b]Aurora[/b] — 출시 후 핵심 지원
+[/list]

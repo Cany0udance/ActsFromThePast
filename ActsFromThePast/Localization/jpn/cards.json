@@ -1,0 +1,18 @@
+{
+  "ACTSFROMTHEPAST-BITE.description": "{Damage:diff()} ダメージを与える。 \n HPを {Heal:diff()} 回復する。",
+  "ACTSFROMTHEPAST-BITE.title": "噛みつき",
+  "ACTSFROMTHEPAST-JAX.description": "HPを{HpLoss:diff()}失う。 \n 筋力 {StrengthPower:diff()} を得る。",
+  "ACTSFROMTHEPAST-JAX.title": "J.A.X.",
+  "ACTSFROMTHEPAST-MADNESS.description": "この戦闘中、手札のランダムなカード1枚のコストを0にする。",
+  "ACTSFROMTHEPAST-MADNESS.title": "狂気",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.description": "この[red]呪い[/red]から逃れるすべはない。",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.title": "死霊の呪い",
+  "ACTSFROMTHEPAST-PAIN.description": "このカードが手札にある時、カードをプレイするたび{HpLoss:diff()} HPを失う。",
+  "ACTSFROMTHEPAST-PAIN.title": "痛み",
+  "ACTSFROMTHEPAST-PARASITE.description": "デッキから除去、または変化した時、最大HPを3失う。",
+  "ACTSFROMTHEPAST-PARASITE.title": "寄生",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.description": "ダメージを{Damage:diff()}与える。\n致命時、このカードのダメージを恒久的に{Increase:diff()}増加する。",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.title": "儀式の短剣",
+  "ACTSFROMTHEPAST-THE_BOX.title": "箱",
+  "ACTSFROMTHEPAST-THE_BOX.description": "ショップでデッキから除去された時、そのショップでの次の買い物が無料になる。"
+}

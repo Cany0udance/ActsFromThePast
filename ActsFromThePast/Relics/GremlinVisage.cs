@@ -30,13 +30,17 @@ public sealed class GremlinVisage : CustomRelicModel
     {
         if (room is not CombatRoom)
             return;
-
+    
         Flash();
-        await PowerCmd.Apply<WeakPower>(
+    
+        var power = await PowerCmd.Apply<WeakPower>(
             new ThrowingPlayerChoiceContext(),
             Owner.Creature,
             DynamicVars.Weak.BaseValue,
             Owner.Creature,
             null);
+    
+        if (power != null)
+            power.SkipNextDurationTick = false;
     }
 }

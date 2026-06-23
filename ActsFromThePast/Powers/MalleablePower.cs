@@ -1,6 +1,7 @@
 ﻿using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -35,6 +36,8 @@ public sealed class MalleablePower : CustomPowerModel
         return Task.CompletedTask;
     }
 
+    private decimal _pendingBlock = 0M;
+
     public override async Task AfterDamageReceived(
         PlayerChoiceContext choiceContext,
         Creature target,
@@ -53,16 +56,40 @@ public sealed class MalleablePower : CustomPowerModel
             return;
         if (target.CurrentHp <= 0)
             return;
-
-        Flash();
-        await CreatureCmd.GainBlock(Owner, (decimal)Amount, ValueProp.Unpowered, null);
+    
+        _pendingBlock += Amount;
         await PowerCmd.ModifyAmount(choiceContext, this, 1, null, null);
     }
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterAttack(
+        PlayerChoiceContext choiceContext,
+        AttackCommand command)
+    {
+        if (_pendingBlock <= 0)
+            return;
+    
+        Flash();
+        await CreatureCmd.GainBlock(
+            Owner, _pendingBlock, ValueProp.Unpowered, null);
+        _pendingBlock = 0M;
+    }
+
+    public override async Task AfterSideTurnEnd(
+        PlayerChoiceContext choiceContext,
+        CombatSide side,
+        IEnumerable<Creature> participants)
     {
         if (side != Owner.Side)
             return;
+    
+        if (_pendingBlock > 0)
+        {
+            Flash();
+            await CreatureCmd.GainBlock(
+                Owner, _pendingBlock, ValueProp.Unpowered, null);
+            _pendingBlock = 0M;
+        }
+    
         int baseAmount = (int)DynamicVars[_baseAmountKey].BaseValue;
         if (Amount != baseAmount)
         {

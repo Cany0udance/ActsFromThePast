@@ -1,5 +1,5 @@
 {
-  "ACTSFROMTHEPAST.mod_title": "Acts From The Past",
+  "ACTSFROMTHEPAST.mod_title": "Acts from the Past",
   "ACTSFROMTHEPAST-REBALANCED_MODE.title": "Ре-баланс старых актов",
   "ACTSFROMTHEPAST-REBALANCED_MODE.hover.desc": "Добавляет ре-баланс старого контента под реалии Slay the Spire 2. На данный момент изменяет только События.\n\nОтключено по умолчанию (но рекомедовано к использованию!).",
   "ACTSFROMTHEPAST-ALLOW_NON_LEGACY_SHARED_EVENTS_IN_LEGACY_ACTS.title": "Разрешить совместные События из StS 2 в Старых актах",  "ACTSFROMTHEPAST-ALLOW_NON_LEGACY_SHARED_EVENTS_IN_LEGACY_ACTS.hover.desc": "Когда включено, совместные События из Slay the Spire 2 и сторонних модов смогут появляться в Старых актах.\n\nВключено по умолчанию.",	"ACTSFROMTHEPAST-ALLOW_LEGACY_SHARED_EVENTS_IN_NON_LEGACY_ACTS.title": "Разрешить совместные События из StS 1 в Обычных актах",	"ACTSFROMTHEPAST-ALLOW_LEGACY_SHARED_EVENTS_IN_NON_LEGACY_ACTS.hover.desc": "Когда включено, совместные События из Slay the Spire 1 смогут появляться в Обычных актах StS 2 и актах, добавленных сторонними модами.\n\nОтключено по умолчанию.",

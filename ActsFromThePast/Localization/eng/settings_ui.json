@@ -1,5 +1,5 @@
 {
-	  "ACTSFROMTHEPAST.mod_title": "Acts From The Past",
+	  "ACTSFROMTHEPAST.mod_title": "Acts from the Past",
 		"ACTSFROMTHEPAST-REBALANCED_MODE.title": "Rebalanced Mode",
 	"ACTSFROMTHEPAST-REBALANCED_MODE.hover.desc": "Rebalances legacy content to better match Slay the Spire 2's environment. Currently only targets events.\n\nDisabled by default (but it's recommended to try it out!).",
 	"ACTSFROMTHEPAST-ALLOW_NON_LEGACY_SHARED_EVENTS_IN_LEGACY_ACTS.title": "Allow Non-Legacy Shared Events in Legacy Acts",

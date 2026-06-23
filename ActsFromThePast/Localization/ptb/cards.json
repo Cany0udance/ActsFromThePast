@@ -1,0 +1,18 @@
+{
+  "ACTSFROMTHEPAST-BITE.description": "Causa {Damage:diff()} de dano.\nCura {Heal:diff()} de PV.",
+  "ACTSFROMTHEPAST-BITE.title": "Mordida",
+  "ACTSFROMTHEPAST-JAX.description": "Perde {HpLoss:diff()} de PV.\nGanha {StrengthPower:diff()} de [gold]Força[/gold].",
+  "ACTSFROMTHEPAST-JAX.title": "J.A.X.",
+  "ACTSFROMTHEPAST-MADNESS.description": "Torna uma carta aleatória na sua [gold]Mão[/gold] gratuita para jogar neste combate.",
+  "ACTSFROMTHEPAST-MADNESS.title": "Loucura",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.description": "Não há escapatória desta [red]Maldição[/red].",
+  "ACTSFROMTHEPAST-NECRONOMICURSE.title": "Necromaldição",
+  "ACTSFROMTHEPAST-PAIN.description": "Se esta carta estiver na sua [gold]Mão[/gold], sempre que jogar uma carta, perca {HpLoss:diff()} de PV.",
+  "ACTSFROMTHEPAST-PAIN.title": "Dor",
+  "ACTSFROMTHEPAST-PARASITE.description": "Se for [gold]Transformada[/gold] ou removida do seu [gold]Baralho[/gold], perde 3 de PV Máx.",
+  "ACTSFROMTHEPAST-PARASITE.title": "Parasita",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.description": "Causa {Damage:diff()} de dano.\nSe for [gold]Fatal[/gold], aumenta permanentemente o dano desta carta em {Increase:diff()}.",
+  "ACTSFROMTHEPAST-RITUAL_DAGGER.title": "Adaga Ritual",
+  "ACTSFROMTHEPAST-THE_BOX.title": "A Caixa",
+  "ACTSFROMTHEPAST-THE_BOX.description": "Se for removida do seu [gold]Baralho[/gold] em uma sala de loja, sua próxima compra na loja é gratuita."
+}

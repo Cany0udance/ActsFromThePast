@@ -1,0 +1,13 @@
+{
+  "ACTSFROMTHEPAST.mod_title": "Acts from the Past",
+  "ACTSFROMTHEPAST-REBALANCED_MODE.title": "再バランス調整モード",
+  "ACTSFROMTHEPAST-REBALANCED_MODE.hover.desc": "過去のコンテンツをSlay the Spire 2の環境に合わせて再調整します。現在はイベントのみが対象です。\n\n初期設定では無効化されています。（ですが、有効化して試してみることをお勧めします！）",
+  "ACTSFROMTHEPAST-ALLOW_NON_LEGACY_SHARED_EVENTS_IN_LEGACY_ACTS.title": "過去のアクトで通常イベントを許可",
+  "ACTSFROMTHEPAST-ALLOW_NON_LEGACY_SHARED_EVENTS_IN_LEGACY_ACTS.hover.desc": "有効な場合、Slay the Spire 2や他のMODの通常イベントが過去のアクトでも発生するようになります。\n\n初期設定では有効化されています。",
+  "ACTSFROMTHEPAST-ALLOW_LEGACY_SHARED_EVENTS_IN_NON_LEGACY_ACTS.title": "通常の章で過去のイベントを許可",
+  "ACTSFROMTHEPAST-ALLOW_LEGACY_SHARED_EVENTS_IN_NON_LEGACY_ACTS.hover.desc": "有効な場合、Acts From The Pastによって追加されたイベントが通常の章（ゲーム本編や他のMODの章）でも発生するようになります。\n\n初期設定では無効化されています。",
+  "ACTSFROMTHEPAST-DARV_ONLY_IN_LEGACY_ACTS.title": "過去のアクトではダーヴのみ出現",
+  "ACTSFROMTHEPAST-DARV_ONLY_IN_LEGACY_ACTS.hover.desc": "「都市」および「彼方」でエンシェントが常にダーヴになるようにします。これにより、Slay the Spire 1のボスレリックシステムをより忠実に再現します。\n\nこの設定は[gold]Act Toggler[/gold] MODと併用して動かすことを推奨します。\n\n初期設定では無効化されています。",
+  "ACTSFROMTHEPAST-LEGACY_ENEMIES_GIVE_CLASSIC_SLIMED.title": "過去の敵からクラシック版のスライムを得る",
+  "ACTSFROMTHEPAST-LEGACY_ENEMIES_GIVE_CLASSIC_SLIMED.hover.desc": "Acts From The Pastの敵から生成されるカード[green]スライム[/green]に「カードを1枚引く」効果がないクラシック版にします。これはSlay the Spire 1での[green]スライム[/green]の仕様と一致します。\n\n初期設定では無効化されています。"
+}

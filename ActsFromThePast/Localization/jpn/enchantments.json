@@ -1,0 +1,11 @@
+{
+  "ACTSFROMTHEPAST-BURN_BRIGHT.title": "輝く燃焼",
+  "ACTSFROMTHEPAST-BURN_BRIGHT.description": "このカードのアタックダメージは2倍になり、[blue]5[/blue]回の戦闘の後に[gold]デッキ[/gold]から除去される。",
+  "ACTSFROMTHEPAST-BURN_BRIGHT.extraCardText": "戦闘{Combats}回後にデッキから除去される。",
+  "ACTSFROMTHEPAST-FEARFUL.title": "恐れ",
+  "ACTSFROMTHEPAST-FEARFUL.description": "このカードから得る[gold]ブロック[/gold]を3倍にする。このカードがプレイされた時、[blue]1[/blue]の[gold]弱体[/gold]を得る。",
+  "ACTSFROMTHEPAST-FEARFUL.extraCardText": "弱体1を得る。",
+  "ACTSFROMTHEPAST-HAUNTED.title": "憑依",
+  "ACTSFROMTHEPAST-HAUNTED.description": "このカードを引くたび、[purple]反響[/purple]を得る。このカードがプレイされた時、[blue]1[/blue]の[gold]無形[/gold]を得る。",
+  "ACTSFROMTHEPAST-HAUNTED.extraCardText": "このカードを引くたび、反響を得る。\n無形1を得る。"
+}

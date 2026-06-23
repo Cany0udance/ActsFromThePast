@@ -1,0 +1,11 @@
+{
+  "ACTSFROMTHEPAST-BURN_BRIGHT.title": "Brilho Intenso",
+  "ACTSFROMTHEPAST-BURN_BRIGHT.description": "O dano de ataque desta carta é dobrado e ela é removida do seu [gold]Baralho[/gold] após [blue]5[/blue] combates.",
+  "ACTSFROMTHEPAST-BURN_BRIGHT.extraCardText": "Removida do seu Baralho após {Combats} {Combats:plural:combate|combates}.",
+  "ACTSFROMTHEPAST-FEARFUL.title": "Medroso",
+  "ACTSFROMTHEPAST-FEARFUL.description": "Triplica o [gold]Bloqueio[/gold] recebido por esta carta. Quando esta carta for jogada, ganhe [blue]1[/blue] de [gold]Vulnerável[/gold].",
+  "ACTSFROMTHEPAST-FEARFUL.extraCardText": "Ganha 1 de Vulnerável.",
+  "ACTSFROMTHEPAST-HAUNTED.title": "Assombrado",
+  "ACTSFROMTHEPAST-HAUNTED.description": "Sempre que comprar esta carta, ganhe [purple]Zumbido[/purple]. Quando esta carta for jogada, ganhe [blue]1[/blue] de [gold]Intangível[/gold].",
+  "ACTSFROMTHEPAST-HAUNTED.extraCardText": "Sempre que comprar esta carta, ganhe Zumbido.\nGanha 1 de Intangível."
+}

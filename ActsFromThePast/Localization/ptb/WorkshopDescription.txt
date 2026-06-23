@@ -1,0 +1,67 @@
+﻿[h1]IMPORTANTE![/h1]
+[list]
+[*]Acts from the Past ainda não está finalizado! O mod ainda tem coisas como efeitos visuais e de áudio provisórios (placeholders), lógica faltando em alguns lugares, e mais.
+[*]Você deve estar no [b]ramo beta (beta branch)[/b] do Slay the Spire 2 se quiser jogar com o Acts from the Past.
+[*]Acts from the Past tem suporte para Inglês, Chinês Simplificado, Russo, Coreano e Português (BR). Se você deseja corrigir ou contribuir com uma tradução, por favor, consulte os [url=[https://github.com/Cany0udance/ActsFromThePast/tree/main/ActsFromThePast/Localization](https://github.com/Cany0udance/ActsFromThePast/tree/main/ActsFromThePast/Localization)]arquivos de localização[/url]. Sinta-se à vontade para fazer um pull request para o repositório no Git ou me enviar os arquivos de outra forma.
+[*]Se você quiser jogar APENAS com Exórdio/A Cidade/O Além, por favor, instale também o [url=[https://steamcommunity.com/sharedfiles/filedetails/?id=3737158447](https://steamcommunity.com/sharedfiles/filedetails/?id=3737158447)]Act Toggler[/url].
+[*]Para jogar com o Acts from the Past no multiplayer, TODOS os jogadores devem ter as mesmas configurações (configs).
+[/list]
+
+[h1]Acts From The Past[/h1]
+Acts from the Past é uma adaptação (port) em desenvolvimento dos Atos do Slay the Spire 1, incluindo Exórdio, A Cidade e O Além. Esses atos são adicionados à seleção de atos do jogo base através do CustomActModel do BaseLib. O mod também inclui todos os eventos do primeiro jogo, com exceção de "Um Recado Para Você Mesmo" (A Note For Yourself). Você também pode esperar melhorias visuais em vários inimigos!
+
+Embora o objetivo deste mod seja adaptar fielmente o conteúdo do Slay the Spire 1, eu me adiantei e fiz algumas alterações a meu próprio critério. Algumas delas incluem:
+[list]
+[*]Os Sombrios (Darklings) agora estão [b]apenas[/b] no grupo de encontros fáceis de O Além, em vez de estarem nos grupos de encontros fáceis E difíceis.
+[*]A Pilha de Lixo (Trash Heap) pode ser encontrada em qualquer ato do StS1.
+[*]Os encontros não possuem mais "pesos", o que significa que você tem a mesma probabilidade de encontrar qualquer... encontro.
+[*]O Explosivo (Exploder) não tem mais o poder Explosivo. Em vez disso, ele tem uma intenção de "Golpe Mortal", semelhante aos inimigos Bomba de Gás e Gigante da Cachoeira do jogo base. Tecnicamente, isso torna o Explosivo mais fácil, já que o seu movimento de explosão pode ser mitigado com Fraqueza, mas né.
+[/list]
+Existem algumas outras pequenas mudanças, mas essas são as maiores que afetam a jogabilidade que eu consigo lembrar.
+
+(ah é, e este mod também tem suporte para o mod [url=[https://steamcommunity.com/sharedfiles/filedetails/?id=3745864998](https://steamcommunity.com/sharedfiles/filedetails/?id=3745864998)]Googly Eyes[/url])
+
+[h1]Modo Rebalanceado[/h1]
+Incluído nas configurações está um ambicioso Modo Rebalanceado. A intenção do Modo Rebalanceado é retrabalhar os eventos do Slay the Spire 1 para combinarem melhor com as filosofias de design que eu observei que foram estabelecidas pelos eventos do Slay the Spire 2, que são mais ou menos as seguintes:
+[list]
+[*]Se você entrar em um evento, ALGUMA COISA vai mudar. Isso significa que não há mais botões "Sair" ou qualquer coisa do tipo que apenas permita que você prossiga para a próxima sala.
+[*]Eventos no Slay the Spire 2 são geralmente mais poderosos do que os eventos do Slay the Spire 1.
+[*]Eventos no Slay the Spire 2 são geralmente mais "empolgantes", o que significa que há oportunidades para coisas como Encantamentos.
+[/list]
+Embora o Modo Rebalanceado venha desativado por padrão, eu incentivo você a ativá-lo e me dizer o que achou! :)
+
+Além disso, embora eu também incentive você a jogar às cegas, se quiser apenas ver as mudanças que o Modo Rebalanceado faz, elas estão listadas [url=[https://docs.google.com/document/d/1QYCLq_Cke5DHNGgrV3XWfMO-njLcGtvKvUCJwf6jvf4/edit?usp=sharing](https://docs.google.com/document/d/1QYCLq_Cke5DHNGgrV3XWfMO-njLcGtvKvUCJwf6jvf4/edit?usp=sharing)]neste documento[/url].
+
+[h1]Perguntas Frequentes (FAQ)[/h1]
+[h2]Como a Ascensão afeta o comportamento dos inimigos?[/h2]
+Por padrão, os inimigos possuem seus conjuntos de movimentos da Ascensão 17+ (A17+) do Slay the Spire 1. Isso significa que o Gremlin Nob, por exemplo, sempre aplicará Vulnerável ao jogador no turno 2, seguido por 2 golpes fortes. Os inimigos também têm seus menores valores de vida/dano do Slay the Spire 1, mas se as Ascensões Inimigos Resistentes/Inimigos Mortais (Tough Enemies/Deadly Enemies) estiverem ativadas, então eles terão os seus maiores valores de vida/dano do Slay the Spire 1. Espero que isso faça sentido! Basicamente, os inimigos são mais difíceis por padrão, e na Ascensão mais alta, eles se equiparam a como eram na A19+ no jogo original.
+
+[h2]Este mod adiciona o Ato 4 do Slay the Spire 1? Se não, ele será incluído futuramente?[/h2]
+Não e não. Eu não gostaria de adicionar o Ato 4 até que o próprio Ato 4 do Slay the Spire 2 seja adicionado e, além disso, [url=[https://steamcommunity.com/sharedfiles/filedetails/?id=3747537811](https://steamcommunity.com/sharedfiles/filedetails/?id=3747537811)]outro modder já o adicionou.[/url]
+
+[h2]Onde posso participar de discussões mais ativas sobre este mod?[/h2]
+Sinta-se à vontade para entrar no servidor do Discord de Slay the Spire. Especificamente, o Acts from the Past tem sua própria thread na seção #modding-forum.
+
+[h2]Por que este mod não tem suporte ao ramo principal (main branch) do Slay the Spire 2?[/h2]
+Se eu tivesse tempo e energia ilimitados, eu manteria duas versões de Acts from the Past, mas... eu não tenho. Com minha agenda, é muito mais viável manter uma única versão, e eu opto por manter a versão pela qual estou mais animado, que é o ramo que recebe mudanças frequentes, experimentais e interessantes.
+
+[h2]IA foi usada na criação deste mod?[/h2]
+Sim. Este mod possui código e shaders que foram escritos por IA. Além disso, embora a maior parte da tradução não-inglesa tenha sido feita por humanos, para pequenas mudanças no mod eu posso usar IA para isso, em vez de contatar e incomodar os tradutores individuais.
+
+[h2]Quais são os planos futuros para o Acts from the Past?[/h2]
+Manutenção geral e o balanceamento do Modo Rebalanceado são minhas preocupações principais. Além disso, há muita arte provisória (placeholder) que eu gostaria de substituir, mas isso exigiria que artistas demonstrassem interesse em fazer isso. Por favor, note que imagens geradas por IA não serão aceitas para este mod.
+
+[h2]Posso usar o código deste mod para os meus próprios projetos?[/h2]
+Com certeza! Sinta-se à vontade para usar como referência o que está no [url=[https://github.com/Cany0udance/ActsFromThePast](https://github.com/Cany0udance/ActsFromThePast)]GitHub[/url] e/ou descompilar o .pck e referenciar seus assets, contanto que o seu mod não seja, tipo, um reupload ou um remake deste mod. Você não precisa nem me dar os créditos (embora fosse legal), meu maior desejo é tornar o mais fácil possível para os modders criarem coisas legais!
+
+[h1]Créditos Adicionais[/h1]
+[list]
+[*][b]Nitablade[/b] - Tradução para Russo
+[*][b]snumodder[/b] - Tradução para Coreano
+[*][b]Sashimi_knife[/b] - Tradução para Japonês
+[*][b]floca[/b] - Tradução para Português Brasileiro
+[*][b]jjkkllike & ImLingCheng[/b] - Tradução para Chinês Simplificado
+[*][b]flounder[/b] - Forneceu a arte para a relíquia Banco de Sangue
+[*][b]Book & Ajama[/b] - Suporte geral
+[*][b]Aurora[/b] - Suporte crítico pós-lançamento
+[/list]
