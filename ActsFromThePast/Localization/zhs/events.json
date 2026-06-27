@@ -410,7 +410,7 @@
   "ACTSFROMTHEPAST-MUSHROOMS.title": "催眠彩菇",
 
   "ACTSFROMTHEPAST-MYSTERIOUS_SPHERE.loss": "{character}打开了[gold][b]{event}[/b][/gold]，里面却是死亡。",
-  "ACTSFROMTHEPAST-MYSTERIOUS_SPHERE.pages.DISTRACT.description": "你躲到附近的掩体后，捡起一块恰到好处的[gold]石头[/gold]，朝远离那个区域的方向扔去。\n哨兵们听到声响，你赶紧跑到球体前翻找。\n由于搜索时间有限，你在里面找到了一些[blue]东西[/blue]。",
+  "ACTSFROMTHEPAST-MYSTERIOUS_SPHERE.pages.DISTRACT.description": "你躲到附近的掩体后，捡起一块大小适中的[gold]石头[/gold]，朝离那片区域较远的方向扔去。\n看守们被声响吸引离去，你赶紧跑到圆球前进行翻找。\n由于搜索时间有限，你只在里面找到了些[blue]东西[/blue]。",
   "ACTSFROMTHEPAST-MYSTERIOUS_SPHERE.pages.INITIAL.description": "在四周混乱的地形中间，一个骨质圆球伫立在地上，似乎包裹着一样神秘的发光物体。\n你很好奇里面有什么东西，但你注意到圆球周围有一些哨兵正在看守。",
   "ACTSFROMTHEPAST-MYSTERIOUS_SPHERE.pages.INITIAL.options.LEAVE.description": "",
   "ACTSFROMTHEPAST-MYSTERIOUS_SPHERE.pages.INITIAL.options.LEAVE.title": "离开",
@@ -468,7 +468,7 @@
   "ACTSFROMTHEPAST-OMINOUS_FORGE.pages.RUMMAGE.description": "你决定看看能不能找到什么其他有用的东西。在掀开不少盖布、翻开不少箱子和在角落四处搜寻之后，你找到了一个满是灰尘的[gold][sine]遗物[/sine][/gold]！",
   "ACTSFROMTHEPAST-OMINOUS_FORGE.pages.LEAVE.description": "看来没什么能用上的东西，你从来路退了出去。熔炉中的火焰在墙上投射下了[purple][sine]诡异的影子[/sine][/purple]……",
 
-  "ACTSFROMTHEPAST-PLEADING_VAGRANT.pages.INITIAL.description": "你想要从一群披着斗篷的人旁边偷偷潜行过去，其中一个跑到了你面前。\n“你能给我点儿什么吗，朋友？ 求求你了……一点[gold]小钱[/gold]就好？”\n“我只是需要找个地方过夜，我身上有财宝可以交换……”\n他看起来有点疯疯癫癫的，但似乎并不危险。",
+  "ACTSFROMTHEPAST-PLEADING_VAGRANT.pages.INITIAL.description": "你想要从一群披着斗篷的人旁边偷偷潜行过去，其中一个跑到了你面前。\n“你能给我点儿什么吗，朋友？求求你了……一点[gold]小钱[/gold]就好？”\n“我只是需要找个地方过夜，我身上有财宝可以交换……”\n他看起来有点疯疯癫癫的，但似乎并不危险。",
   "ACTSFROMTHEPAST-PLEADING_VAGRANT.pages.INITIAL.options.LEAVE.description": "",
   "ACTSFROMTHEPAST-PLEADING_VAGRANT.pages.INITIAL.options.LEAVE.title": "离开",
   "ACTSFROMTHEPAST-PLEADING_VAGRANT.pages.INITIAL.options.PAY_GOLD.description": "给予[blue]{GoldCost}[/blue][gold]金币[/gold]。获得一件随机[gold]遗物[/gold]。",
