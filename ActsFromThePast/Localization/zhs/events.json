@@ -451,7 +451,7 @@
   "ACTSFROMTHEPAST-OLD_BEGGAR.pages.INITIAL.options.LEAVE.title": "离开",
   "ACTSFROMTHEPAST-OLD_BEGGAR.pages.INITIAL_REBALANCED.options.KEEP_WALKING.description": "为一张随机牌[gold]附魔[/gold]：[purple]{Enchantment}[/purple][blue]{EnchantmentAmount}[/blue]。将[red]笨拙[/red]加入你的[gold]牌组[/gold]。",
   "ACTSFROMTHEPAST-OLD_BEGGAR.pages.INITIAL_REBALANCED.options.KEEP_WALKING.title": "继续走",
-  "ACTSFROMTHEPAST-OLD_BEGGAR.pages.KEEP_WALKING.description": "你不想放弃辛苦赚来的 [gold]金币[/gold]，[purple]迅速[/purple] 转身想逃。然而，当你远离那个[blue]乞丐[/blue]时，却被自己的脚绊倒了。\n\n真丢脸。",
+  "ACTSFROMTHEPAST-OLD_BEGGAR.pages.KEEP_WALKING.description": "你不想放弃辛苦赚来的[gold]金币[/gold]，[purple]迅速[/purple]转身想逃。然而，当你远离那个[blue]乞丐[/blue]时，却被自己的脚绊倒了。\n\n真丢脸。",
   "ACTSFROMTHEPAST-OLD_BEGGAR.pages.LEAVE.description": "乞丐在你经过时低头看着地板，喃喃自语：\n“你永远也成就不了什么事情的……永远不会。”",
   "ACTSFROMTHEPAST-OLD_BEGGAR.pages.REMOVE_CARD.description": "[jitter]“希望你这次能做得更好啊，朋友！”[/jitter] 他冲你喊着。\n你玩味着这句话中暗藏的意思，继续向前出发。",
   "ACTSFROMTHEPAST-OLD_BEGGAR.title": "老乞丐",
