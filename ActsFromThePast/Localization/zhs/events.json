@@ -453,7 +453,7 @@
   "ACTSFROMTHEPAST-OLD_BEGGAR.pages.INITIAL_REBALANCED.options.KEEP_WALKING.title": "继续走",
   "ACTSFROMTHEPAST-OLD_BEGGAR.pages.KEEP_WALKING.description": "你不想放弃辛苦赚来的[gold]金币[/gold]，[purple]迅速[/purple]转身想逃。然而，当你远离那个[blue]乞丐[/blue]时，却被自己的脚绊倒了。\n\n真丢脸。",
   "ACTSFROMTHEPAST-OLD_BEGGAR.pages.LEAVE.description": "乞丐在你经过时低头看着地板，喃喃自语：\n“你永远也成就不了什么事情的……永远不会。”",
-  "ACTSFROMTHEPAST-OLD_BEGGAR.pages.REMOVE_CARD.description": "[jitter]“希望你这次能做得更好啊，朋友！”[/jitter] 他冲你喊着。\n你玩味着这句话中暗藏的意思，继续向前出发。",
+  "ACTSFROMTHEPAST-OLD_BEGGAR.pages.REMOVE_CARD.description": "[jitter]“希望你这次能做得更好啊，朋友！”[/jitter]他冲你喊着。\n你玩味着这句话中暗藏的意思，继续向前出发。",
   "ACTSFROMTHEPAST-OLD_BEGGAR.title": "老乞丐",
 
   "ACTSFROMTHEPAST-OMINOUS_FORGE.title": "邪恶熔炉",
@@ -561,7 +561,7 @@
   "ACTSFROMTHEPAST-SENSORY_STONE.title": "感知石",
 
   "ACTSFROMTHEPAST-SHINING_LIGHT.loss": "[gold][b]{event}[/b][/gold]对{character}来说过于耀眼。",
-  "ACTSFROMTHEPAST-SHINING_LIGHT.pages.BASK.description": "站在[gold]光芒[/gold]的照射的范围之中, 你[sine]展开[/sine]双臂，闭上眼睛，沉浸在[purple]迷人的[/purple]光芒之中, 感受着[sine]温暖[/sine]的光芒。\n\n一段时间后，你感到[blue]精力充沛[/blue]，就像是在需要被打醒的时候被人好好地抽了一个耳光。",
+  "ACTSFROMTHEPAST-SHINING_LIGHT.pages.BASK.description": "站在[gold]光芒[/gold]照射的范围之中, 你[sine]展开[/sine]双臂，闭上双眼，沉浸在[purple]迷人的[/purple]光芒之中,感受着[sine]温暖[/sine]的光芒。\n\n一段时间后，你感到[blue]精力充沛[/blue]，就像是在需要被打醒的时候被人好好地抽了一个耳光。",
   "ACTSFROMTHEPAST-SHINING_LIGHT.pages.ENTER.description": "你走进光柱，注意到光似乎被吸入了你的身体。\n这道光[red][jitter]热得发烫[/jitter][/red]！可是痛楚很快消失了。\n你觉得自己[blue]精神焕发[/blue]，就像是在需要被打醒的时候被人好好地抽了一个耳光。",
   "ACTSFROMTHEPAST-SHINING_LIGHT.pages.INITIAL.description": "你发现在房间中央围绕着[gold]一束很粗的光柱[/gold]。\n\n光柱上有着[sine]温暖而闪烁的美丽花纹[/sine]仿佛在邀请你进入。",
   "ACTSFROMTHEPAST-SHINING_LIGHT.pages.INITIAL.options.BASK.description": "为你牌组中的一张随机[gold]攻击[/gold]牌[gold]附魔[/gold]：[purple]炽热燃烧[/purple]。",
@@ -647,8 +647,8 @@
   "ACTSFROMTHEPAST-THE_MAUSOLEUM.pages.INITIAL_REBALANCED.options.PAY_RESPECTS.description": "失去[gold]{SacrificeRelic}[/gold]。获得[green]{MaxHpGain}[/green]点最大生命。",
   "ACTSFROMTHEPAST-THE_MAUSOLEUM.pages.INITIAL_REBALANCED.options.PAY_RESPECTS.title": "致敬",
   "ACTSFROMTHEPAST-THE_MAUSOLEUM.pages.LEAVE.description": "你决定不去打扰被遗忘的死者，继续赶路。",
-  "ACTSFROMTHEPAST-THE_MAUSOLEUM.pages.OPEN_CURSED.description": "你推开石棺，一股[purple][sine]黑雾[/sine][/purple]涌了出来，淹没了整个房间！石棺里没有实体，只有一件[gold][sine]遗物[/sine][/gold]。你拾起它重新上路， 并[red][jitter]剧烈地咳嗽起来[/jitter][/red]。",
-  "ACTSFROMTHEPAST-THE_MAUSOLEUM.pages.PAY_RESPECTS.description": "仔细审视后，你发现石棺底部排列着[blue]众多礼物[/blue]。躺在[gold]镶嵌宝石的棺材[/gold]中的人必定备受他人[purple]爱戴[/purple]。你[sine]情不自禁[/sine]地想留下自己的一份[gold]礼物[/gold]。\n\n将你的[gold]{SacrificeRelic}[/gold]与其他礼物放在一起时，你似乎听到了微弱的低语声。你觉得你可能[purple]幻听了[/purple]?",
+  "ACTSFROMTHEPAST-THE_MAUSOLEUM.pages.OPEN_CURSED.description": "你推开石棺，一股[purple][sine]黑雾[/sine][/purple]涌了出来，淹没了整个房间！石棺里没有实体，只有一件[gold][sine]遗物[/sine][/gold]。你拾起它重新上路，并[red][jitter]剧烈地咳嗽起来[/jitter][/red]。",
+  "ACTSFROMTHEPAST-THE_MAUSOLEUM.pages.PAY_RESPECTS.description": "仔细审视过后，你发现石棺底部排列着[blue]众多随礼[/blue]。躺在[gold]镶嵌宝石的石棺[/gold]中的人必定备受他人[purple]爱戴[/purple]。你[sine]情不自禁[/sine]地想留下自己的一份[gold]随礼[/gold]。\n\n将你的[gold]{SacrificeRelic}[/gold]与其他随礼放在一起时，你似乎听到了微弱的低语声。你觉得你可能[purple]幻听了[/purple]?",
   "ACTSFROMTHEPAST-THE_MAUSOLEUM.title": "陵墓",
 
   "ACTSFROMTHEPAST-THE_NEST.pages.INITIAL.description": "你看见一长串[blue][sine]戴着兜帽的人们[/sine][/blue]正鱼贯走进一座[purple]看起来没什么特别的大教堂。[/purple]",
