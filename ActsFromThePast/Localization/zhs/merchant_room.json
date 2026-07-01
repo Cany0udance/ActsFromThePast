@@ -1,6 +1,6 @@
 {
-  "ACTSFROMTHEPAST-MERCHANT.talk.openInventory.theBox.1": "Nice [gold]box[/gold]",
-  "ACTSFROMTHEPAST-MERCHANT.talk.openInventory.theBox.2": "Delivering supplies?",
-  "ACTSFROMTHEPAST-MERCHANT.talk.purchaseSuccess.theBox.1": "Next one's on the house.",
-  "ACTSFROMTHEPAST-MERCHANT.talk.purchaseSuccess.theBox.2": "Thaaaanks! Take something, just one."
+  "ACTSFROMTHEPAST-MERCHANT.talk.openInventory.theBox.1": "精致的[gold]盒子[/gold]",
+  "ACTSFROMTHEPAST-MERCHANT.talk.openInventory.theBox.2": "是在运送物资?",
+  "ACTSFROMTHEPAST-MERCHANT.talk.purchaseSuccess.theBox.1": "这份物品免单。",
+  "ACTSFROMTHEPAST-MERCHANT.talk.purchaseSuccess.theBox.2": "谢谢！拿点东西吧，随便哪一件都行。"
 }

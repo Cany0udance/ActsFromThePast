@@ -1,53 +1,53 @@
 ﻿[i]本描述由AI翻译。[/i]
 
-[h1]重要！[/h1]
+[h1]重点！[/h1]
 [list]
-[*]Acts from the Past 尚未完成！模组中仍然存在临时音效和视觉效果、部分逻辑缺失等问题。
-[*]游玩 Acts from the Past 需要使用 Slay the Spire 2 的[b]测试分支[/b]。
-[*]如果您想修正或贡献翻译，请参考[url=https://github.com/Cany0udance/ActsFromThePast/tree/main/ActsFromThePast/Localization]本地化文件[/url]。欢迎向 GitHub 仓库提交 pull request，或者直接将文件发送给我。
-[*]如果您只想游玩 Exordium/The City/The Beyond，请同时安装 [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3737158447]Act Toggler[/url] 模组。
-[*]在多人游戏中使用 Acts from the Past 时，所有玩家必须使用相同的配置设置。
+[*]往昔之章（Acts from the Past）尚未完成！模组中仍然存在临时音效和视觉效果、部分逻辑缺失等问题。
+[*]游玩 往昔之章（Acts from the Past） 需要使用《杀戮尖塔2》的[b]测试版分支[/b]。
+[*]如果您想修正或贡献翻译，请参考[url=https://github.com/Cany0udance/ActsFromThePast/tree/main/ActsFromThePast/Localization]本地化文件[/url]。欢迎向 GitHub 仓库提交 Pull Request，或者直接将文件发送给我。
+[*]如果您只想游玩 塔底/城市/深处，请同时安装 [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3737158447]Act Toggler[/url] 模组。
+[*]在多人游戏中使用 往昔之章 时，所有玩家必须使用相同的配置设置。
 [/list]
 
-[h1]Acts From The Past[/h1]
-Acts from the Past 是一个仍在开发中的模组，旨在移植 Slay the Spire 1 中的章节，包括 Exordium、The City 和 The Beyond。这些章节通过 BaseLib 的 CustomActModel 添加到基础游戏的章节池中。模组还包含了第一代游戏中的所有事件，A Note For Yourself 除外。此外，部分敌人还获得了视觉上的优化！
+[h1]往昔之章[/h1]
+往昔之章是一个仍在开发中的模组，旨在移植《杀戮尖塔1》中的章节，包括“塔底”、“城市”和“深处”。这些章节通过 BaseLib 的 CustomActModel 添加到基础游戏的章节池中。模组还包含了《杀戮尖塔1》中的所有事件，除了 “留给自己的讯息” 事件以外。此外，部分敌人还获得了视觉上的优化！
 
-虽然本模组的目标是忠实移植 Slay the Spire 1 的内容，但我还是根据自己的判断做了一些改动。主要包括：
+虽然本模组的目标是忠实移植《杀戮尖塔1》的内容，但我还是根据自己的判断做了一些改动。主要包括：
 [list]
-[*]Darklings 现在[b]仅[/b]出现在 The Beyond 的简单敌人池中，而不是同时出现在简单和困难敌人池中
-[*]Trash Heap 可以在任何 StS1 章节中遇到
-[*]Exploder 不再拥有 Explosive 能力。取而代之的是类似于基础游戏中 Gas Bomb 和 Waterfall Giant 的"Death Blow"意图。从技术上来说，这使得 Exploder 变得更简单了，因为它的爆炸攻击可以被 Weak 削弱，不过无所谓啦。
+[*]“小黑” 现在[b]仅[/b]出现在第三层 “深处” 的简单敌人池中，而不是同时出现在简单和困难敌人池中
+[*]“垃圾堆” 事件可以在任何《杀戮尖塔1》章节中遇到
+[*]“爆炸机” 不再拥有 “爆炸” 能力。取而代之的是类似于基础游戏中 “气态炸弹” 和 “瀑布巨兽” 的 “濒死一击” 意图。从技术上来说，这使得 “爆炸机” 变得更简单了，因为它的爆炸攻击可以被减益效果 “虚弱” 削弱，不过也无所谓啦。
 [/list]
 还有一些其他小改动，但以上是我能想到的对游戏玩法影响最大的几个。
 
 （对了，这个模组还支持 [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3745864998]Googly Eyes[/url] 模组）
 
 [h1]重平衡模式[/h1]
-配置选项中包含一个雄心勃勃的重平衡模式。重平衡模式的目标是重新设计 Slay the Spire 1 的事件，使其更符合我在 Slay the Spire 2 事件中观察到的设计理念，大致如下：
+配置选项中包含一个雄心勃勃的“重平衡模式”。“重平衡模式”的目标是重新设计了《杀戮尖塔1》的事件，使其更符合我在《杀戮尖塔2》事件中观察到的设计理念，大致如下：
 [list]
 [*]进入事件后，必须有所改变。不再有"离开"按钮或任何让你直接前往下一个房间的选项。
-[*]Slay the Spire 2 的事件总体上比 Slay the Spire 1 的事件更强力。
-[*]Slay the Spire 2 的事件总体上更"令人兴奋"，这意味着有机会获得附魔等内容。
+[*]《杀戮尖塔2》的事件总体上比《杀戮尖塔1》的事件更强力。
+[*]《杀戮尖塔2》的事件总体上更"令人兴奋"，这意味着有机会获得卡牌附魔等内容。
 [/list]
-重平衡模式默认关闭，但我鼓励您开启它并告诉我您的想法！:)
+“重平衡模式”默认关闭，但我鼓励您开启它并告诉我您对“重平衡模式”的想法！:)
 
-此外，虽然我也建议您盲玩体验，但如果您想提前查看重平衡模式的改动，它们都列在[url=https://docs.google.com/document/d/1QYCLq_Cke5DHNGgrV3XWfMO-njLcGtvKvUCJwf6jvf4/edit?usp=sharing]这份文档[/url]中。
+此外，虽然我也建议您盲玩体验，但如果您想提前查看“重平衡模式”的改动，它们都列在[url=https://docs.google.com/document/d/1QYCLq_Cke5DHNGgrV3XWfMO-njLcGtvKvUCJwf6jvf4/edit?usp=sharing]这份文档[/url]中。
 
 [h1]常见问题[/h1]
 
-[h2]飞升如何影响敌人行为？[/h2]
-默认情况下，敌人使用 Slay the Spire 1 中 A17+ 的行动模式。例如，Gremlin Nob 会在第2回合对玩家施加 Vulnerable，然后进行2次重击。敌人的生命值/伤害值使用 Slay the Spire 1 中的最低值，但如果启用了"强韧敌人"/"致命敌人"飞升，则使用 Slay the Spire 1 中的最高值。希望这样说清楚了！简单来说，敌人默认就更强，而在最高飞升下，它们与原版游戏 A19+ 的状态一致。
+[h2]进阶难度如何影响敌人行为？[/h2]
+默认情况下，敌人使用《杀戮尖塔1》中 A17+ 的行动模式。例如，“地精大块头” 会在第2回合对玩家施加 “激怒” 意图，然后进行2次重击。敌人的生命值/伤害值默认使用《杀戮尖塔1》中的最低值，但如果启用了"强韧敌人"/"致命敌人"进阶难度，则使用《杀戮尖塔1》中的最高值。希望这样说清楚了！简单来说，敌人默认就更强，而在最高进阶下，它们与原版游戏 A19+ 的状态一致。
 
-[h2]这个模组会添加 Slay the Spire 1 的第四章吗？如果不会，未来会添加吗？[/h2]
-不会，两个都不会。在 Slay the Spire 2 自己的第四章添加之前，我不打算添加第四章，而且[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3747537811]已经有其他模组作者添加了。[/url]
+[h2]这个模组会添加《杀戮尖塔1》的第四章吗？如果不会，未来会添加吗？[/h2]
+不会，两个都不会。在《杀戮尖塔2》自己的第四章添加之前，我不打算添加第四章，而且[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3747537811]已经有其他模组作者添加了。[/url]
 
-[h2]为什么这个模组不支持 Slay the Spire 2 的正式分支？[/h2]
-如果我有无限的时间和精力，我会同时维护两个版本的 Acts from the Past，但……我没有。以我的时间安排，维护一个版本要现实得多，而我选择维护让我更兴奋的那个版本——每两周都会有有趣更新的测试分支。
+[h2]为什么这个模组不支持《杀戮尖塔2》的正式分支？[/h2]
+如果我有无限的时间和精力，我会同时维护两个版本的 往昔之章，但……我没有。以我的时间安排，维护一个版本要现实得多，而我选择维护让我更兴奋的那个版本——每两周都会有有趣更新的测试分支。
 
 [h2]这个模组的制作过程中使用了AI吗？[/h2]
 是的。本模组中有 AI 编写的代码和着色器。此外，虽然大部分非英语翻译由人工完成，但对于模组的小幅改动，我可能会使用 AI 来处理，而不是每次都去打扰翻译人员。
 
-[h2]Acts from the Past 未来有什么计划？[/h2]
+[h2]往昔之章 未来有什么计划？[/h2]
 日常维护和重平衡模式的平衡调整是我的主要关注点。此外，模组中有很多临时美术素材需要替换，但这需要有兴趣的美术人员参与。请注意，本模组不接受 AI 生成的图像。
 
 [h2]我可以在自己的项目中使用这个模组的代码吗？[/h2]
@@ -59,7 +59,7 @@ Acts from the Past 是一个仍在开发中的模组，旨在移植 Slay the Spi
 [*][b]snumodder[/b] — 韩语翻译
 [*][b]Sashimi_knife[/b] — 日语翻译
 [*][b]floca[/b] — 巴西葡萄牙语翻译
-[*][b]jjkkllike & ImLingCheng[/b] — 简体中文翻译
+[*][b]jjkkllike & ImLingCheng & Entropy ManG0[/b] — 简体中文翻译
 [*][b]flounder[/b] — Blood Bank 遗物美术
 [*][b]Book & Ajama[/b] — 综合支持
 [*][b]Aurora[/b] — 发布后的关键支持
