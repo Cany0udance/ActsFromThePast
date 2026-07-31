@@ -111,8 +111,12 @@ public sealed class Exploder : CustomMonsterModel
         foreach (var target in targets.Where(t => t.IsAlive))
         {
             await CreatureCmd.Damage(
-                null, target, ExplodeDamage,
-                ValueProp.Move, null, null);
+                new ThrowingPlayerChoiceContext(),
+                target,
+                ExplodeDamage,
+                ValueProp.Move,
+                null,
+                null);
         }
 
         await CreatureCmd.Kill(Creature);

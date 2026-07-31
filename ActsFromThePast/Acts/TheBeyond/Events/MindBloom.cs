@@ -59,7 +59,7 @@ public sealed class MindBloom : CustomEventModel
             ModelDb.Encounter<MindBloomHexaghost>(),
             ModelDb.Encounter<MindBloomSlimeBoss>()
         };
-        var encounter = Rng.NextItem(bosses).ToMutable();
+        var encounter = Rng.NextItem(bosses);
         var rareRelic = RelicFactory.PullNextRelicFromFront(Owner, RelicRarity.Rare).ToMutable();
         var rewards = new List<Reward>
         {

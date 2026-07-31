@@ -143,7 +143,7 @@ public sealed class DeadAdventurer : CustomEventModel
         }
 
         EnterCombatWithoutExitingEvent(
-            CanonicalEncounter.ToMutable(),
+            CanonicalEncounter,
             rewards,
             false);
         return Task.CompletedTask;

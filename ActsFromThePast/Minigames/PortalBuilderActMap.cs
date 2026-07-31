@@ -10,6 +10,7 @@ public sealed class PortalBuilderActMap : ActMap
     private const int Middle = 3;
  
     public override MapPoint BossMapPoint { get; }
+    public override MapPoint? SecondBossMapPoint { get; }
     public override MapPoint StartingMapPoint { get; }
     protected override MapPoint?[,] Grid { get; }
  
@@ -63,6 +64,14 @@ public sealed class PortalBuilderActMap : ActMap
         {
             PointType = MapPointType.Boss
         };
+
+        if (originalMap.SecondBossMapPoint != null)
+        {
+            SecondBossMapPoint = new MapPoint(Middle, height + 1)
+            {
+                PointType = MapPointType.Boss
+            };
+        }
  
         MapPoint? previous = StartingMapPoint;
         var newVisited = new List<MapCoord>();
@@ -101,6 +110,8 @@ public sealed class PortalBuilderActMap : ActMap
  
         // Last node connects to boss
         previous.AddChildPoint(BossMapPoint);
+        if (SecondBossMapPoint != null)
+            BossMapPoint.AddChildPoint(SecondBossMapPoint);
  
         NewVisitedCoords = newVisited;
     }

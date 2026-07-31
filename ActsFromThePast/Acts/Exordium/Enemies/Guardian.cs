@@ -308,7 +308,12 @@ public sealed class Guardian : CustomMonsterModel
         await PowerCmd.Apply<ModeShiftPower>(new ThrowingPlayerChoiceContext(), Creature, _nextThreshold, Creature, null);
         if (Creature.Block > 0)
         {
-            await CreatureCmd.LoseBlock(Creature, Creature.Block);
+            await CreatureCmd.LoseBlock(
+                new ThrowingPlayerChoiceContext(),
+                Creature,
+                Creature.Block,
+                null
+            );
         }
 
         await CreatureCmd.TriggerAnim(Creature, "idle", 0.0f);

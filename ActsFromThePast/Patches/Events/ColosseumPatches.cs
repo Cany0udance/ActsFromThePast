@@ -14,7 +14,7 @@ public class ColosseumPatches
         typeof(ColosseumSecondEncounter)
     };
 
-    [HarmonyPatch(typeof(CombatManager), nameof(CombatManager.StartCombatInternal))]
+    [HarmonyPatch(typeof(CombatManager), "StartCombatInternal")]
     public class ReplayWriterFixPatch
     {
         public static void Prefix()

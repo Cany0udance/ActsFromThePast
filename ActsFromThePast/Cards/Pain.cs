@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -36,19 +37,20 @@ public sealed class Pain : CustomCardModel
     {
         if (cardPlay.Card == this)
             return;
-        
+    
         if (cardPlay.Card.Owner != Owner)
             return;
-
+    
         var hand = PileType.Hand.GetPile(Owner);
         if (!hand.Cards.Contains(this))
             return;
-
+    
         await CreatureCmd.Damage(
-            null,
+            new BlockingPlayerChoiceContext(),
             Owner.Creature,
             DynamicVars.HpLoss.BaseValue,
             ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move,
-            null, null);
+            (CardModel)this,
+            (CardPlay)null);
     }
 }

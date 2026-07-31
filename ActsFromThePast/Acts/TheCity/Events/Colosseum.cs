@@ -44,7 +44,7 @@ public sealed class Colosseum : CustomEventModel
     {
         _lastFight = FightPhase.Slavers;
         EnterCombatWithoutExitingEvent(
-            ModelDb.Encounter<ColosseumFirstEncounter>().ToMutable(),
+            ModelDb.Encounter<ColosseumFirstEncounter>(),
             Array.Empty<Reward>(),
             true);
         return Task.CompletedTask;
@@ -52,6 +52,9 @@ public sealed class Colosseum : CustomEventModel
 
     public override Task Resume(AbstractRoom room)
     {
+        _combatSynchronizer?.ResetState();
+        _combatSynchronizer?.InitializeForEvent(this);
+    
         if (ActsFromThePastConfig.RebalancedMode)
         {
             SetEventState(
@@ -87,7 +90,7 @@ public sealed class Colosseum : CustomEventModel
             new GoldReward(100, Owner)
         };
         EnterCombatWithoutExitingEvent(
-            ModelDb.Encounter<ColosseumSecondEncounter>().ToMutable(),
+            ModelDb.Encounter<ColosseumSecondEncounter>(),
             rewards,
             false);
         return Task.CompletedTask;

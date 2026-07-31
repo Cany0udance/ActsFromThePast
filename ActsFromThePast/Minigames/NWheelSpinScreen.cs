@@ -588,21 +588,21 @@ public partial class NWheelSpinScreen : Control, IOverlayScreen, IScreenContext
     private void UpdateControllerIcon()
     {
         if (_controllerIcon == null) return;
- 
+
         if (!_buttonRect.Visible || _spinning)
         {
             _controllerIcon.Visible = false;
             return;
         }
- 
+
         var controllerManager = NControllerManager.Instance;
-        if (controllerManager == null || !controllerManager.IsUsingController)
+        if (controllerManager == null || controllerManager.InputType != InputType.Controller)
         {
             _controllerIcon.Visible = false;
             return;
         }
- 
-        var hotkeyIcon = NInputManager.Instance?.GetHotkeyIcon((string)MegaInput.accept);
+
+        var hotkeyIcon = NInputManager.Instance?.GetHotkeyIcon(MegaInput.select);
         if (hotkeyIcon != null)
         {
             _controllerIcon.Texture = hotkeyIcon;
@@ -613,7 +613,7 @@ public partial class NWheelSpinScreen : Control, IOverlayScreen, IScreenContext
             _controllerIcon.Visible = false;
         }
     }
- 
+    
     // ─── Particle Spawner ───
  
     private void StartParticleSpawner()
