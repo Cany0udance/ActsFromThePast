@@ -438,7 +438,7 @@ public static bool UpdateTrack_Prefix(NRunMusicController __instance)
     }
 
     // Handle Boss rewards screen (combat ended but still in boss room)
-    if (IsBossRoom() && !combatInProgress2)
+    if (IsBossRoom() && !combatInProgress2 && !(IsHexaghostEncounter() && !_hexaghostActivated))
     {
         StopBaseGameMusic(__instance);
         AFTPModAudio.PlayBossStinger();
@@ -608,7 +608,7 @@ public static bool UpdateTrack_Prefix(NRunMusicController __instance)
                 SetBossStingerState();
                 return false;
             }
-            if (IsBossRoom() && !combatInProgress && !_playingBossStinger)
+            if (IsBossRoom() && !combatInProgress && !_playingBossStinger && !(IsHexaghostEncounter() && !_hexaghostActivated))
             {
                 AFTPModAudio.StopMusic();
                 AFTPModAudio.StopAmbience();

@@ -1,7 +1,12 @@
-﻿using ActsFromThePast.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ActsFromThePast.Interfaces;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.Factories;
@@ -66,6 +71,7 @@ public sealed class Transmogrifier : CustomEventModel, IShrineEvent
             false);
 
         var cards = Owner.Deck.Cards
+            .Where(c => c.Type != CardType.Quest && c.IsTransformable)
             .ToList()
             .StableShuffle(Owner.RunState.Rng.Niche)
             .Take(2)

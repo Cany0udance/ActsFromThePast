@@ -1,4 +1,5 @@
-﻿using ActsFromThePast.Acts;
+﻿using System.Collections.Generic;
+using ActsFromThePast.Acts;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Entities.Encounters;
 using MegaCrit.Sts2.Core.Models;

@@ -1,4 +1,5 @@
-﻿using ActsFromThePast.Acts;
+﻿using System.Collections.Generic;
+using ActsFromThePast.Acts;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
